@@ -1,0 +1,31 @@
+/*
+ * SakuYado - A web application that helps you find the best value accommodations
+ * Copyright (C) 2025  Sakan Nirattisaykul
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+import React from 'react';
+import { render } from '@testing-library/react';
+import { HotelProvider } from '@/contexts/HotelContext';
+
+export function renderWithHotelProvider(ui: React.ReactElement) {
+  return render(
+    <HotelProvider>
+      {ui}
+    </HotelProvider>
+  );
+}
+
+export * from '@testing-library/react';
+export { renderWithHotelProvider as render };

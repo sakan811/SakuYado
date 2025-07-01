@@ -17,37 +17,13 @@
 
 "use client";
 
-import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Hotel } from "@/types/hotel";
+import { useHotel } from "@/contexts/HotelContext";
 
 export default function CompareHotelsPage() {
-  const [hotels, setHotels] = useState<Hotel[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    try {
-      const savedHotels = JSON.parse(localStorage.getItem("hotels") || "[]");
-      // Calculate value score and sort in one step
-      const processedHotels = savedHotels
-        .map((hotel: Hotel) => ({
-          ...hotel,
-          valueScore: +(hotel.rating / hotel.price).toFixed(4),
-        }))
-        .sort((a: Hotel, b: Hotel) => b.valueScore! - a.valueScore!);
-
-      setHotels(processedHotels);
-    } catch (error) {
-      console.error("Error loading hotels:", error);
-    } finally {
-      setIsLoading(false);
-    }
-  }, []);
-
-  const clearAllHotels = () => {
-    localStorage.removeItem("hotels");
-    setHotels([]);
-  };
+  const { state, clearAllHotels } = useHotel();
+  const { hotels, isLoading } = state;
 
   // Mobile Card Component
   const HotelCard = ({ hotel, index }: { hotel: Hotel; index: number }) => (

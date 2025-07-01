@@ -21,20 +21,22 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { CURRENCIES } from "@/constants/currencies";
+import { useHotel } from "@/contexts/HotelContext";
 
 export default function AddHotelPage() {
   const router = useRouter();
+  const { state, addHotel, setLastUsedCurrency } = useHotel();
   const [formData, setFormData] = useState({
     name: "",
     price: "",
     rating: "",
-    currency: "USD",
+    currency: state.lastUsedCurrency,
   });
   const [errors, setErrors] = useState({
     name: "",
     price: "",
     rating: "",
-    general: "", // Add general error for storage issues
+    general: "",
   });
 
   const addHotelPageSchema = {
@@ -69,22 +71,15 @@ export default function AddHotelPage() {
     },
   };
 
-  // Load previously selected currency on component mount
+  // Initialize currency from context when it's available
   useEffect(() => {
-    try {
-      // Try to get the last used currency from localStorage
-      const savedCurrency = localStorage.getItem("lastUsedCurrency");
-      if (savedCurrency) {
-        setFormData((prev) => ({
-          ...prev,
-          currency: savedCurrency,
-        }));
-      }
-    } catch (error) {
-      console.error("Error loading saved currency:", error);
-      // Don't show error to user for loading preferences
+    if (!state.isLoading) {
+      setFormData((prev) => ({
+        ...prev,
+        currency: state.lastUsedCurrency,
+      }));
     }
-  }, []);
+  }, [state.isLoading, state.lastUsedCurrency]);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
@@ -95,14 +90,9 @@ export default function AddHotelPage() {
       [name]: value,
     }));
 
-    // If currency is changed, save it to localStorage
+    // If currency is changed, update the context
     if (name === "currency") {
-      try {
-        localStorage.setItem("lastUsedCurrency", value);
-      } catch (error) {
-        console.error("Error saving currency preference:", error);
-        // Don't show error for preference saving
-      }
+      setLastUsedCurrency(value);
     }
 
     // Clear errors when user starts typing
@@ -110,7 +100,7 @@ export default function AddHotelPage() {
       setErrors((prev) => ({
         ...prev,
         [name]: "",
-        general: "", // Clear general error too
+        general: "",
       }));
     }
   };
@@ -145,17 +135,11 @@ export default function AddHotelPage() {
     return isValid;
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (validateForm()) {
       try {
-        // Get existing hotels from local storage or initialize empty array
-        const existingHotels = JSON.parse(
-          localStorage.getItem("hotels") || "[]",
-        );
-
-        // Add new hotel to the array
         const newHotel = {
           name: formData.name,
           price: parseFloat(formData.price),
@@ -163,24 +147,12 @@ export default function AddHotelPage() {
           currency: formData.currency,
         };
 
-        const updatedHotels = [...existingHotels, newHotel];
-
-        // Save to local storage - this might throw an error
-        localStorage.setItem("hotels", JSON.stringify(updatedHotels));
-
-        // Save the currency for future use
-        localStorage.setItem("lastUsedCurrency", formData.currency);
-
-        // Navigate to results page
+        await addHotel(newHotel);
         router.push("/hotels/compare");
-      } catch (error) {
-        console.error("Error saving hotel data:", error);
-
-        // Set user-friendly error message
+      } catch {
         setErrors((prev) => ({
           ...prev,
-          general:
-            "Unable to save hotel data. Please try again or check your browser storage settings.",
+          general: state.error || "Unable to save hotel data. Please try again.",
         }));
       }
     }
