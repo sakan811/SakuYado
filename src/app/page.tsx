@@ -71,56 +71,6 @@ export default function ResponsiveHomePage() {
         </div>
       </section>
 
-      {/* How it works - responsive layout */}
-      <section className="bg-gradient-to-br from-pink-50 to-white p-4 sm:p-6 md:p-8 rounded-2xl sm:rounded-3xl border-2 border-pink-200">
-        <div className="text-center mb-6 sm:mb-8">
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-pink-800 mb-2 sm:mb-4">
-            How SakuYado Works
-          </h2>
-          <p className="text-sm sm:text-base md:text-lg text-pink-600">
-            Three simple steps to find your perfect hotel
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 md:gap-8">
-          <div className="text-center">
-            <div className="w-12 h-12 sm:w-16 sm:h-16 bg-pink-500 text-white rounded-full flex items-center justify-center mx-auto mb-3 sm:mb-4 font-bold text-lg sm:text-xl">
-              1
-            </div>
-            <h3 className="text-lg sm:text-xl font-bold text-pink-800 mb-2">
-              Add Hotels
-            </h3>
-            <p className="text-sm sm:text-base text-pink-600">
-              Input hotel names, prices, and ratings
-            </p>
-          </div>
-
-          <div className="text-center">
-            <div className="w-12 h-12 sm:w-16 sm:h-16 bg-rose-500 text-white rounded-full flex items-center justify-center mx-auto mb-3 sm:mb-4 font-bold text-lg sm:text-xl">
-              2
-            </div>
-            <h3 className="text-lg sm:text-xl font-bold text-rose-800 mb-2">
-              Auto Calculate
-            </h3>
-            <p className="text-sm sm:text-base text-rose-600">
-              We calculate value scores automatically
-            </p>
-          </div>
-
-          <div className="text-center">
-            <div className="w-12 h-12 sm:w-16 sm:h-16 bg-pink-500 text-white rounded-full flex items-center justify-center mx-auto mb-3 sm:mb-4 font-bold text-lg sm:text-xl">
-              3
-            </div>
-            <h3 className="text-lg sm:text-xl font-bold text-pink-800 mb-2">
-              Compare & Choose
-            </h3>
-            <p className="text-sm sm:text-base text-pink-600">
-              See ranked results and pick the best value
-            </p>
-          </div>
-        </div>
-      </section>
-
       {/* Decorative Elements - responsive */}
       <div className="text-center space-x-3 sm:space-x-6 opacity-60">
         <span className="text-2xl sm:text-3xl animate-pulse">🌸</span>
