@@ -123,13 +123,13 @@ export function HotelProvider({ children }: { children: React.ReactNode }) {
       dispatch({ type: "SET_ERROR", payload: null });
       dispatch({ type: "ADD_HOTEL", payload: hotel });
       
-      const newHotel: Hotel = {
-        ...hotel,
-        valueScore: calculateValueScore(hotel.rating, hotel.price),
-      };
-      const updatedHotels = [...state.hotels, newHotel];
+      // Read current hotels from localStorage to ensure we have the latest data
+      const currentHotels = JSON.parse(localStorage.getItem("hotels") || "[]");
+      const newHotelData = { ...hotel };
+      const updatedHotelsData = [...currentHotels, newHotelData];
       
-      localStorage.setItem("hotels", JSON.stringify(updatedHotels));
+      // Save to localStorage without valueScore (computed property)
+      localStorage.setItem("hotels", JSON.stringify(updatedHotelsData));
       localStorage.setItem("lastUsedCurrency", hotel.currency);
       
       dispatch({ type: "SET_LAST_USED_CURRENCY", payload: hotel.currency });
