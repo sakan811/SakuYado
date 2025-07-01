@@ -23,24 +23,6 @@ Higher scores = better value for money! 🌸
 
 Simply visit: **<https://saku-yado.vercel.app/>**
 
-### 🐳 Docker
-
-1. Install [Docker Desktop](https://www.docker.com/products/docker-desktop/)
-2. Clone this repository:
-
-   ```bash
-   git clone https://github.com/sakan811/SakuYado.git
-   cd SakuYado
-   ```
-
-3. Run with Docker Compose:
-
-   ```bash
-   docker compose --profile pull up -d
-   ```
-
-4. Open <http://localhost:3000>
-
 ### 💻 Local Development
 
 1. Setup [pnpm](https://pnpm.io/installation)
