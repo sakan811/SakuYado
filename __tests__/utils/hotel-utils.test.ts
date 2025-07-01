@@ -1,13 +1,5 @@
 import { describe, expect, it } from "vitest";
-
-// Define the Hotel interface to match the application's Hotel type
-interface Hotel {
-  name: string;
-  price: number;
-  rating: number;
-  currency?: string;
-  valueScore: number;
-}
+import { Hotel } from "@/types/hotel";
 
 // Utility functions for testing (could be extracted to a separate file in a real app)
 export const calculateValueScore = (rating: number, price: number): number => {
