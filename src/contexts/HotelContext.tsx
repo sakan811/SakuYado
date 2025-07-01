@@ -19,6 +19,7 @@
 
 import React, { createContext, useContext, useReducer, useEffect } from "react";
 import { Hotel } from "@/types/hotel";
+import { calculateValueScore, sortHotelsByValueScore } from "@/utils/calculations";
 
 interface HotelState {
   hotels: Hotel[];
@@ -61,11 +62,9 @@ function hotelReducer(state: HotelState, action: HotelAction): HotelState {
     case "ADD_HOTEL": {
       const newHotel: Hotel = {
         ...action.payload,
-        valueScore: +(action.payload.rating / action.payload.price).toFixed(4),
+        valueScore: calculateValueScore(action.payload.rating, action.payload.price),
       };
-      const updatedHotels = [...state.hotels, newHotel].sort(
-        (a, b) => b.valueScore! - a.valueScore!
-      );
+      const updatedHotels = sortHotelsByValueScore([...state.hotels, newHotel]);
       return { ...state, hotels: updatedHotels, error: null };
     }
     case "CLEAR_HOTELS":
@@ -95,10 +94,12 @@ export function HotelProvider({ children }: { children: React.ReactNode }) {
         const savedHotels = JSON.parse(localStorage.getItem("hotels") || "[]");
         const savedCurrency = localStorage.getItem("lastUsedCurrency") || "USD";
         
-        const processedHotels = savedHotels.map((hotel: Hotel) => ({
-          ...hotel,
-          valueScore: +(hotel.rating / hotel.price).toFixed(4),
-        })).sort((a: Hotel, b: Hotel) => b.valueScore! - a.valueScore!);
+        const processedHotels = sortHotelsByValueScore(
+          savedHotels.map((hotel: Hotel) => ({
+            ...hotel,
+            valueScore: calculateValueScore(hotel.rating, hotel.price),
+          }))
+        );
 
         dispatch({
           type: "INITIALIZE_STATE",
@@ -124,7 +125,7 @@ export function HotelProvider({ children }: { children: React.ReactNode }) {
       
       const newHotel: Hotel = {
         ...hotel,
-        valueScore: +(hotel.rating / hotel.price).toFixed(4),
+        valueScore: calculateValueScore(hotel.rating, hotel.price),
       };
       const updatedHotels = [...state.hotels, newHotel];
       

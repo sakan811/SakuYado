@@ -1,6 +1,6 @@
 // __tests__/pages/compare-hotels.test.tsx
 import { describe, expect, it, vi, beforeEach } from "vitest";
-import { cleanup, render, screen } from "@testing-library/react";
+import { cleanup, render, screen } from "../../src/__tests__/test-utils";
 import userEvent from "@testing-library/user-event";
 import CompareHotelsPage from "../../src/app/hotels/compare/page";
 
