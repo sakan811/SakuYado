@@ -20,6 +20,9 @@
 import Link from "next/link";
 import { Hotel } from "@/types/hotel";
 import { useHotel } from "@/contexts/HotelContext";
+import { calculateHotelStatistics } from "@/utils/calculations";
+import { formatPrice, formatRating } from "@/utils/formatting";
+import { generateHotelComparisonSchema } from "@/utils/structured-data";
 
 export default function CompareHotelsPage() {
   const { state, clearAllHotels } = useHotel();
@@ -79,13 +82,13 @@ export default function CompareHotelsPage() {
         <div className="bg-pink-50 p-3 rounded-lg">
           <div className="text-pink-600 font-medium mb-1">💰 Price</div>
           <div className="font-bold text-pink-800">
-            {hotel.price.toFixed(2)} {hotel.currency}
+            {formatPrice(hotel.price, hotel.currency)}
           </div>
         </div>
         <div className="bg-rose-50 p-3 rounded-lg">
           <div className="text-rose-600 font-medium mb-1">⭐ Rating</div>
           <div className="font-bold text-rose-800">
-            {hotel.rating.toFixed(1)}
+            {formatRating(hotel.rating)}
           </div>
         </div>
       </div>
@@ -103,33 +106,7 @@ export default function CompareHotelsPage() {
     );
   }
 
-  const hotelComparisonStructuredData = {
-    "@context": "https://schema.org",
-    "@type": "ItemList",
-    name: "Hotel Value Comparison",
-    description: "Compare hotels by value score (rating/price ratio)",
-    numberOfItems: hotels.length,
-    itemListElement: hotels.map((hotel, index) => ({
-      "@type": "ListItem",
-      position: index + 1,
-      item: {
-        "@type": "LodgingBusiness",
-        name: hotel.name,
-        aggregateRating: {
-          "@type": "AggregateRating",
-          ratingValue: hotel.rating,
-          bestRating: "10",
-          worstRating: "1",
-        },
-        priceRange: `${hotel.price} ${hotel.currency}`,
-        additionalProperty: {
-          "@type": "PropertyValue",
-          name: "Value Score",
-          value: hotel.valueScore,
-        },
-      },
-    })),
-  };
+  const hotelComparisonStructuredData = generateHotelComparisonSchema(hotels);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-pink-50 via-white to-rose-100 px-4 py-4 sm:py-8">
@@ -251,13 +228,13 @@ export default function CompareHotelsPage() {
                           </td>
                           <td className="py-3 lg:py-4 px-4 lg:px-6 whitespace-nowrap">
                             <span className="font-semibold text-pink-700 text-base lg:text-lg">
-                              {hotel.price.toFixed(2)} {hotel.currency}
+                              {formatPrice(hotel.price, hotel.currency)}
                             </span>
                           </td>
                           <td className="py-3 lg:py-4 px-4 lg:px-6 whitespace-nowrap">
                             <div className="flex items-center space-x-1">
                               <span className="font-semibold text-pink-700 text-base lg:text-lg">
-                                {hotel.rating.toFixed(1)}
+                                {formatRating(hotel.rating)}
                               </span>
                               <span className="text-yellow-500">⭐</span>
                             </div>
@@ -321,13 +298,13 @@ export default function CompareHotelsPage() {
             <div className="mt-6 sm:mt-8 grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
               <div className="bg-white/80 backdrop-blur p-3 sm:p-4 rounded-xl border border-pink-200 text-center">
                 <div className="text-lg sm:text-xl font-bold text-pink-800">
-                  {hotels.length}
+                  {calculateHotelStatistics(hotels).count}
                 </div>
                 <div className="text-xs sm:text-sm text-pink-600">Hotels</div>
               </div>
               <div className="bg-white/80 backdrop-blur p-3 sm:p-4 rounded-xl border border-pink-200 text-center">
                 <div className="text-lg sm:text-xl font-bold text-rose-800">
-                  {hotels[0]?.valueScore || 0}
+                  {calculateHotelStatistics(hotels).topScore}
                 </div>
                 <div className="text-xs sm:text-sm text-rose-600">
                   Top Score
@@ -335,9 +312,7 @@ export default function CompareHotelsPage() {
               </div>
               <div className="bg-white/80 backdrop-blur p-3 sm:p-4 rounded-xl border border-pink-200 text-center col-span-2 lg:col-span-1">
                 <div className="text-lg sm:text-xl font-bold text-pink-800">
-                  {hotels.length > 0
-                    ? Math.min(...hotels.map((h) => h.price)).toFixed(2)
-                    : 0}
+                  {formatPrice(calculateHotelStatistics(hotels).lowestPrice)}
                 </div>
                 <div className="text-xs sm:text-sm text-pink-600">
                   Lowest Price
@@ -345,9 +320,7 @@ export default function CompareHotelsPage() {
               </div>
               <div className="bg-white/80 backdrop-blur p-3 sm:p-4 rounded-xl border border-pink-200 text-center col-span-2 lg:col-span-1">
                 <div className="text-lg sm:text-xl font-bold text-rose-800">
-                  {hotels.length > 0
-                    ? Math.max(...hotels.map((h) => h.rating)).toFixed(1)
-                    : 0}
+                  {formatRating(calculateHotelStatistics(hotels).highestRating)}
                 </div>
                 <div className="text-xs sm:text-sm text-rose-600">
                   Highest Rating

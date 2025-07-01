@@ -22,6 +22,8 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { CURRENCIES } from "@/constants/currencies";
 import { useHotel } from "@/contexts/HotelContext";
+import { validateHotelForm, type ValidationError } from "@/utils/validation";
+import { generateAddHotelPageSchema } from "@/utils/structured-data";
 
 export default function AddHotelPage() {
   const router = useRouter();
@@ -32,44 +34,14 @@ export default function AddHotelPage() {
     rating: "",
     currency: state.lastUsedCurrency,
   });
-  const [errors, setErrors] = useState({
+  const [errors, setErrors] = useState<ValidationError>({
     name: "",
     price: "",
     rating: "",
     general: "",
   });
 
-  const addHotelPageSchema = {
-    "@context": "https://schema.org",
-    "@type": "WebPage",
-    name: "Add Hotel Information - SakuYado",
-    description:
-      "Add hotel details to compare value and find the best accommodation deals with SakuYado",
-    url: "https://saku-yado.vercel.app/hotels/add",
-    isPartOf: {
-      "@type": "WebSite",
-      name: "SakuYado",
-      url: "https://saku-yado.vercel.app",
-    },
-    mainEntity: {
-      "@type": "WebApplication",
-      name: "SakuYado Hotel Information Form",
-      description:
-        "Input hotel name, price, rating and currency for value comparison with SakuYado",
-      applicationCategory: "TravelApplication",
-      featureList: [
-        "Hotel data input",
-        "Multi-currency support",
-        "Rating validation",
-        "Value score calculation",
-      ],
-    },
-    potentialAction: {
-      "@type": "UseAction",
-      target: "https://saku-yado.vercel.app/hotels/compare",
-      name: "Compare Hotels with SakuYado",
-    },
-  };
+  const addHotelPageSchema = generateAddHotelPageSchema();
 
   // Initialize currency from context when it's available
   useEffect(() => {
@@ -106,32 +78,8 @@ export default function AddHotelPage() {
   };
 
   const validateForm = () => {
-    const newErrors = {
-      name: "",
-      price: "",
-      rating: "",
-      general: "",
-    };
-    let isValid = true;
-
-    if (!formData.name.trim()) {
-      newErrors.name = "Hotel name is required";
-      isValid = false;
-    }
-
-    const price = parseFloat(formData.price);
-    if (isNaN(price) || price <= 0) {
-      newErrors.price = "Price must be a positive number";
-      isValid = false;
-    }
-
-    const rating = parseFloat(formData.rating);
-    if (isNaN(rating) || rating < 0 || rating > 10) {
-      newErrors.rating = "Rating must be between 0 and 10";
-      isValid = false;
-    }
-
-    setErrors(newErrors);
+    const { errors: validationErrors, isValid } = validateHotelForm(formData);
+    setErrors(validationErrors);
     return isValid;
   };
 

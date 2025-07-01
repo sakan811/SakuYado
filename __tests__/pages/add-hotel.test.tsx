@@ -1,6 +1,6 @@
 // __tests__/pages/add-hotel.test.tsx
 import { describe, expect, it, vi, beforeEach } from "vitest";
-import { render, screen } from "@testing-library/react";
+import { render, screen } from "../../src/__tests__/test-utils";
 import userEvent from "@testing-library/user-event";
 import AddHotelPage from "../../src/app/hotels/add/page";
 

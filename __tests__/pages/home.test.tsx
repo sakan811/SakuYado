@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, afterEach } from "vitest";
-import { render, screen, cleanup } from "@testing-library/react";
+import { render, screen, cleanup } from "../../src/__tests__/test-utils";
 import Home from "../../src/app/page";
 
 // Mock Next.js Link component
