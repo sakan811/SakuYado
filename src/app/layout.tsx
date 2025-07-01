@@ -18,6 +18,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import "./globals.css";
+import { HotelProvider } from "@/contexts/HotelContext";
 
 export const metadata: Metadata = {
   title: "SakuYado - Hotel Value Analyzer",
@@ -108,9 +109,11 @@ export default function RootLayout({
           </div>
         </header>
 
-        <main className="relative z-10 container mx-auto px-4 py-8">
-          {children}
-        </main>
+        <HotelProvider>
+          <main className="relative z-10 container mx-auto px-4 py-8">
+            {children}
+          </main>
+        </HotelProvider>
       </body>
     </html>
   );
