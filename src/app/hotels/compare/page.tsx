@@ -19,14 +19,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-
-interface Hotel {
-  name: string;
-  price: number;
-  rating: number;
-  currency: string;
-  valueScore?: number;
-}
+import { Hotel } from "@/types/hotel";
 
 export default function CompareHotelsPage() {
   const [hotels, setHotels] = useState<Hotel[]>([]);
