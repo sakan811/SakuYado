@@ -1,7 +1,12 @@
 describe('Multi-Hotel Comparison', () => {
-  beforeEach(() => {
-    cy.clearLocalStorage()
-  })
+  const viewports = Cypress.env('viewports') || [{ name: 'default', width: 1280, height: 720 }]
+
+  viewports.forEach((viewport) => {
+    describe(`${viewport.name} viewport (${viewport.width}x${viewport.height})`, () => {
+      beforeEach(() => {
+        cy.viewport(viewport.width, viewport.height)
+        cy.clearLocalStorage()
+      })
 
   it('should handle multiple hotels with different currencies', () => {
     // Add hotels with different currencies
@@ -39,7 +44,7 @@ describe('Multi-Hotel Comparison', () => {
     // Verify hotels are in correct order
     const expectedOrder = ['Best Value', 'Good Value', 'Poor Value', 'Worst Value']
     
-    cy.get('[data-testid="hotel-card-mobile"]').each(($el, index) => {
+    cy.get('[data-testid="hotel-card"], [data-testid="hotel-card-mobile"]').each(($el, index) => {
       cy.wrap($el).should('contain', expectedOrder[index])
     })
   })
@@ -112,7 +117,7 @@ describe('Multi-Hotel Comparison', () => {
     })
     
     // Verify the page is still responsive
-    cy.get('[data-testid="hotel-card-mobile"]').should('have.length', 10)
+    cy.get('[data-testid="hotel-card"], [data-testid="hotel-card-mobile"]').should('have.length', 10)
     
     // Test that we can still navigate back to add more
     cy.get('[data-testid="add-another-hotel"]').should('be.visible').click()
@@ -129,5 +134,7 @@ describe('Multi-Hotel Comparison', () => {
     cy.contains('0.2997').should('be.visible') // 9.99/33.33
     cy.contains('0.0832').should('be.visible') // 5.55/66.67
     cy.contains('0.0111').should('be.visible') // 1.11/99.99
+  })
+    })
   })
 })
