@@ -17,11 +17,11 @@ describe('Hotel Management Journey', () => {
     
     // Should redirect to compare page
     cy.url().should('include', '/hotels/compare')
-    cy.contains('Hotel Comparison').should('be.visible')
+    cy.contains('Hotel Value Comparison').should('be.visible')
     
     // Verify hotel appears in comparison
     cy.contains('Tokyo Hotel').should('be.visible')
-    cy.contains('$150.00').should('be.visible')
+    cy.contains('150.00 USD').should('be.visible')
     cy.contains('8.5').should('be.visible')
     
     // Verify value score calculation (8.5 / 150 = 0.0567)
@@ -53,7 +53,7 @@ describe('Hotel Management Journey', () => {
     
     // Should show validation errors
     cy.contains('Hotel name is required').should('be.visible')
-    cy.contains('Price must be greater than 0').should('be.visible')
+    cy.contains('Price must be a positive number').should('be.visible')
     cy.contains('Rating must be between 0 and 10').should('be.visible')
     
     // Test invalid price
@@ -62,7 +62,7 @@ describe('Hotel Management Journey', () => {
     cy.get('[data-testid="hotel-rating"]').type('5')
     cy.get('[data-testid="add-hotel-button"]').click()
     
-    cy.contains('Price must be greater than 0').should('be.visible')
+    cy.contains('Price must be a positive number').should('be.visible')
     
     // Test invalid rating
     cy.get('[data-testid="hotel-price"]').clear().type('100')
@@ -91,7 +91,7 @@ describe('Hotel Management Journey', () => {
     
     // Hotel should still be there
     cy.contains('Persistent Hotel').should('be.visible')
-    cy.contains('$200.00').should('be.visible')
+    cy.contains('200.00 USD').should('be.visible')
     cy.contains('9.0').should('be.visible')
   })
 
@@ -99,7 +99,7 @@ describe('Hotel Management Journey', () => {
     cy.visit('/hotels/compare')
     
     // Should show empty state message
-    cy.contains('No hotels added yet').should('be.visible')
+    cy.contains('No Hotels Added Yet').should('be.visible')
     cy.get('[data-testid="add-first-hotel"]').should('be.visible')
     
     // Clicking should navigate to add hotel page

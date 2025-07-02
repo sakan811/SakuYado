@@ -46,16 +46,34 @@ export function validateHotelForm(formData: HotelFormData): {
     isValid = false;
   }
 
-  const price = parseFloat(formData.price);
-  if (isNaN(price) || price <= 0) {
+  // Use regex to validate proper number format for price
+  const priceRegex = /^-?\d*\.?\d+$/;
+  const trimmedPrice = formData.price.trim();
+  
+  if (!trimmedPrice || !priceRegex.test(trimmedPrice)) {
     errors.price = "Price must be a positive number";
     isValid = false;
+  } else {
+    const price = parseFloat(trimmedPrice);
+    if (isNaN(price) || price <= 0) {
+      errors.price = "Price must be a positive number";
+      isValid = false;
+    }
   }
 
-  const rating = parseFloat(formData.rating);
-  if (isNaN(rating) || rating < 0 || rating > 10) {
+  // Use regex to validate proper number format for rating
+  const ratingRegex = /^-?\d*\.?\d+$/;
+  const trimmedRating = formData.rating.trim();
+  
+  if (!trimmedRating || !ratingRegex.test(trimmedRating)) {
     errors.rating = "Rating must be between 0 and 10";
     isValid = false;
+  } else {
+    const rating = parseFloat(trimmedRating);
+    if (isNaN(rating) || rating < 0 || rating > 10) {
+      errors.rating = "Rating must be between 0 and 10";
+      isValid = false;
+    }
   }
 
   return { errors, isValid };
