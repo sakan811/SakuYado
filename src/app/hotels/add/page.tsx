@@ -131,7 +131,7 @@ export default function AddHotelPage() {
 
         {/* Form Card - enhanced responsive design */}
         <div className="bg-gradient-to-br from-white via-pink-50 to-rose-50 p-4 sm:p-6 md:p-8 rounded-2xl sm:rounded-3xl shadow-xl sm:shadow-2xl border-2 border-pink-200">
-          <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
+          <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6" noValidate>
             {/* General Error Message */}
             {errors.general && (
               <div className="bg-red-50 border-2 border-red-200 rounded-xl p-3 sm:p-4">
@@ -153,6 +153,7 @@ export default function AddHotelPage() {
                 type="text"
                 id="name"
                 name="name"
+                data-testid="hotel-name"
                 value={formData.name}
                 onChange={handleChange}
                 className="w-full px-3 sm:px-4 py-2 sm:py-3 border-2 border-pink-200 rounded-xl sm:rounded-2xl focus:outline-none focus:ring-2 focus:ring-pink-400 focus:border-pink-400 bg-white/80 backdrop-blur transition-all duration-300 text-sm sm:text-base"
@@ -179,15 +180,14 @@ export default function AddHotelPage() {
                 {/* Price Input - equal width on desktop */}
                 <div className="flex-1 sm:flex-1">
                   <input
-                    type="number"
+                    type="text"
                     id="price"
                     name="price"
+                    data-testid="hotel-price"
                     value={formData.price}
                     onChange={handleChange}
                     className="w-full px-3 sm:px-4 py-2 sm:py-3 border-2 border-pink-200 rounded-xl sm:rounded-2xl focus:outline-none focus:ring-2 focus:ring-pink-400 focus:border-pink-400 bg-white/80 backdrop-blur transition-all duration-300 text-sm sm:text-base"
                     placeholder="Enter price"
-                    min="0"
-                    step="0.01"
                   />
                 </div>
 
@@ -196,6 +196,7 @@ export default function AddHotelPage() {
                   <select
                     id="currency"
                     name="currency"
+                    data-testid="hotel-currency"
                     value={formData.currency}
                     onChange={handleChange}
                     className="w-full px-2 sm:px-3 py-2 sm:py-3 border-2 border-pink-200 rounded-xl sm:rounded-2xl focus:outline-none focus:ring-2 focus:ring-pink-400 focus:border-pink-400 bg-white/80 backdrop-blur transition-all duration-300 text-xs sm:text-sm"
@@ -225,16 +226,14 @@ export default function AddHotelPage() {
                 ⭐ Rating (0-10)
               </label>
               <input
-                type="number"
+                type="text"
                 id="rating"
                 name="rating"
+                data-testid="hotel-rating"
                 value={formData.rating}
                 onChange={handleChange}
                 className="w-full px-3 sm:px-4 py-2 sm:py-3 border-2 border-pink-200 rounded-xl sm:rounded-2xl focus:outline-none focus:ring-2 focus:ring-pink-400 focus:border-pink-400 bg-white/80 backdrop-blur transition-all duration-300 text-sm sm:text-base"
                 placeholder="Enter rating"
-                min="0"
-                max="10"
-                step="0.1"
               />
               {errors.rating && (
                 <p className="mt-1 sm:mt-2 text-xs sm:text-sm text-red-500 font-medium">
@@ -246,6 +245,7 @@ export default function AddHotelPage() {
             {/* Submit Button - enhanced responsive */}
             <button
               type="submit"
+              data-testid="add-hotel-button"
               className="w-full bg-gradient-to-r from-pink-500 to-rose-500 text-white py-3 sm:py-4 px-4 sm:px-6 rounded-xl sm:rounded-2xl font-bold text-base sm:text-lg hover:from-pink-600 hover:to-rose-600 hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl"
             >
               🌸 Submit & Compare

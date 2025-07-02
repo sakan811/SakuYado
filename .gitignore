@@ -44,3 +44,4 @@ next-env.d.ts
 /git.txt
 /CLAUDE.md
 /.claude
+/cypress/screenshots

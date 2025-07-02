@@ -31,6 +31,7 @@ export default function CompareHotelsPage() {
   // Mobile Card Component
   const HotelCard = ({ hotel, index }: { hotel: Hotel; index: number }) => (
     <div
+      data-testid="hotel-card"
       className={`
         bg-white rounded-xl sm:rounded-2xl shadow-lg border-2 p-4 mb-4 transition-all duration-300
         ${
@@ -148,6 +149,7 @@ export default function CompareHotelsPage() {
             </p>
             <Link
               href="/hotels/add"
+              data-testid="add-first-hotel"
               className="inline-block bg-gradient-to-r from-pink-500 to-rose-500 text-white py-3 sm:py-4 px-6 sm:px-8 rounded-xl sm:rounded-2xl font-bold text-base sm:text-lg hover:from-pink-600 hover:to-rose-600 hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl"
             >
               🌸 Add Your First Hotel
@@ -192,6 +194,7 @@ export default function CompareHotelsPage() {
                       {hotels.map((hotel, index) => (
                         <tr
                           key={index}
+                          data-testid="hotel-card"
                           className={`
                             ${
                               index === 0
@@ -282,6 +285,7 @@ export default function CompareHotelsPage() {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 mt-6 sm:mt-8">
               <Link
                 href="/hotels/add"
+                data-testid="add-another-hotel"
                 className="bg-gradient-to-r from-pink-500 to-rose-500 text-white py-3 sm:py-4 px-4 sm:px-6 rounded-xl sm:rounded-2xl font-bold text-base sm:text-lg hover:from-pink-600 hover:to-rose-600 hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl text-center"
               >
                 🌸 Add Another Hotel
@@ -295,7 +299,7 @@ export default function CompareHotelsPage() {
             </div>
 
             {/* Statistics Section - Mobile Friendly */}
-            <div className="mt-6 sm:mt-8 grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+            <div data-testid="statistics" className="mt-6 sm:mt-8 grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
               <div className="bg-white/80 backdrop-blur p-3 sm:p-4 rounded-xl border border-pink-200 text-center">
                 <div className="text-lg sm:text-xl font-bold text-pink-800">
                   {calculateHotelStatistics(hotels).count}
