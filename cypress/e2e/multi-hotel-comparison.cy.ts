@@ -17,10 +17,10 @@ describe('Multi-Hotel Comparison', () => {
     cy.contains('Berlin Hotel').should('be.visible')
     
     // Verify currency formatting
-    cy.contains('¥15,000.00').should('be.visible')
-    cy.contains('£120.00').should('be.visible')
-    cy.contains('$200.00').should('be.visible')
-    cy.contains('€90.00').should('be.visible')
+    cy.contains('15,000.00 JPY').should('be.visible')
+    cy.contains('120.00 GBP').should('be.visible')
+    cy.contains('200.00 USD').should('be.visible')
+    cy.contains('90.00 EUR').should('be.visible')
     
     // Verify value scores are calculated correctly
     cy.contains('0.0833').should('be.visible') // Berlin: 7.5/90
@@ -56,7 +56,7 @@ describe('Multi-Hotel Comparison', () => {
     // Verify statistics calculations
     // Average price: (100 + 150 + 200) / 3 = 150
     cy.contains('Average Price').should('be.visible')
-    cy.contains('$150.00').should('be.visible')
+    cy.contains('150.00 USD').should('be.visible')
     
     // Average rating: (8.0 + 7.5 + 9.0) / 3 = 8.17
     cy.contains('Average Rating').should('be.visible')
