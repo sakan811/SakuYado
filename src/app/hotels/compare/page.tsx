@@ -63,13 +63,14 @@ export default function CompareHotelsPage() {
               : "bg-gray-100 text-gray-700"
           }
         `}
+          data-testid={`hotel-value-score-${index}`}
         >
           {hotel.valueScore}
         </div>
       </div>
 
       {/* Hotel Name */}
-      <h3 className="font-bold text-lg sm:text-xl text-pink-800 mb-3">
+      <h3 className="font-bold text-lg sm:text-xl text-pink-800 mb-3" data-testid={`hotel-name-${index}`}>
         {hotel.name}
         {index === 0 && (
           <span className="block text-sm font-normal text-pink-600 mt-1">
@@ -82,13 +83,13 @@ export default function CompareHotelsPage() {
       <div className="grid grid-cols-2 gap-3 text-sm">
         <div className="bg-pink-50 p-3 rounded-lg">
           <div className="text-pink-600 font-medium mb-1">💰 Price</div>
-          <div className="font-bold text-pink-800">
+          <div className="font-bold text-pink-800" data-testid={`hotel-price-${index}`}>
             {formatPrice(hotel.price, hotel.currency)}
           </div>
         </div>
         <div className="bg-rose-50 p-3 rounded-lg">
           <div className="text-rose-600 font-medium mb-1">⭐ Rating</div>
-          <div className="font-bold text-rose-800">
+          <div className="font-bold text-rose-800" data-testid={`hotel-rating-${index}`}>
             {formatRating(hotel.rating)}
           </div>
         </div>
@@ -220,7 +221,7 @@ export default function CompareHotelsPage() {
                             </div>
                           </td>
                           <td className="py-3 lg:py-4 px-4 lg:px-6 whitespace-nowrap">
-                            <div className="font-bold text-pink-800 text-base lg:text-lg">
+                            <div className="font-bold text-pink-800 text-base lg:text-lg" data-testid={`hotel-name-${index}`}>
                               {hotel.name}
                               {index === 0 && (
                                 <span className="ml-2 text-pink-500 text-sm font-normal">
@@ -230,13 +231,13 @@ export default function CompareHotelsPage() {
                             </div>
                           </td>
                           <td className="py-3 lg:py-4 px-4 lg:px-6 whitespace-nowrap">
-                            <span className="font-semibold text-pink-700 text-base lg:text-lg">
+                            <span className="font-semibold text-pink-700 text-base lg:text-lg" data-testid={`hotel-price-${index}`}>
                               {formatPrice(hotel.price, hotel.currency)}
                             </span>
                           </td>
                           <td className="py-3 lg:py-4 px-4 lg:px-6 whitespace-nowrap">
                             <div className="flex items-center space-x-1">
-                              <span className="font-semibold text-pink-700 text-base lg:text-lg">
+                              <span className="font-semibold text-pink-700 text-base lg:text-lg" data-testid={`hotel-rating-${index}`}>
                                 {formatRating(hotel.rating)}
                               </span>
                               <span className="text-yellow-500">⭐</span>
@@ -252,6 +253,7 @@ export default function CompareHotelsPage() {
                                   : "bg-pink-100 text-pink-700"
                               }
                             `}
+                              data-testid={`hotel-value-score-${index}`}
                             >
                               {hotel.valueScore}
                             </span>
