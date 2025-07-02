@@ -41,8 +41,8 @@ describe('Hotel Management Journey', () => {
     cy.contains('Osaka Hotel').should('be.visible')
     
     // Verify hotels are sorted by value score (Osaka: 0.07, Tokyo: 0.0567)
-    cy.get('[data-testid="hotel-card"]').first().should('contain', 'Osaka Hotel')
-    cy.get('[data-testid="hotel-card"]').last().should('contain', 'Tokyo Hotel')
+    cy.get('[data-testid="hotel-card-mobile"]').first().should('contain', 'Osaka Hotel')
+    cy.get('[data-testid="hotel-card-mobile"]').last().should('contain', 'Tokyo Hotel')
   })
 
   it('should handle form validation on add hotel page', () => {
