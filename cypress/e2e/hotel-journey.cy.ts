@@ -1,7 +1,12 @@
 describe('Hotel Management Journey', () => {
-  beforeEach(() => {
-    cy.visit('/')
-  })
+  const viewports = Cypress.env('viewports') || [{ name: 'default', width: 1280, height: 720 }]
+
+  viewports.forEach((viewport) => {
+    describe(`${viewport.name} viewport (${viewport.width}x${viewport.height})`, () => {
+      beforeEach(() => {
+        cy.viewport(viewport.width, viewport.height)
+        cy.visit('/')
+      })
 
   it('should complete the main user journey: add hotel and view comparison', () => {
     // Test homepage load
@@ -41,8 +46,8 @@ describe('Hotel Management Journey', () => {
     cy.contains('Osaka Hotel').should('be.visible')
     
     // Verify hotels are sorted by value score (Osaka: 0.07, Tokyo: 0.0567)
-    cy.get('[data-testid="hotel-card-mobile"]').first().should('contain', 'Osaka Hotel')
-    cy.get('[data-testid="hotel-card-mobile"]').last().should('contain', 'Tokyo Hotel')
+    cy.get('[data-testid="hotel-card"], [data-testid="hotel-card-mobile"]').first().should('contain', 'Osaka Hotel')
+    cy.get('[data-testid="hotel-card"], [data-testid="hotel-card-mobile"]').last().should('contain', 'Tokyo Hotel')
   })
 
   it('should handle form validation on add hotel page', () => {
@@ -105,5 +110,7 @@ describe('Hotel Management Journey', () => {
     // Clicking should navigate to add hotel page
     cy.get('[data-testid="add-first-hotel"]').click()
     cy.url().should('include', '/hotels/add')
+  })
+    })
   })
 })
