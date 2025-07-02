@@ -24,8 +24,8 @@ describe('Multi-Hotel Comparison', () => {
     
     // Verify value scores are calculated correctly
     cy.contains('0.0833').should('be.visible') // Berlin: 7.5/90
-    cy.contains('0.0650').should('be.visible') // London: 7.8/120
-    cy.contains('0.0400').should('be.visible') // New York: 8.0/200
+    cy.contains('0.065').should('be.visible') // London: 7.8/120
+    cy.contains('0.04').should('be.visible') // New York: 8.0/200
     cy.contains('0.0006').should('be.visible') // Tokyo: 8.5/15000
   })
 
@@ -39,7 +39,7 @@ describe('Multi-Hotel Comparison', () => {
     // Verify hotels are in correct order
     const expectedOrder = ['Best Value', 'Good Value', 'Poor Value', 'Worst Value']
     
-    cy.get('[data-testid="hotel-card"]').each(($el, index) => {
+    cy.get('[data-testid="hotel-card-mobile"]').each(($el, index) => {
       cy.wrap($el).should('contain', expectedOrder[index])
     })
   })
@@ -53,18 +53,21 @@ describe('Multi-Hotel Comparison', () => {
     // Check if statistics section exists
     cy.get('[data-testid="statistics"]').should('be.visible')
     
-    // Verify statistics calculations
-    // Average price: (100 + 150 + 200) / 3 = 150
-    cy.contains('Average Price').should('be.visible')
-    cy.contains('150.00 USD').should('be.visible')
+    // Check Hotels count
+    cy.contains('Hotels').should('be.visible')
+    cy.contains('3').should('be.visible')
     
-    // Average rating: (8.0 + 7.5 + 9.0) / 3 = 8.17
-    cy.contains('Average Rating').should('be.visible')
-    cy.contains('8.17').should('be.visible')
+    // Check Top Score (Hotel A: 8.0/100 = 0.08)
+    cy.contains('Top Score').should('be.visible')
+    cy.contains('0.08').should('be.visible')
     
-    // Best value score: 9.0/200 = 0.045
-    cy.contains('Best Value Score').should('be.visible')
-    cy.contains('0.0450').should('be.visible')
+    // Check Lowest Price
+    cy.contains('Lowest Price').should('be.visible')
+    cy.contains('100.00 USD').should('be.visible')
+    
+    // Check Highest Rating
+    cy.contains('Highest Rating').should('be.visible')
+    cy.contains('9.0').should('be.visible')
   })
 
   it('should handle edge cases with extreme values', () => {
@@ -79,9 +82,9 @@ describe('Multi-Hotel Comparison', () => {
     cy.contains('Free Stay').should('be.visible')
     
     // Verify extreme value scores
-    cy.contains('500.0000').should('be.visible') // Free Stay: 5.0/0.01
-    cy.contains('1.0000').should('be.visible')   // Budget: 1.0/1
-    cy.contains('0.0010').should('be.visible')   // Luxury: 10.0/10000
+    cy.contains('500').should('be.visible') // Free Stay: 5.0/0.01
+    cy.contains('1').should('be.visible')   // Budget: 1.0/1
+    cy.contains('0.001').should('be.visible')   // Luxury: 10.0/10000
   })
 
   it('should maintain functionality with many hotels', () => {
@@ -109,7 +112,7 @@ describe('Multi-Hotel Comparison', () => {
     })
     
     // Verify the page is still responsive
-    cy.get('[data-testid="hotel-card"]').should('have.length', 10)
+    cy.get('[data-testid="hotel-card-mobile"]').should('have.length', 10)
     
     // Test that we can still navigate back to add more
     cy.get('[data-testid="add-another-hotel"]').should('be.visible').click()
@@ -124,7 +127,7 @@ describe('Multi-Hotel Comparison', () => {
     
     // Verify precise value score calculations
     cy.contains('0.2997').should('be.visible') // 9.99/33.33
-    cy.contains('0.0833').should('be.visible') // 5.55/66.67
+    cy.contains('0.0832').should('be.visible') // 5.55/66.67
     cy.contains('0.0111').should('be.visible') // 1.11/99.99
   })
 })

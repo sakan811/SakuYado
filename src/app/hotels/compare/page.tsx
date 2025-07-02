@@ -31,7 +31,7 @@ export default function CompareHotelsPage() {
   // Mobile Card Component
   const HotelCard = ({ hotel, index }: { hotel: Hotel; index: number }) => (
     <div
-      data-testid="hotel-card"
+      data-testid="hotel-card-mobile"
       className={`
         bg-white rounded-xl sm:rounded-2xl shadow-lg border-2 p-4 mb-4 transition-all duration-300
         ${
@@ -194,7 +194,7 @@ export default function CompareHotelsPage() {
                       {hotels.map((hotel, index) => (
                         <tr
                           key={index}
-                          data-testid="hotel-card"
+                          data-testid="hotel-row-desktop"
                           className={`
                             ${
                               index === 0
