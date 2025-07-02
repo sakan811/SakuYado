@@ -25,12 +25,12 @@ describe('Hotel Management Journey', () => {
     cy.contains('Hotel Value Comparison').should('be.visible')
     
     // Verify hotel appears in comparison
-    cy.contains('Tokyo Hotel').should('be.visible')
-    cy.contains('150.00 USD').should('be.visible')
-    cy.contains('8.5').should('be.visible')
+    cy.get('[data-testid="hotel-name-0"]').should('contain', 'Tokyo Hotel')
+    cy.get('[data-testid="hotel-price-0"]').should('contain', '150.00 USD')
+    cy.get('[data-testid="hotel-rating-0"]').should('contain', '8.5')
     
     // Verify value score calculation (8.5 / 150 = 0.0567)
-    cy.contains('0.0567').should('be.visible')
+    cy.get('[data-testid="hotel-value-score-0"]').should('contain', '0.0567')
     
     // Add another hotel from the comparison page
     cy.get('[data-testid="add-another-hotel"]').click()
@@ -42,12 +42,12 @@ describe('Hotel Management Journey', () => {
     cy.url().should('include', '/hotels/compare')
     
     // Verify both hotels are displayed
-    cy.contains('Tokyo Hotel').should('be.visible')
-    cy.contains('Osaka Hotel').should('be.visible')
+    cy.get('[data-testid="hotel-name-0"]').should('be.visible')
+    cy.get('[data-testid="hotel-name-1"]').should('be.visible')
     
     // Verify hotels are sorted by value score (Osaka: 0.07, Tokyo: 0.0567)
-    cy.get('[data-testid="hotel-card"], [data-testid="hotel-card-mobile"]').first().should('contain', 'Osaka Hotel')
-    cy.get('[data-testid="hotel-card"], [data-testid="hotel-card-mobile"]').last().should('contain', 'Tokyo Hotel')
+    cy.get('[data-testid="hotel-name-0"]').should('contain', 'Osaka Hotel')
+    cy.get('[data-testid="hotel-name-1"]').should('contain', 'Tokyo Hotel')
   })
 
   it('should handle form validation on add hotel page', () => {
@@ -89,15 +89,15 @@ describe('Hotel Management Journey', () => {
     cy.addHotel('Persistent Hotel', 200, 9.0)
     
     // Verify it's in comparison
-    cy.contains('Persistent Hotel').should('be.visible')
+    cy.get('[data-testid="hotel-name-0"]').should('contain', 'Persistent Hotel')
     
     // Refresh the page
     cy.reload()
     
     // Hotel should still be there
-    cy.contains('Persistent Hotel').should('be.visible')
-    cy.contains('200.00 USD').should('be.visible')
-    cy.contains('9.0').should('be.visible')
+    cy.get('[data-testid="hotel-name-0"]').should('contain', 'Persistent Hotel')
+    cy.get('[data-testid="hotel-price-0"]').should('contain', '200.00 USD')
+    cy.get('[data-testid="hotel-rating-0"]').should('contain', '9.0')
   })
 
   it('should handle empty state on comparison page', () => {
