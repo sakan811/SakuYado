@@ -100,11 +100,35 @@ export function HotelProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     const initializeFromStorage = () => {
       try {
+        // Check if localStorage is available
+        if (typeof localStorage === "undefined" || !localStorage) {
+          dispatch({ type: "SET_LOADING", payload: false });
+          return;
+        }
+
         const savedHotels = JSON.parse(localStorage.getItem("hotels") || "[]");
         const savedCurrency = localStorage.getItem("lastUsedCurrency") || "USD";
 
+        // Filter out invalid hotels
+        const validHotels = savedHotels.filter((hotel: unknown) => {
+          if (!hotel || typeof hotel !== "object") return false;
+          const hotelObj = hotel as Record<string, unknown>;
+          return (
+            hotelObj &&
+            typeof hotelObj === "object" &&
+            typeof hotelObj.name === "string" &&
+            typeof hotelObj.price === "number" &&
+            typeof hotelObj.rating === "number" &&
+            typeof hotelObj.currency === "string" &&
+            hotelObj.name.trim() !== "" &&
+            hotelObj.price > 0 &&
+            hotelObj.rating >= 0 &&
+            hotelObj.rating <= 10
+          );
+        });
+
         const processedHotels = sortHotelsByValueScore(
-          savedHotels.map((hotel: Hotel) => ({
+          validHotels.map((hotel: Hotel) => ({
             ...hotel,
             valueScore: calculateValueScore(hotel.rating, hotel.price),
           })),
@@ -132,6 +156,15 @@ export function HotelProvider({ children }: { children: React.ReactNode }) {
       dispatch({ type: "SET_ERROR", payload: null });
       dispatch({ type: "ADD_HOTEL", payload: hotel });
 
+      // Check if localStorage is available
+      if (typeof localStorage === "undefined" || !localStorage) {
+        dispatch({
+          type: "SET_ERROR",
+          payload: "Unable to save hotel data. Storage is not available.",
+        });
+        throw new Error("localStorage is not available");
+      }
+
       // Read current hotels from localStorage to ensure we have the latest data
       const currentHotels = JSON.parse(localStorage.getItem("hotels") || "[]");
       const newHotelData = { ...hotel };
@@ -155,7 +188,9 @@ export function HotelProvider({ children }: { children: React.ReactNode }) {
 
   const clearAllHotels = () => {
     try {
-      localStorage.removeItem("hotels");
+      if (typeof localStorage !== "undefined" && localStorage) {
+        localStorage.removeItem("hotels");
+      }
       dispatch({ type: "CLEAR_HOTELS" });
     } catch (error) {
       console.error("Error clearing hotel data:", error);
@@ -165,7 +200,9 @@ export function HotelProvider({ children }: { children: React.ReactNode }) {
 
   const setLastUsedCurrency = (currency: string) => {
     try {
-      localStorage.setItem("lastUsedCurrency", currency);
+      if (typeof localStorage !== "undefined" && localStorage) {
+        localStorage.setItem("lastUsedCurrency", currency);
+      }
       dispatch({ type: "SET_LAST_USED_CURRENCY", payload: currency });
     } catch (error) {
       console.error("Error saving currency preference:", error);

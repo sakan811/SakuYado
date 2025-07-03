@@ -13,7 +13,7 @@ Higher scores = better value for money! 🌸
 
 ## Status
 
-[![Docker CI](https://github.com/sakan811/SakuYado/actions/workflows/docker-ci.yml/badge.svg)](https://github.com/sakan811/SakuYado/actions/workflows/docker-ci.yml)
+[![Cypress E2E Tests](https://github.com/sakan811/SakuYado/actions/workflows/cypress.yml/badge.svg)](https://github.com/sakan811/SakuYado/actions/workflows/cypress.yml)
 
 [![Web App Test](https://github.com/sakan811/SakuYado/actions/workflows/web-app-test.yml/badge.svg)](https://github.com/sakan811/SakuYado/actions/workflows/web-app-test.yml)
 
