@@ -54,11 +54,12 @@ const SKIP_DIRS = [
   "coverage",
   "out",
   ".git",
+  "cypress",
   "scripts", // Skip the scripts directory to avoid modifying this file
 ];
 
 // Files to skip
-const SKIP_FILES = ["next-env.d.ts", "next.config.ts"];
+const SKIP_FILES = ["next-env.d.ts", "next.config.ts", "cypress.config.ts"];
 
 function shouldProcessFile(filePath) {
   const ext = path.extname(filePath);
