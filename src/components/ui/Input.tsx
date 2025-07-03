@@ -26,10 +26,13 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
   ({ label, error, icon, className = "", ...props }, ref) => {
-    const baseClasses = "w-full px-3 py-2 border-2 border-pink-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-pink-400 focus:border-pink-400 bg-white/80 backdrop-blur transition-all duration-300 text-sm sm:px-4 sm:py-3 sm:text-base sm:rounded-2xl";
-    
-    const errorClasses = error ? "border-red-300 focus:border-red-400 focus:ring-red-400" : "";
-    
+    const baseClasses =
+      "w-full px-3 py-2 border-2 border-pink-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-pink-400 focus:border-pink-400 bg-white/80 backdrop-blur transition-all duration-300 text-sm sm:px-4 sm:py-3 sm:text-base sm:rounded-2xl";
+
+    const errorClasses = error
+      ? "border-red-300 focus:border-red-400 focus:ring-red-400"
+      : "";
+
     const combinedClasses = `${baseClasses} ${errorClasses} ${className}`;
 
     return (
@@ -40,11 +43,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
             {label}
           </label>
         )}
-        <input
-          ref={ref}
-          className={combinedClasses}
-          {...props}
-        />
+        <input ref={ref} className={combinedClasses} {...props} />
         {error && (
           <p className="mt-1 sm:mt-2 text-xs sm:text-sm text-red-500 font-medium">
             {error}
@@ -52,7 +51,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
         )}
       </div>
     );
-  }
+  },
 );
 
 Input.displayName = "Input";

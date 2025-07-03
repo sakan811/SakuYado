@@ -101,7 +101,8 @@ export default function AddHotelPage() {
       } catch {
         setErrors((prev) => ({
           ...prev,
-          general: state.error || "Unable to save hotel data. Please try again.",
+          general:
+            state.error || "Unable to save hotel data. Please try again.",
         }));
       }
     }
@@ -132,7 +133,11 @@ export default function AddHotelPage() {
 
         {/* Form Card - enhanced responsive design */}
         <Card variant="gradient" size="md" className="shadow-xl sm:shadow-2xl">
-          <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6" noValidate>
+          <form
+            onSubmit={handleSubmit}
+            className="space-y-4 sm:space-y-6"
+            noValidate
+          >
             {/* General Error Message */}
             <ErrorMessage message={errors.general} />
 
@@ -184,7 +189,7 @@ export default function AddHotelPage() {
                     onChange={handleChange}
                     options={CURRENCIES.map((currency) => ({
                       value: currency.code,
-                      label: `${currency.code} - ${currency.name}`
+                      label: `${currency.code} - ${currency.name}`,
                     }))}
                   />
                 </div>

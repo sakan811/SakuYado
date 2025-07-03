@@ -15,17 +15,13 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React from 'react';
-import { render } from '@testing-library/react';
-import { HotelProvider } from '@/contexts/HotelContext';
+import React from "react";
+import { render } from "@testing-library/react";
+import { HotelProvider } from "@/contexts/HotelContext";
 
 export function renderWithHotelProvider(ui: React.ReactElement) {
-  return render(
-    <HotelProvider>
-      {ui}
-    </HotelProvider>
-  );
+  return render(<HotelProvider>{ui}</HotelProvider>);
 }
 
-export * from '@testing-library/react';
+export * from "@testing-library/react";
 export { renderWithHotelProvider as render };

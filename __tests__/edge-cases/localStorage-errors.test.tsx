@@ -1,6 +1,11 @@
 // __tests__/edge-cases/localStorage-errors.test.tsx
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
-import { cleanup, render, screen, waitFor } from "../../src/__tests__/test-utils";
+import {
+  cleanup,
+  render,
+  screen,
+  waitFor,
+} from "../../src/__tests__/test-utils";
 import userEvent from "@testing-library/user-event";
 import AddHotelPage from "../../src/app/hotels/add/page";
 import CompareHotelsPage from "../../src/app/hotels/compare/page";

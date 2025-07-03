@@ -28,29 +28,27 @@ const Card: React.FC<CardProps> = ({
   variant = "default",
   size = "md",
   className = "",
-  children
+  children,
 }) => {
-  const baseClasses = "rounded-xl shadow-lg border-2 transition-all duration-300 sm:rounded-2xl";
-  
+  const baseClasses =
+    "rounded-xl shadow-lg border-2 transition-all duration-300 sm:rounded-2xl";
+
   const variantClasses = {
     default: "bg-white border-pink-200 hover:border-pink-300",
-    gradient: "bg-gradient-to-br from-white via-pink-50 to-rose-50 border-pink-200",
-    highlight: "bg-gradient-to-br from-pink-50 to-rose-50 border-pink-400"
+    gradient:
+      "bg-gradient-to-br from-white via-pink-50 to-rose-50 border-pink-200",
+    highlight: "bg-gradient-to-br from-pink-50 to-rose-50 border-pink-400",
   };
 
   const sizeClasses = {
     sm: "p-3 sm:p-4",
     md: "p-4 sm:p-6 md:p-8",
-    lg: "p-6 sm:p-8 md:p-12"
+    lg: "p-6 sm:p-8 md:p-12",
   };
 
   const combinedClasses = `${baseClasses} ${variantClasses[variant]} ${sizeClasses[size]} ${className}`;
 
-  return (
-    <div className={combinedClasses}>
-      {children}
-    </div>
-  );
+  return <div className={combinedClasses}>{children}</div>;
 };
 
 export { Card };

@@ -22,11 +22,12 @@ interface LoadingSpinnerProps {
   className?: string;
 }
 
-const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({ 
-  message = "Loading...", 
-  className = "" 
+const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
+  message = "Loading...",
+  className = "",
 }) => {
-  const baseClasses = "flex flex-col justify-center items-center h-64 space-y-4";
+  const baseClasses =
+    "flex flex-col justify-center items-center h-64 space-y-4";
   const combinedClasses = `${baseClasses} ${className}`;
 
   return (

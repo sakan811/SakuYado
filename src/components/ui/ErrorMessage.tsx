@@ -22,7 +22,10 @@ interface ErrorMessageProps {
   className?: string;
 }
 
-const ErrorMessage: React.FC<ErrorMessageProps> = ({ message, className = "" }) => {
+const ErrorMessage: React.FC<ErrorMessageProps> = ({
+  message,
+  className = "",
+}) => {
   if (!message) return null;
 
   const baseClasses = "bg-red-50 border-2 border-red-200 rounded-xl p-3 sm:p-4";
@@ -30,9 +33,7 @@ const ErrorMessage: React.FC<ErrorMessageProps> = ({ message, className = "" }) 
 
   return (
     <div className={combinedClasses}>
-      <p className="text-sm sm:text-base text-red-700 font-medium">
-        {message}
-      </p>
+      <p className="text-sm sm:text-base text-red-700 font-medium">{message}</p>
     </div>
   );
 };

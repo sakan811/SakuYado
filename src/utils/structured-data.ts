@@ -27,7 +27,7 @@ export function generateAddHotelPageSchema() {
     url: "https://saku-yado.vercel.app/hotels/add",
     isPartOf: {
       "@type": "WebSite",
-      name: "SakuYado", 
+      name: "SakuYado",
       url: "https://saku-yado.vercel.app",
     },
     mainEntity: {

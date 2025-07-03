@@ -19,7 +19,10 @@
 
 import React, { createContext, useContext, useReducer, useEffect } from "react";
 import { Hotel } from "@/types/hotel";
-import { calculateValueScore, sortHotelsByValueScore } from "@/utils/calculations";
+import {
+  calculateValueScore,
+  sortHotelsByValueScore,
+} from "@/utils/calculations";
 
 interface HotelState {
   hotels: Hotel[];
@@ -35,7 +38,10 @@ type HotelAction =
   | { type: "ADD_HOTEL"; payload: Omit<Hotel, "valueScore"> }
   | { type: "CLEAR_HOTELS" }
   | { type: "SET_LAST_USED_CURRENCY"; payload: string }
-  | { type: "INITIALIZE_STATE"; payload: { hotels: Hotel[]; currency: string } };
+  | {
+      type: "INITIALIZE_STATE";
+      payload: { hotels: Hotel[]; currency: string };
+    };
 
 interface HotelContextType {
   state: HotelState;
@@ -62,7 +68,10 @@ function hotelReducer(state: HotelState, action: HotelAction): HotelState {
     case "ADD_HOTEL": {
       const newHotel: Hotel = {
         ...action.payload,
-        valueScore: calculateValueScore(action.payload.rating, action.payload.price),
+        valueScore: calculateValueScore(
+          action.payload.rating,
+          action.payload.price,
+        ),
       };
       const updatedHotels = sortHotelsByValueScore([...state.hotels, newHotel]);
       return { ...state, hotels: updatedHotels, error: null };
@@ -93,12 +102,12 @@ export function HotelProvider({ children }: { children: React.ReactNode }) {
       try {
         const savedHotels = JSON.parse(localStorage.getItem("hotels") || "[]");
         const savedCurrency = localStorage.getItem("lastUsedCurrency") || "USD";
-        
+
         const processedHotels = sortHotelsByValueScore(
           savedHotels.map((hotel: Hotel) => ({
             ...hotel,
             valueScore: calculateValueScore(hotel.rating, hotel.price),
-          }))
+          })),
         );
 
         dispatch({
@@ -122,22 +131,23 @@ export function HotelProvider({ children }: { children: React.ReactNode }) {
     try {
       dispatch({ type: "SET_ERROR", payload: null });
       dispatch({ type: "ADD_HOTEL", payload: hotel });
-      
+
       // Read current hotels from localStorage to ensure we have the latest data
       const currentHotels = JSON.parse(localStorage.getItem("hotels") || "[]");
       const newHotelData = { ...hotel };
       const updatedHotelsData = [...currentHotels, newHotelData];
-      
+
       // Save to localStorage without valueScore (computed property)
       localStorage.setItem("hotels", JSON.stringify(updatedHotelsData));
       localStorage.setItem("lastUsedCurrency", hotel.currency);
-      
+
       dispatch({ type: "SET_LAST_USED_CURRENCY", payload: hotel.currency });
     } catch (error) {
       console.error("Error saving hotel data:", error);
       dispatch({
         type: "SET_ERROR",
-        payload: "Unable to save hotel data. Please try again or check your browser storage settings.",
+        payload:
+          "Unable to save hotel data. Please try again or check your browser storage settings.",
       });
       throw error;
     }
