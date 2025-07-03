@@ -35,21 +35,26 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       children,
       ...props
     },
-    ref
+    ref,
   ) => {
-    const baseClasses = "font-bold rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105";
-    
+    const baseClasses =
+      "font-bold rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105";
+
     const variantClasses = {
-      primary: "bg-gradient-to-r from-pink-500 to-rose-500 text-white hover:from-pink-600 hover:to-rose-600",
-      secondary: "bg-gradient-to-r from-white to-pink-50 text-pink-600 hover:from-pink-50 hover:to-rose-50 border-2 border-pink-200",
-      danger: "bg-gradient-to-r from-red-400 to-pink-400 text-white hover:from-red-500 hover:to-pink-500",
-      outline: "bg-transparent border-2 border-pink-200 text-pink-600 hover:bg-pink-50"
+      primary:
+        "bg-gradient-to-r from-pink-500 to-rose-500 text-white hover:from-pink-600 hover:to-rose-600",
+      secondary:
+        "bg-gradient-to-r from-white to-pink-50 text-pink-600 hover:from-pink-50 hover:to-rose-50 border-2 border-pink-200",
+      danger:
+        "bg-gradient-to-r from-red-400 to-pink-400 text-white hover:from-red-500 hover:to-pink-500",
+      outline:
+        "bg-transparent border-2 border-pink-200 text-pink-600 hover:bg-pink-50",
     };
 
     const sizeClasses = {
       sm: "px-3 py-2 text-sm sm:rounded-lg",
       md: "px-4 py-3 text-base sm:px-6 sm:py-4 sm:text-lg sm:rounded-2xl",
-      lg: "px-6 py-4 text-lg sm:px-8 sm:py-5 sm:text-xl sm:rounded-2xl"
+      lg: "px-6 py-4 text-lg sm:px-8 sm:py-5 sm:text-xl sm:rounded-2xl",
     };
 
     const widthClasses = fullWidth ? "w-full" : "w-auto";
@@ -57,15 +62,11 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     const combinedClasses = `${baseClasses} ${variantClasses[variant]} ${sizeClasses[size]} ${widthClasses} ${className}`;
 
     return (
-      <button
-        ref={ref}
-        className={combinedClasses}
-        {...props}
-      >
+      <button ref={ref} className={combinedClasses} {...props}>
         {children}
       </button>
     );
-  }
+  },
 );
 
 Button.displayName = "Button";

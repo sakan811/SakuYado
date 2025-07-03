@@ -13,6 +13,11 @@ lint:
 format:
 	pnpm run format
 
+pre-ci:
+	pnpm run lint && \
+	pnpm run format && \
+	pnpm run test:run
+
 license-add:
 	node scripts/manage-license-headers.js add
 

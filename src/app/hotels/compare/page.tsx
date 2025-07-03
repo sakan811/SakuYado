@@ -66,7 +66,10 @@ export default function CompareHotelsPage() {
       </div>
 
       {/* Hotel Name */}
-      <h3 className="font-bold text-lg sm:text-xl text-pink-800 mb-3" data-testid={`hotel-name-${index}`}>
+      <h3
+        className="font-bold text-lg sm:text-xl text-pink-800 mb-3"
+        data-testid={`hotel-name-${index}`}
+      >
         {hotel.name}
         {index === 0 && (
           <span className="block text-sm font-normal text-pink-600 mt-1">
@@ -79,13 +82,19 @@ export default function CompareHotelsPage() {
       <div className="grid grid-cols-2 gap-3 text-sm">
         <div className="bg-pink-50 p-3 rounded-lg">
           <div className="text-pink-600 font-medium mb-1">💰 Price</div>
-          <div className="font-bold text-pink-800" data-testid={`hotel-price-${index}`}>
+          <div
+            className="font-bold text-pink-800"
+            data-testid={`hotel-price-${index}`}
+          >
             {formatPrice(hotel.price, hotel.currency)}
           </div>
         </div>
         <div className="bg-rose-50 p-3 rounded-lg">
           <div className="text-rose-600 font-medium mb-1">⭐ Rating</div>
-          <div className="font-bold text-rose-800" data-testid={`hotel-rating-${index}`}>
+          <div
+            className="font-bold text-rose-800"
+            data-testid={`hotel-rating-${index}`}
+          >
             {formatRating(hotel.rating)}
           </div>
         </div>
@@ -127,9 +136,9 @@ export default function CompareHotelsPage() {
 
         {hotels.length === 0 ? (
           /* Empty State */
-          <Card 
-            variant="gradient" 
-            size="lg" 
+          <Card
+            variant="gradient"
+            size="lg"
             className="text-center max-w-2xl mx-auto"
           >
             <div className="text-6xl sm:text-7xl md:text-8xl mb-4 sm:mb-6">
@@ -142,9 +151,9 @@ export default function CompareHotelsPage() {
               Start your journey by adding your first hotel to compare
             </p>
             <Link href="/hotels/add" data-testid="add-first-hotel">
-              <Button 
-                variant="primary" 
-                size="lg" 
+              <Button
+                variant="primary"
+                size="lg"
                 className="text-base sm:text-lg"
               >
                 🌸 Add Your First Hotel
@@ -164,11 +173,7 @@ export default function CompareHotelsPage() {
 
             {/* Desktop Table View */}
             <div className="hidden lg:block">
-              <Card 
-                variant="gradient" 
-                size="lg" 
-                className="overflow-hidden"
-              >
+              <Card variant="gradient" size="lg" className="overflow-hidden">
                 <div className="overflow-x-auto">
                   <table className="min-w-full">
                     <thead className="bg-gradient-to-r from-pink-500 to-rose-500">
@@ -220,7 +225,10 @@ export default function CompareHotelsPage() {
                             </div>
                           </td>
                           <td className="py-3 lg:py-4 px-4 lg:px-6 whitespace-nowrap">
-                            <div className="font-bold text-pink-800 text-base lg:text-lg" data-testid={`hotel-name-${index}`}>
+                            <div
+                              className="font-bold text-pink-800 text-base lg:text-lg"
+                              data-testid={`hotel-name-${index}`}
+                            >
                               {hotel.name}
                               {index === 0 && (
                                 <span className="ml-2 text-pink-500 text-sm font-normal">
@@ -230,13 +238,19 @@ export default function CompareHotelsPage() {
                             </div>
                           </td>
                           <td className="py-3 lg:py-4 px-4 lg:px-6 whitespace-nowrap">
-                            <span className="font-semibold text-pink-700 text-base lg:text-lg" data-testid={`hotel-price-${index}`}>
+                            <span
+                              className="font-semibold text-pink-700 text-base lg:text-lg"
+                              data-testid={`hotel-price-${index}`}
+                            >
                               {formatPrice(hotel.price, hotel.currency)}
                             </span>
                           </td>
                           <td className="py-3 lg:py-4 px-4 lg:px-6 whitespace-nowrap">
                             <div className="flex items-center space-x-1">
-                              <span className="font-semibold text-pink-700 text-base lg:text-lg" data-testid={`hotel-rating-${index}`}>
+                              <span
+                                className="font-semibold text-pink-700 text-base lg:text-lg"
+                                data-testid={`hotel-rating-${index}`}
+                              >
                                 {formatRating(hotel.rating)}
                               </span>
                               <span className="text-yellow-500">⭐</span>
@@ -266,11 +280,7 @@ export default function CompareHotelsPage() {
             </div>
 
             {/* Value Score Explanation */}
-            <Card 
-              variant="gradient" 
-              size="md" 
-              className="mt-6 sm:mt-8"
-            >
+            <Card variant="gradient" size="md" className="mt-6 sm:mt-8">
               <div className="flex items-center space-x-2 sm:space-x-3 mb-2">
                 <span className="text-xl sm:text-2xl">🧮</span>
                 <h3 className="text-base sm:text-lg font-bold text-pink-800">
@@ -289,19 +299,19 @@ export default function CompareHotelsPage() {
             {/* Action Buttons - Enhanced Mobile Layout */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 mt-6 sm:mt-8">
               <Link href="/hotels/add" data-testid="add-another-hotel">
-                <Button 
-                  variant="primary" 
-                  size="lg" 
-                  fullWidth 
+                <Button
+                  variant="primary"
+                  size="lg"
+                  fullWidth
                   className="text-base sm:text-lg"
                 >
                   🌸 Add Another Hotel
                 </Button>
               </Link>
-              <Button 
-                variant="danger" 
-                size="lg" 
-                fullWidth 
+              <Button
+                variant="danger"
+                size="lg"
+                fullWidth
                 onClick={clearAllHotels}
                 className="text-base sm:text-lg"
               >
@@ -310,7 +320,10 @@ export default function CompareHotelsPage() {
             </div>
 
             {/* Statistics Section - Mobile Friendly */}
-            <div data-testid="statistics" className="mt-6 sm:mt-8 grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+            <div
+              data-testid="statistics"
+              className="mt-6 sm:mt-8 grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4"
+            >
               <div className="bg-white/80 backdrop-blur p-3 sm:p-4 rounded-xl border border-pink-200 text-center">
                 <div className="text-lg sm:text-xl font-bold text-pink-800">
                   {calculateHotelStatistics(hotels).count}
