@@ -26,7 +26,7 @@ interface SelectProps extends SelectHTMLAttributes<HTMLSelectElement> {
 }
 
 const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
-  ({ label, error, icon, options, className = "", ...props }, ref) => {
+  ({ label, error, icon, options, className = "", id, ...props }, ref) => {
     const baseClasses =
       "w-full px-2 py-2 border-2 border-pink-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-pink-400 focus:border-pink-400 bg-white/80 backdrop-blur transition-all duration-300 text-xs sm:px-3 sm:py-3 sm:text-sm sm:rounded-2xl";
 
@@ -39,12 +39,15 @@ const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
     return (
       <div className="w-full">
         {label && (
-          <label className="block text-sm sm:text-base font-bold text-pink-800 mb-2">
+          <label
+            htmlFor={id}
+            className="block text-sm sm:text-base font-bold text-pink-800 mb-2"
+          >
             {icon && <span className="mr-2">{icon}</span>}
             {label}
           </label>
         )}
-        <select ref={ref} className={combinedClasses} {...props}>
+        <select ref={ref} id={id} className={combinedClasses} {...props}>
           {options.map((option) => (
             <option key={option.value} value={option.value}>
               {option.label}

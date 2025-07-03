@@ -25,7 +25,7 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
 }
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ label, error, icon, className = "", ...props }, ref) => {
+  ({ label, error, icon, className = "", id, ...props }, ref) => {
     const baseClasses =
       "w-full px-3 py-2 border-2 border-pink-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-pink-400 focus:border-pink-400 bg-white/80 backdrop-blur transition-all duration-300 text-sm sm:px-4 sm:py-3 sm:text-base sm:rounded-2xl";
 
@@ -38,12 +38,15 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
     return (
       <div className="w-full">
         {label && (
-          <label className="block text-sm sm:text-base font-bold text-pink-800 mb-2">
+          <label
+            htmlFor={id}
+            className="block text-sm sm:text-base font-bold text-pink-800 mb-2"
+          >
             {icon && <span className="mr-2">{icon}</span>}
             {label}
           </label>
         )}
-        <input ref={ref} className={combinedClasses} {...props} />
+        <input ref={ref} id={id} className={combinedClasses} {...props} />
         {error && (
           <p className="mt-1 sm:mt-2 text-xs sm:text-sm text-red-500 font-medium">
             {error}

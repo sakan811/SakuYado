@@ -32,7 +32,7 @@ describe("localStorage Error Handling", () => {
     cleanup();
   });
 
-  it("handles corrupted JSON in localStorage gracefully", () => {
+  it("handles corrupted JSON in localStorage gracefully", async () => {
     // Mock localStorage with corrupted data
     const mockLocalStorage = {
       getItem: vi.fn(() => '{"malformed": json}'),
@@ -48,8 +48,11 @@ describe("localStorage Error Handling", () => {
 
     render(<CompareHotelsPage />);
 
-    // Should show empty state instead of crashing
-    expect(screen.getByText("No Hotels Added Yet")).toBeTruthy();
+    // Wait for component to initialize and handle the error
+    await waitFor(() => {
+      // Should show empty state instead of crashing
+      expect(screen.getByText("No Hotels Added Yet")).toBeTruthy();
+    });
   });
 
   it("handles localStorage quota exceeded error", async () => {
@@ -90,7 +93,7 @@ describe("localStorage Error Handling", () => {
     expect(mockPush).not.toHaveBeenCalled();
   });
 
-  it("handles unavailable localStorage", () => {
+  it("handles unavailable localStorage", async () => {
     // Remove localStorage entirely
     Object.defineProperty(window, "localStorage", {
       value: undefined,
@@ -99,8 +102,11 @@ describe("localStorage Error Handling", () => {
 
     render(<CompareHotelsPage />);
 
-    // Should show empty state gracefully
-    expect(screen.getByText("No Hotels Added Yet")).toBeTruthy();
+    // Wait for component to initialize and handle the error
+    await waitFor(() => {
+      // Should show empty state gracefully
+      expect(screen.getByText("No Hotels Added Yet")).toBeTruthy();
+    });
   });
 
   it("handles localStorage with mixed data types", () => {

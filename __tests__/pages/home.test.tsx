@@ -132,24 +132,24 @@ describe("Home Page", () => {
     const addButton = screen.getByText("🌸 Add a Hotel");
     const compareButton = screen.getByText("Compare Hotels");
 
-    // Get the actual link elements (closest 'a' tag)
-    const addLink = addButton.closest("a");
-    const compareLink = compareButton.closest("a");
+    // Check add button styling (should have secondary variant classes)
+    expect(addButton).not.toBeNull();
+    expect(addButton.classList.contains("bg-gradient-to-r")).toBe(true);
+    expect(addButton.classList.contains("text-pink-600")).toBe(true);
+    expect(addButton.classList.contains("from-white")).toBe(true);
+    expect(addButton.classList.contains("to-pink-50")).toBe(true);
 
-    // Check add button styling
-    expect(addLink).not.toBeNull();
-    if (addLink) {
-      expect(addLink.classList.contains("bg-white")).toBe(true);
-      expect(addLink.classList.contains("text-pink-600")).toBe(true);
-      expect(addLink.classList.contains("hover:bg-pink-50")).toBe(true);
-    }
+    // Check compare button styling (should have primary variant classes)
+    expect(compareButton).not.toBeNull();
+    expect(compareButton.classList.contains("bg-gradient-to-r")).toBe(true);
+    expect(compareButton.classList.contains("from-pink-500")).toBe(true);
+    expect(compareButton.classList.contains("to-rose-500")).toBe(true);
+    expect(compareButton.classList.contains("text-white")).toBe(true);
 
-    // Check compare button styling
-    expect(compareLink).not.toBeNull();
-    if (compareLink) {
-      expect(compareLink.classList.contains("bg-pink-600")).toBe(true);
-      expect(compareLink.classList.contains("text-white")).toBe(true);
-      expect(compareLink.classList.contains("hover:bg-pink-700")).toBe(true);
-    }
+    // Check that buttons have base button classes
+    expect(addButton.classList.contains("font-bold")).toBe(true);
+    expect(addButton.classList.contains("rounded-xl")).toBe(true);
+    expect(compareButton.classList.contains("font-bold")).toBe(true);
+    expect(compareButton.classList.contains("rounded-xl")).toBe(true);
   });
 });
