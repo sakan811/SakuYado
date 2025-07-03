@@ -17,6 +17,7 @@
 
 import type { Metadata } from "next";
 import Link from "next/link";
+import Image from "next/image";
 import "./globals.css";
 import { HotelProvider } from "@/contexts/HotelContext";
 
@@ -102,9 +103,16 @@ export default function RootLayout({
           <div className="container mx-auto px-4 py-6 flex justify-between items-center">
             <Link
               href="/"
-              className="text-2xl font-bold text-white hover:text-pink-100 transition-colors duration-300 drop-shadow-sm"
+              className="flex items-center gap-2 text-2xl font-bold text-white hover:text-pink-100 transition-colors duration-300 drop-shadow-sm"
             >
-              🌸 SakuYado
+              <Image
+                src="/android-chrome-512x512.png"
+                alt="SakuYado Logo"
+                width={32}
+                height={32}
+                className="w-8 h-8"
+              />
+              SakuYado
             </Link>
           </div>
         </header>
