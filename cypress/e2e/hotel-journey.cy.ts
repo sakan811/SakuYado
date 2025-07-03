@@ -1,7 +1,13 @@
-describe('Hotel Management Journey', () => {
-  const viewports = Cypress.env('viewports') || [{ name: 'default', width: 1280, height: 720 }]
+interface Viewport {
+  name: string;
+  width: number;
+  height: number;
+}
 
-  viewports.forEach((viewport) => {
+describe('Hotel Management Journey', () => {
+  const viewports: Viewport[] = Cypress.env('viewports') || [{ name: 'default', width: 1280, height: 720 }]
+
+  viewports.forEach((viewport: Viewport) => {
     describe(`${viewport.name} viewport (${viewport.width}x${viewport.height})`, () => {
       beforeEach(() => {
         cy.viewport(viewport.width, viewport.height)
