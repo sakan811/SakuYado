@@ -16,6 +16,7 @@
  */
 
 import Link from "next/link";
+import { Button } from "@/components";
 
 export default function ResponsiveHomePage() {
   return (
@@ -55,18 +56,26 @@ export default function ResponsiveHomePage() {
 
           {/* Responsive buttons */}
           <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center max-w-md sm:max-w-none mx-auto">
-            <Link
-              href="/hotels/add"
-              data-testid="add-hotel-link"
-              className="w-full sm:w-auto bg-white text-pink-600 px-6 sm:px-8 py-3 sm:py-4 rounded-xl sm:rounded-2xl font-bold text-base sm:text-lg hover:bg-pink-50 hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl text-center"
-            >
-              🌸 Add a Hotel
+            <Link href="/hotels/add" className="w-full sm:w-auto">
+              <Button
+                data-testid="add-hotel-link"
+                variant="secondary"
+                size="md"
+                fullWidth
+                className="bg-white text-pink-600 hover:bg-pink-50 text-center"
+              >
+                🌸 Add a Hotel
+              </Button>
             </Link>
-            <Link
-              href="/hotels/compare"
-              className="w-full sm:w-auto bg-pink-600 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-xl sm:rounded-2xl font-bold text-base sm:text-lg hover:bg-pink-700 hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl border-2 border-pink-300 text-center"
-            >
-              Compare Hotels
+            <Link href="/hotels/compare" className="w-full sm:w-auto">
+              <Button
+                variant="primary"
+                size="md"
+                fullWidth
+                className="bg-pink-600 text-white hover:bg-pink-700 border-2 border-pink-300 text-center"
+              >
+                Compare Hotels
+              </Button>
             </Link>
           </div>
         </div>

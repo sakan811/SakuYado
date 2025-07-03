@@ -23,6 +23,7 @@ import { useHotel } from "@/contexts/HotelContext";
 import { calculateHotelStatistics } from "@/utils/calculations";
 import { formatPrice, formatRating } from "@/utils/formatting";
 import { generateHotelComparisonSchema } from "@/utils/structured-data";
+import { Button, Card, LoadingSpinner } from "@/components";
 
 export default function CompareHotelsPage() {
   const { state, clearAllHotels } = useHotel();
@@ -30,16 +31,11 @@ export default function CompareHotelsPage() {
 
   // Mobile Card Component
   const HotelCard = ({ hotel, index }: { hotel: Hotel; index: number }) => (
-    <div
+    <Card
       data-testid="hotel-card-mobile"
-      className={`
-        bg-white rounded-xl sm:rounded-2xl shadow-lg border-2 p-4 mb-4 transition-all duration-300
-        ${
-          index === 0
-            ? "border-pink-400 bg-gradient-to-br from-pink-50 to-rose-50"
-            : "border-pink-200 hover:border-pink-300"
-        }
-      `}
+      variant={index === 0 ? "highlight" : "default"}
+      size="sm"
+      className={`mb-4 ${index === 0 ? "" : "hover:border-pink-300"}`}
     >
       {/* Card Header */}
       <div className="flex items-start justify-between mb-3">
@@ -94,18 +90,11 @@ export default function CompareHotelsPage() {
           </div>
         </div>
       </div>
-    </div>
+    </Card>
   );
 
   if (isLoading) {
-    return (
-      <div className="flex flex-col justify-center items-center h-64 space-y-4">
-        <div className="text-4xl sm:text-6xl animate-pulse">🌸</div>
-        <div className="text-lg sm:text-xl text-pink-600 font-medium">
-          Loading hotel comparisons...
-        </div>
-      </div>
-    );
+    return <LoadingSpinner message="Loading hotel comparisons..." />;
   }
 
   const hotelComparisonStructuredData = generateHotelComparisonSchema(hotels);
@@ -138,7 +127,11 @@ export default function CompareHotelsPage() {
 
         {hotels.length === 0 ? (
           /* Empty State */
-          <div className="text-center bg-gradient-to-br from-pink-50 via-white to-rose-50 p-6 sm:p-8 md:p-12 rounded-2xl sm:rounded-3xl shadow-xl border-2 border-pink-200 max-w-2xl mx-auto">
+          <Card 
+            variant="gradient" 
+            size="lg" 
+            className="text-center max-w-2xl mx-auto"
+          >
             <div className="text-6xl sm:text-7xl md:text-8xl mb-4 sm:mb-6">
               🌸
             </div>
@@ -148,14 +141,16 @@ export default function CompareHotelsPage() {
             <p className="text-sm sm:text-base md:text-lg text-pink-600 mb-6 sm:mb-8">
               Start your journey by adding your first hotel to compare
             </p>
-            <Link
-              href="/hotels/add"
-              data-testid="add-first-hotel"
-              className="inline-block bg-gradient-to-r from-pink-500 to-rose-500 text-white py-3 sm:py-4 px-6 sm:px-8 rounded-xl sm:rounded-2xl font-bold text-base sm:text-lg hover:from-pink-600 hover:to-rose-600 hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl"
-            >
-              🌸 Add Your First Hotel
+            <Link href="/hotels/add" data-testid="add-first-hotel">
+              <Button 
+                variant="primary" 
+                size="lg" 
+                className="text-base sm:text-lg"
+              >
+                🌸 Add Your First Hotel
+              </Button>
             </Link>
-          </div>
+          </Card>
         ) : (
           <>
             {/* Mobile Cards View (default on mobile) */}
@@ -169,7 +164,11 @@ export default function CompareHotelsPage() {
 
             {/* Desktop Table View */}
             <div className="hidden lg:block">
-              <div className="bg-gradient-to-br from-white via-pink-50 to-rose-50 rounded-2xl lg:rounded-3xl shadow-xl lg:shadow-2xl border-2 border-pink-200 overflow-hidden">
+              <Card 
+                variant="gradient" 
+                size="lg" 
+                className="overflow-hidden"
+              >
                 <div className="overflow-x-auto">
                   <table className="min-w-full">
                     <thead className="bg-gradient-to-r from-pink-500 to-rose-500">
@@ -263,11 +262,15 @@ export default function CompareHotelsPage() {
                     </tbody>
                   </table>
                 </div>
-              </div>
+              </Card>
             </div>
 
             {/* Value Score Explanation */}
-            <div className="bg-gradient-to-r from-pink-100 via-white to-rose-100 p-4 sm:p-6 rounded-xl sm:rounded-2xl border-2 border-pink-200 shadow-lg mt-6 sm:mt-8">
+            <Card 
+              variant="gradient" 
+              size="md" 
+              className="mt-6 sm:mt-8"
+            >
               <div className="flex items-center space-x-2 sm:space-x-3 mb-2">
                 <span className="text-xl sm:text-2xl">🧮</span>
                 <h3 className="text-base sm:text-lg font-bold text-pink-800">
@@ -281,23 +284,29 @@ export default function CompareHotelsPage() {
                   (higher score = better value for money)
                 </span>
               </p>
-            </div>
+            </Card>
 
             {/* Action Buttons - Enhanced Mobile Layout */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 mt-6 sm:mt-8">
-              <Link
-                href="/hotels/add"
-                data-testid="add-another-hotel"
-                className="bg-gradient-to-r from-pink-500 to-rose-500 text-white py-3 sm:py-4 px-4 sm:px-6 rounded-xl sm:rounded-2xl font-bold text-base sm:text-lg hover:from-pink-600 hover:to-rose-600 hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl text-center"
-              >
-                🌸 Add Another Hotel
+              <Link href="/hotels/add" data-testid="add-another-hotel">
+                <Button 
+                  variant="primary" 
+                  size="lg" 
+                  fullWidth 
+                  className="text-base sm:text-lg"
+                >
+                  🌸 Add Another Hotel
+                </Button>
               </Link>
-              <button
+              <Button 
+                variant="danger" 
+                size="lg" 
+                fullWidth 
                 onClick={clearAllHotels}
-                className="bg-gradient-to-r from-red-400 to-pink-400 text-white py-3 sm:py-4 px-4 sm:px-6 rounded-xl sm:rounded-2xl font-bold text-base sm:text-lg hover:from-red-500 hover:to-pink-500 hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl"
+                className="text-base sm:text-lg"
               >
                 🗑️ Clear All Hotels
-              </button>
+              </Button>
             </div>
 
             {/* Statistics Section - Mobile Friendly */}
