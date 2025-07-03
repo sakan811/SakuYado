@@ -31,6 +31,9 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
+      - name: Install Cypress
+        run: cypress install
+
       - name: Build application
         run: pnpm run build
 
