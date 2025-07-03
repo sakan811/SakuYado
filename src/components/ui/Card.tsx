@@ -22,6 +22,7 @@ interface CardProps {
   size?: "sm" | "md" | "lg";
   className?: string;
   children: React.ReactNode;
+  "data-testid"?: string;
 }
 
 const Card: React.FC<CardProps> = ({
@@ -29,6 +30,7 @@ const Card: React.FC<CardProps> = ({
   size = "md",
   className = "",
   children,
+  "data-testid": testId,
 }) => {
   const baseClasses =
     "rounded-xl shadow-lg border-2 transition-all duration-300 sm:rounded-2xl";
@@ -48,7 +50,7 @@ const Card: React.FC<CardProps> = ({
 
   const combinedClasses = `${baseClasses} ${variantClasses[variant]} ${sizeClasses[size]} ${className}`;
 
-  return <div className={combinedClasses}>{children}</div>;
+  return <div className={combinedClasses} data-testid={testId}>{children}</div>;
 };
 
 export { Card };
