@@ -24,6 +24,7 @@ import { CURRENCIES } from "@/constants/currencies";
 import { useHotel } from "@/contexts/HotelContext";
 import { validateHotelForm, type ValidationError } from "@/utils/validation";
 import { generateAddHotelPageSchema } from "@/utils/structured-data";
+import { Button, Input, Select, Card, ErrorMessage } from "@/components";
 
 export default function AddHotelPage() {
   const router = useRouter();
@@ -130,41 +131,24 @@ export default function AddHotelPage() {
         </div>
 
         {/* Form Card - enhanced responsive design */}
-        <div className="bg-gradient-to-br from-white via-pink-50 to-rose-50 p-4 sm:p-6 md:p-8 rounded-2xl sm:rounded-3xl shadow-xl sm:shadow-2xl border-2 border-pink-200">
+        <Card variant="gradient" size="md" className="shadow-xl sm:shadow-2xl">
           <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6" noValidate>
             {/* General Error Message */}
-            {errors.general && (
-              <div className="bg-red-50 border-2 border-red-200 rounded-xl p-3 sm:p-4">
-                <p className="text-sm sm:text-base text-red-700 font-medium">
-                  {errors.general}
-                </p>
-              </div>
-            )}
+            <ErrorMessage message={errors.general} />
 
             {/* Hotel Name - responsive input */}
-            <div>
-              <label
-                htmlFor="name"
-                className="block text-sm sm:text-base font-bold text-pink-800 mb-2"
-              >
-                🏨 Hotel Name
-              </label>
-              <input
-                type="text"
-                id="name"
-                name="name"
-                data-testid="hotel-name"
-                value={formData.name}
-                onChange={handleChange}
-                className="w-full px-3 sm:px-4 py-2 sm:py-3 border-2 border-pink-200 rounded-xl sm:rounded-2xl focus:outline-none focus:ring-2 focus:ring-pink-400 focus:border-pink-400 bg-white/80 backdrop-blur transition-all duration-300 text-sm sm:text-base"
-                placeholder="Enter hotel name"
-              />
-              {errors.name && (
-                <p className="mt-1 sm:mt-2 text-xs sm:text-sm text-red-500 font-medium">
-                  {errors.name}
-                </p>
-              )}
-            </div>
+            <Input
+              type="text"
+              id="name"
+              name="name"
+              data-testid="hotel-name"
+              value={formData.name}
+              onChange={handleChange}
+              label="Hotel Name"
+              icon="🏨"
+              placeholder="Enter hotel name"
+              error={errors.name}
+            />
 
             {/* Price and Currency - enhanced responsive layout */}
             <div>
@@ -179,34 +163,30 @@ export default function AddHotelPage() {
               <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
                 {/* Price Input - equal width on desktop */}
                 <div className="flex-1 sm:flex-1">
-                  <input
+                  <Input
                     type="text"
                     id="price"
                     name="price"
                     data-testid="hotel-price"
                     value={formData.price}
                     onChange={handleChange}
-                    className="w-full px-3 sm:px-4 py-2 sm:py-3 border-2 border-pink-200 rounded-xl sm:rounded-2xl focus:outline-none focus:ring-2 focus:ring-pink-400 focus:border-pink-400 bg-white/80 backdrop-blur transition-all duration-300 text-sm sm:text-base"
                     placeholder="Enter price"
                   />
                 </div>
 
                 {/* Currency dropdown - equal width on desktop */}
                 <div className="w-full sm:flex-1">
-                  <select
+                  <Select
                     id="currency"
                     name="currency"
                     data-testid="hotel-currency"
                     value={formData.currency}
                     onChange={handleChange}
-                    className="w-full px-2 sm:px-3 py-2 sm:py-3 border-2 border-pink-200 rounded-xl sm:rounded-2xl focus:outline-none focus:ring-2 focus:ring-pink-400 focus:border-pink-400 bg-white/80 backdrop-blur transition-all duration-300 text-xs sm:text-sm"
-                  >
-                    {CURRENCIES.map((currency) => (
-                      <option key={currency.code} value={currency.code}>
-                        {currency.code} - {currency.name}
-                      </option>
-                    ))}
-                  </select>
+                    options={CURRENCIES.map((currency) => ({
+                      value: currency.code,
+                      label: `${currency.code} - ${currency.name}`
+                    }))}
+                  />
                 </div>
               </div>
 
@@ -218,46 +198,41 @@ export default function AddHotelPage() {
             </div>
 
             {/* Rating - responsive input */}
-            <div>
-              <label
-                htmlFor="rating"
-                className="block text-sm sm:text-base font-bold text-pink-800 mb-2"
-              >
-                ⭐ Rating (0-10)
-              </label>
-              <input
-                type="text"
-                id="rating"
-                name="rating"
-                data-testid="hotel-rating"
-                value={formData.rating}
-                onChange={handleChange}
-                className="w-full px-3 sm:px-4 py-2 sm:py-3 border-2 border-pink-200 rounded-xl sm:rounded-2xl focus:outline-none focus:ring-2 focus:ring-pink-400 focus:border-pink-400 bg-white/80 backdrop-blur transition-all duration-300 text-sm sm:text-base"
-                placeholder="Enter rating"
-              />
-              {errors.rating && (
-                <p className="mt-1 sm:mt-2 text-xs sm:text-sm text-red-500 font-medium">
-                  {errors.rating}
-                </p>
-              )}
-            </div>
+            <Input
+              type="text"
+              id="rating"
+              name="rating"
+              data-testid="hotel-rating"
+              value={formData.rating}
+              onChange={handleChange}
+              label="Rating (0-10)"
+              icon="⭐"
+              placeholder="Enter rating"
+              error={errors.rating}
+            />
 
             {/* Submit Button - enhanced responsive */}
-            <button
+            <Button
               type="submit"
               data-testid="add-hotel-button"
-              className="w-full bg-gradient-to-r from-pink-500 to-rose-500 text-white py-3 sm:py-4 px-4 sm:px-6 rounded-xl sm:rounded-2xl font-bold text-base sm:text-lg hover:from-pink-600 hover:to-rose-600 hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl"
+              variant="primary"
+              size="md"
+              fullWidth
             >
               🌸 Submit & Compare
-            </button>
+            </Button>
 
             {/* Secondary Actions - responsive layout */}
             <div className="space-y-3 sm:space-y-4">
-              <Link
-                href="/hotels/compare"
-                className="block w-full bg-gradient-to-r from-white to-pink-50 text-pink-600 py-3 sm:py-4 px-4 sm:px-6 rounded-xl sm:rounded-2xl font-bold text-base sm:text-lg hover:from-pink-50 hover:to-rose-50 hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl text-center border-2 border-pink-200"
-              >
-                👀 View Compare Page
+              <Link href="/hotels/compare" className="block w-full">
+                <Button
+                  variant="secondary"
+                  size="md"
+                  fullWidth
+                  className="text-center"
+                >
+                  👀 View Compare Page
+                </Button>
               </Link>
 
               <Link
@@ -268,7 +243,7 @@ export default function AddHotelPage() {
               </Link>
             </div>
           </form>
-        </div>
+        </Card>
 
         {/* Decorative Elements - responsive */}
         <div className="text-center mt-6 sm:mt-8 space-x-2 sm:space-x-4">
