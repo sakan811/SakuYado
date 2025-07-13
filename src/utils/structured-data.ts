@@ -24,11 +24,11 @@ export function generateAddHotelPageSchema() {
     name: "Add Hotel Information - SakuYado",
     description:
       "Add hotel details to compare value and find the best accommodation deals with SakuYado",
-    url: "https://saku-yado.vercel.app/hotels/add",
+    url: "https://sakuyado.fukudev.org/hotels/add",
     isPartOf: {
       "@type": "WebSite",
       name: "SakuYado",
-      url: "https://saku-yado.vercel.app",
+      url: "https://sakuyado.fukudev.org",
     },
     mainEntity: {
       "@type": "WebApplication",
@@ -45,7 +45,7 @@ export function generateAddHotelPageSchema() {
     },
     potentialAction: {
       "@type": "UseAction",
-      target: "https://saku-yado.vercel.app/hotels/compare",
+      target: "https://sakuyado.fukudev.org/hotels/compare",
       name: "Compare Hotels with SakuYado",
     },
   };

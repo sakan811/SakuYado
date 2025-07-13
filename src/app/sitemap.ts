@@ -18,7 +18,7 @@
 import { MetadataRoute } from "next";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = "https://saku-yado.vercel.app";
+  const baseUrl = "https://sakuyado.fukudev.org";
 
   return [
     {
