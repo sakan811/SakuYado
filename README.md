@@ -21,7 +21,7 @@ Higher scores = better value for money! 🌸
 
 ### 🌐 Vercel (Recommended)
 
-Simply visit: **<https://saku-yado.vercel.app/>**
+Simply visit: **<https://sakuyado.fukudev.org/>**
 
 ### 💻 Local Development
 
