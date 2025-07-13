@@ -38,7 +38,7 @@ export const metadata: Metadata = {
     title: "SakuYado - Hotel Value Analyzer",
     description:
       "Compare hotels based on review-per-price ratio to get the most value for your money with SakuYado",
-    url: "https://saku-yado.vercel.app",
+    url: "https://sakuyado.fukudev.org",
     siteName: "SakuYado",
     images: [
       {
@@ -57,7 +57,7 @@ const organizationStructuredData = {
   alternateName: "SakuYado Hotel Value Analyzer",
   description:
     "Compare hotels based on review-per-price ratio to get the most value for your money with SakuYado",
-  url: "https://saku-yado.vercel.app",
+  url: "https://sakuyado.fukudev.org",
   applicationCategory: "TravelApplication",
   operatingSystem: "Any",
   browserRequirements: "Requires JavaScript",

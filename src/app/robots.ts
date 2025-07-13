@@ -18,7 +18,7 @@
 import { MetadataRoute } from "next";
 
 export default function robots(): MetadataRoute.Robots {
-  const baseUrl = "https://saku-yado.vercel.app";
+  const baseUrl = "https://sakuyado.fukudev.org";
 
   return {
     rules: {
