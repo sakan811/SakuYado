@@ -8,5 +8,9 @@ export default defineConfig({
     environment: "jsdom",
     setupFiles: ["./__tests__/vitest-setup.ts"],
     css: false,
+    coverage: {
+      provider: 'istanbul',
+      reporter: ['text'],
+    },
   },
 });
