@@ -51,3 +51,4 @@ Simply visit: **<https://sakuyado.fukudev.org/>**
 ## Documentation
 
 - [Features Documentation](./docs/features.md) - Detailed overview of all app features and capabilities
+- [Architecture Overview](./docs/architecture.md) - App structure and technical architecture
