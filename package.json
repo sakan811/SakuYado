@@ -9,6 +9,7 @@
     "lint": "next lint",
     "test": "vitest",
     "test:run": "vitest --run",
+    "test:coverage": "vitest run --coverage",
     "format": "npx prettier . --write",
     "e2e": "cypress run",
     "e2e:open": "cypress open",
