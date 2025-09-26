@@ -30,6 +30,45 @@ SakuYado is a hotel value comparison web application that helps users find the b
 - **LocalStorage Persistence**: Hotel data persists across browser sessions
 - **Mobile-First Design**: Optimized for mobile (375px) with desktop support (1280px+)
 
+## App Router Architecture
+
+The `src/app/` directory follows Next.js 15 App Router conventions with a hierarchical structure optimized for hotel value comparison functionality.
+
+### Core Structure
+
+**Layout Components:**
+
+- `layout.tsx`: Root layout with HotelProvider wrapper, header, and global styling
+- `globals.css`: Tailwind CSS v4 styling with pink/rose color scheme
+
+**Main Pages:**
+
+- `page.tsx`: Landing page with hero section and navigation CTAs
+- `hotels/add/page.tsx`: Hotel entry form with validation
+- `hotels/compare/page.tsx`: Hotel comparison and ranking display
+
+**SEO & Metadata:**
+
+- `manifest.ts`: Progressive Web App configuration
+- `robots.ts`: Search engine crawling instructions
+- `sitemap.ts`: XML sitemap generation
+
+### App Router Integration
+
+**HotelProvider Context:**
+
+- Wrapped around all pages in layout.tsx:120
+- Provides centralized state management across the application
+- Handles localStorage persistence and currency preferences
+
+**Responsive Design:**
+
+- Mobile-first approach (375px) with desktop support (1280px+)
+- Sakura-themed decorative elements and animations
+- Gradient backgrounds and consistent spacing
+
+![App Architecture Diagram](./mermaid/app-architecture.png)
+
 ## Component Architecture
 
 ### UI Component Library

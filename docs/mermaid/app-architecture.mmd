@@ -1,0 +1,100 @@
+---
+config:
+  theme: 'forest'
+  defaultRenderer: "elk"
+  layout: elk
+---
+flowchart LR
+    %% App directory structure
+    subgraph App["src/app/<br>Next.js App Router"]
+        direction TB
+
+        subgraph RootFiles["Root Configuration"]
+            Layout["layout.tsx<br>Root layout & HotelProvider"]
+            Globals["globals.css<br>Global styling"]
+            Manifest["manifest.ts<br>PWA config"]
+            Robots["robots.ts<br>SEO config"]
+            Sitemap["sitemap.ts<br>XML sitemap"]
+            Favicon["favicon.ico<br>App icon"]
+        end
+
+        subgraph Pages["Application Pages"]
+            Home["page.tsx<br>Landing page"]
+            Add["hotels/add/page.tsx<br>Hotel entry form"]
+            Compare["hotels/compare/page.tsx<br>Hotel comparison"]
+        end
+    end
+
+    %% External dependencies
+    subgraph Context["State Management"]
+        HotelProvider["HotelContext<br>Hotel data & localStorage"]
+    end
+
+    subgraph Components["UI Components"]
+        Button["Button<br>Interactive elements"]
+        Input["Input<br>Form fields"]
+        Select["Select<br>Dropdown menus"]
+        Card["Card<br>Content containers"]
+        ErrorMsg["ErrorMessage<br>Error display"]
+        Loading["LoadingSpinner<br>Loading indicators"]
+    end
+
+    subgraph Utils["Utilities"]
+        Calc["calculations.ts<br>Value score formulas"]
+        Valid["validation.ts<br>Form validation"]
+        Format["formatting.ts<br>Data formatting"]
+        Struct["structured-data.ts<br>SEO data"]
+        Currencies["currencies.ts<br>Currency data"]
+    end
+
+    subgraph NextJS["Next.js Features"]
+        Link["next/link<br>Navigation"]
+        Image["next/image<br>Image optimization"]
+        Metadata["next/metadata<br>SEO metadata"]
+    end
+
+    %% Data flow relationships
+    Layout -.-> HotelProvider
+    Layout -.-> Globals
+    Layout -.-> Link
+    Layout -.-> Image
+
+    Home -.-> Button
+    Home -.-> Link
+    Home -.-> Metadata
+
+    Add -.-> Button
+    Add -.-> Input
+    Add -.-> Select
+    Add -.-> Card
+    Add -.-> ErrorMsg
+    Add -.-> Valid
+    Add -.-> Format
+    Add -.-> Currencies
+    Add -.-> HotelProvider
+
+    Compare -.-> Button
+    Compare -.-> Card
+    Compare -.-> Loading
+    Compare -.-> Calc
+    Compare -.-> Format
+    Compare -.-> HotelProvider
+
+    HotelProvider -.-> localStorage["localStorage<br>Data persistence"]
+    HotelProvider -.-> Calc
+    HotelProvider -.-> Valid
+    HotelProvider -.-> Format
+    HotelProvider -.-> Struct
+
+    %% Styling classes
+    classDef appFile fill:#e3f2fd,stroke:#1565c0,stroke-width:2px
+    classDef context fill:#fff3e0,stroke:#e65100,stroke-width:2px
+    classDef component fill:#e8f5e8,stroke:#1b5e20,stroke-width:2px
+    classDef util fill:#f3e5f5,stroke:#4a148c,stroke-width:2px
+    classDef external fill:#ffebee,stroke:#c62828,stroke-width:2px
+
+    class Layout,Globals,Manifest,Robots,Sitemap,Favicon,Home,Add,Compare appFile
+    class HotelProvider,localStorage context
+    class Button,Input,Select,Card,ErrorMsg,Loading component
+    class Calc,Valid,Format,Struct,Currencies util
+    class Link,Image,Metadata,NextJS external
