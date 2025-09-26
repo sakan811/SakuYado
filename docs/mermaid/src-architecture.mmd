@@ -1,0 +1,73 @@
+---
+config:
+  theme: 'forest'
+  defaultRenderer: "elk"
+  layout: elk
+---
+flowchart LR
+    %% Core blocks
+    subgraph App["App Router (app/)<br>Next.js App Router"]
+        Layout["layout.tsx<br>Root layout with metadata"]
+        Home["page.tsx<br>Landing page"]
+        Hotels["hotels/<br>Hotel routes"]
+        Add["add/<br>Hotel entry form"]
+        Compare["compare/<br>Hotel comparison"]
+    end
+
+    subgraph Components["Components<br>Reusable UI elements"]
+        UI["ui/<br>Component library"]
+        UI --> Button["Button<br>Interactive elements"]
+        UI --> Input["Input<br>Form inputs"]
+        UI --> Select["Select<br>Dropdown components"]
+        UI --> Card["Card<br>Content containers"]
+        UI --> ErrorMsg["ErrorMsg<br>Error displays"]
+        UI --> Loading["Loading<br>Loading indicators"]
+    end
+
+    subgraph Context["Context<br>State management"]
+        HotelContext["HotelContext<br>Hotel data & localStorage"]
+    end
+
+    subgraph Utils["Utils<br>Business logic"]
+        Calc["calculations<br>Value score formulas"]
+        Valid["validation<br>Form validation"]
+        Format["formatting<br>Data formatting"]
+        Struct["structured-data<br>SEO structured data"]
+    end
+
+    subgraph Types["Types<br>Type definitions"]
+        Hotel["hotel<br>Hotel data types"]
+        Currency["currency<br>Currency types"]
+    end
+
+    subgraph Constants["Constants<br>Configuration"]
+        Currencies["currencies<br>Currency data"]
+        Rules["validation-rules<br>Validation rules"]
+    end
+
+    %% Main connections
+    HotelContext --> localStorage
+    HotelContext <-->|state| App
+    HotelContext <-->|state| Add
+    HotelContext <-->|state| Compare
+
+    %% Component usage
+    Add --> UI
+    Compare --> UI
+    Home --> UI
+
+    %% Dependencies
+    HotelContext --> Utils
+    HotelContext --> Types
+    Calc --> Hotel
+    Valid --> Rules
+    Format --> Currency
+
+    %% Styling
+    classDef core fill:#e1f5fe,stroke:#01579b,stroke-width:2px
+    classDef ui fill:#e8f5e8,stroke:#1b5e20,stroke-width:2px
+    classDef data fill:#fff3e0,stroke:#e65100,stroke-width:2px
+
+    class App,Layout,Home,Hotels,Add,Compare core
+    class Components,UI,Button,Input,Select,Card,ErrorMsg,Loading ui
+    class Context,HotelContext,Utils,Calc,Valid,Format,Struct,Types,Hotel,Currency,Constants,Currencies,Rules data
