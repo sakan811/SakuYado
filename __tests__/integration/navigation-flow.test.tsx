@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
-import { render, screen, cleanup } from "../../src/__tests__/test-utils";
+import { render, screen, cleanup } from "../test-utils";
 import userEvent from "@testing-library/user-event";
 import Home from "../../src/app/page";
 import AddHotelPage from "../../src/app/hotels/add/page";

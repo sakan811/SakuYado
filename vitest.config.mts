@@ -11,6 +11,23 @@ export default defineConfig({
     coverage: {
       provider: 'istanbul',
       reporter: ['text'],
+      exclude: [
+        "next.config.ts",
+        "postcss.config.mjs",
+        "scripts/**",
+        "**/*.config.{js,ts,mjs}",
+        "**/*.d.ts",
+        "node_modules/**",
+        ".next/**",
+        "public/**",
+        "__tests__/**",
+        "coverage/**",
+        ".vscode/**",
+        ".git/**",
+        "*.md",
+        "*.json",
+        "cypress/**",
+      ]
     },
   },
 });
