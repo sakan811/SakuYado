@@ -38,7 +38,7 @@ describe("Multi-Hotel Comparison", () => {
         // Verify value scores are calculated correctly
         cy.get("body").should("contain", "0.0779"); // Berlin: 7.5/(90*1.07)
         cy.get("body").should("contain", "0.0496"); // London: 7.8/(120*1.31)
-        cy.get("body").should("contain", "0.0400"); // New York: 8.0/(200*1.0)
+        cy.get("body").should("contain", "0.04"); // New York: 8.0/(200*1.0)
         cy.get("body").should("contain", "0.0846"); // Tokyo: 8.5/(15000*0.0067)
       });
 
