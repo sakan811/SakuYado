@@ -71,6 +71,7 @@ function hotelReducer(state: HotelState, action: HotelAction): HotelState {
         valueScore: calculateValueScore(
           action.payload.rating,
           action.payload.price,
+          action.payload.currency,
         ),
       };
       const updatedHotels = sortHotelsByValueScore([...state.hotels, newHotel]);
@@ -130,7 +131,7 @@ export function HotelProvider({ children }: { children: React.ReactNode }) {
         const processedHotels = sortHotelsByValueScore(
           validHotels.map((hotel: Hotel) => ({
             ...hotel,
-            valueScore: calculateValueScore(hotel.rating, hotel.price),
+            valueScore: calculateValueScore(hotel.rating, hotel.price, hotel.currency),
           })),
         );
 
