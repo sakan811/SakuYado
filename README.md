@@ -47,3 +47,7 @@ Simply visit: **<https://sakuyado.fukudev.org/>**
    ```
 
 5. Open <http://localhost:3000>
+
+## Documentation
+
+- [Features Documentation](./docs/features.md) - Detailed overview of all app features and capabilities
