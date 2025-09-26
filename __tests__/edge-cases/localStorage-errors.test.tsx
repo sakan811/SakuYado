@@ -5,7 +5,7 @@ import {
   render,
   screen,
   waitFor,
-} from "../../src/__tests__/test-utils";
+} from "../test-utils";
 import userEvent from "@testing-library/user-event";
 import AddHotelPage from "../../src/app/hotels/add/page";
 import CompareHotelsPage from "../../src/app/hotels/compare/page";

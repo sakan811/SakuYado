@@ -1,5 +1,5 @@
 import AddHotelPage from "@/app/hotels/add/page";
-import { cleanup, render, screen } from "../../src/__tests__/test-utils";
+import { cleanup, render, screen } from "../test-utils";
 import userEvent from "@testing-library/user-event";
 import { describe, beforeEach, it, expect, vi } from "vitest";
 

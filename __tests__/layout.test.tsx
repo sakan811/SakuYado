@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, afterEach } from "vitest";
-import { render, screen, cleanup } from "../src/__tests__/test-utils";
+import { render, screen, cleanup } from "./test-utils";
 
 // Mock Next.js Link component
 vi.mock("next/link", () => ({
