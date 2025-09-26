@@ -1,5 +1,6 @@
 onlyBuiltDependencies:
-  - "@tailwindcss/oxide"
+  - '@tailwindcss/oxide'
+  - cypress
   - esbuild
   - sharp
   - unrs-resolver
