@@ -14,7 +14,7 @@
     "e2e": "cypress run",
     "e2e:open": "cypress open",
     "e2e:dev": "start-server-and-test dev http://localhost:3000 'cypress run'",
-    "test:all": "pnpm lint && pnpm:format && pnpm build && pnpm test:run && pnpm e2e:dev"
+    "test:all": "pnpm lint && pnpm format && pnpm build && pnpm test:run && pnpm e2e:dev"
   },
   "dependencies": {
     "@testing-library/user-event": "^14.6.1",
