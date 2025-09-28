@@ -242,7 +242,6 @@ describe("Navigation Flow Integration", () => {
   });
 
   it("tests complete multi-hotel comparison workflow", async () => {
-
     // Add multiple hotels to localStorage
     const multipleHotels = [
       { name: "Budget Hotel", price: 80, rating: 7, currency: "USD" }, // 7/80 = 0.0875

@@ -24,26 +24,26 @@ describe("Formatting Utility Functions", () => {
           price: 100,
           rating: 8.5,
           valueScore: 0.085,
-          currency: "USD"
+          currency: "USD",
         },
         expected: {
           price: "100.00 USD",
           rating: "8.5",
-          valueScore: "0.0850"
-        }
+          valueScore: "0.0850",
+        },
       },
       {
         name: "hotel without value score",
         input: {
           price: 150,
           rating: 9.2,
-          currency: "EUR"
+          currency: "EUR",
         },
         expected: {
           price: "150.00 EUR",
           rating: "9.2",
-          valueScore: "0.0000"
-        }
+          valueScore: "0.0000",
+        },
       },
       {
         name: "high precision values",
@@ -51,14 +51,14 @@ describe("Formatting Utility Functions", () => {
           price: 123.456,
           rating: 8.75,
           valueScore: 0.07089,
-          currency: "JPY"
+          currency: "JPY",
         },
         expected: {
           price: "123.46 JPY",
           rating: "8.8",
-          valueScore: "0.0709"
-        }
-      }
+          valueScore: "0.0709",
+        },
+      },
     ];
 
     testCases.forEach(({ name, input, expected }) => {
@@ -73,7 +73,7 @@ describe("Formatting Utility Functions", () => {
         price: 100,
         rating: 8.5,
         valueScore: 0.085,
-        currency: "USD"
+        currency: "USD",
       };
       const result = formatHotelData(input);
 

@@ -131,7 +131,11 @@ export function HotelProvider({ children }: { children: React.ReactNode }) {
         const processedHotels = sortHotelsByValueScore(
           validHotels.map((hotel: Hotel) => ({
             ...hotel,
-            valueScore: calculateValueScore(hotel.rating, hotel.price, hotel.currency),
+            valueScore: calculateValueScore(
+              hotel.rating,
+              hotel.price,
+              hotel.currency,
+            ),
           })),
         );
 

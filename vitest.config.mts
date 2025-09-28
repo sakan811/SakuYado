@@ -9,8 +9,8 @@ export default defineConfig({
     setupFiles: ["./__tests__/vitest-setup.ts"],
     css: false,
     coverage: {
-      provider: 'istanbul',
-      reporter: ['text'],
+      provider: "istanbul",
+      reporter: ["text"],
       exclude: [
         "next.config.ts",
         "postcss.config.mjs",
@@ -27,7 +27,7 @@ export default defineConfig({
         "*.md",
         "*.json",
         "cypress/**",
-      ]
+      ],
     },
   },
 });
