@@ -50,7 +50,11 @@ const Card: React.FC<CardProps> = ({
 
   const combinedClasses = `${baseClasses} ${variantClasses[variant]} ${sizeClasses[size]} ${className}`;
 
-  return <div className={combinedClasses} data-testid={testId}>{children}</div>;
+  return (
+    <div className={combinedClasses} data-testid={testId}>
+      {children}
+    </div>
+  );
 };
 
 export { Card };

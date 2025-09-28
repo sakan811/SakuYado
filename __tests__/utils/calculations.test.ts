@@ -48,7 +48,7 @@ describe("calculateValueScore", () => {
 
     it("should throw error for null/undefined currency", () => {
       expect(() => {
-        calculateValueScore(4.5, 100, (null as unknown as string));
+        calculateValueScore(4.5, 100, null as unknown as string);
       }).toThrow("Unsupported currency: null");
     });
   });

@@ -75,14 +75,14 @@ The `src/app/` directory follows Next.js 15 App Router conventions with a hierar
 
 Reusable components in `src/components/ui/`:
 
-| Component | Purpose |
-|-----------|---------|
-| **Button** | Interactive actions with variants (primary, secondary, danger) |
-| **Input** | Form fields with labels, icons, and error handling |
-| **Select** | Dropdown selection with accessibility support |
-| **Card** | Content containers with gradient/highlight variants |
-| **ErrorMessage** | Consistent error message display |
-| **LoadingSpinner** | Loading indicators with custom messages |
+| Component          | Purpose                                                        |
+| ------------------ | -------------------------------------------------------------- |
+| **Button**         | Interactive actions with variants (primary, secondary, danger) |
+| **Input**          | Form fields with labels, icons, and error handling             |
+| **Select**         | Dropdown selection with accessibility support                  |
+| **Card**           | Content containers with gradient/highlight variants            |
+| **ErrorMessage**   | Consistent error message display                               |
+| **LoadingSpinner** | Loading indicators with custom messages                        |
 
 ### Component Design Patterns
 

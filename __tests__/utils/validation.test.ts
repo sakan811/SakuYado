@@ -1,5 +1,9 @@
 import { describe, expect, it } from "vitest";
-import { validateHotelName, validatePrice, validateRating } from "@/utils/validation";
+import {
+  validateHotelName,
+  validatePrice,
+  validateRating,
+} from "@/utils/validation";
 
 describe("Validation Utility Functions", () => {
   describe("validateHotelName", () => {

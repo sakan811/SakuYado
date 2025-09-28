@@ -18,12 +18,16 @@
 import { Hotel } from "@/types/hotel";
 import { CURRENCIES } from "@/constants/currencies";
 
-export function calculateValueScore(rating: number, price: number, currency: string): number {
+export function calculateValueScore(
+  rating: number,
+  price: number,
+  currency: string,
+): number {
   if (price <= 0) {
     throw new Error("Price must be greater than 0");
   }
 
-  const currencyData = CURRENCIES.find(c => c.code === currency);
+  const currencyData = CURRENCIES.find((c) => c.code === currency);
   if (!currencyData) {
     throw new Error(`Unsupported currency: ${currency}`);
   }
