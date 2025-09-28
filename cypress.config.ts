@@ -15,7 +15,7 @@ export default defineConfig({
         { name: "desktop", width: 1280, height: 720 },
       ],
     },
-    setupNodeEvents(on, config) {
+    setupNodeEvents() {
       // implement node event listeners here
     },
   },
