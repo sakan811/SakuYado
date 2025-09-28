@@ -13,7 +13,7 @@ vi.mock("next/link", () => ({
     children: React.ReactNode;
     href: string;
     className?: string;
-    [key: string]: any;
+    [key: string]: unknown;
   }) => (
     <a href={href} className={className} data-testid="mock-link" {...props}>
       {children}

@@ -24,7 +24,7 @@ vi.mock("next/link", () => ({
     children: React.ReactNode;
     href: string;
     className?: string;
-    [key: string]: any;
+    [key: string]: React.HTMLAttributes<HTMLAnchorElement>;
   }) => (
     <a href={href} className={className} data-testid="mock-link" {...props}>
       {children}
@@ -242,7 +242,6 @@ describe("Navigation Flow Integration", () => {
   });
 
   it("tests complete multi-hotel comparison workflow", async () => {
-    const user = userEvent.setup();
 
     // Add multiple hotels to localStorage
     const multipleHotels = [

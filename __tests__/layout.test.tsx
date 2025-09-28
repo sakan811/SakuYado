@@ -1,16 +1,21 @@
 import { describe, it, expect, vi, afterEach } from "vitest";
 import { render, screen, cleanup } from "./test-utils";
+import Link from "next/link";
 
 // Mock Next.js Link component
 vi.mock("next/link", () => ({
   default: ({
     children,
     href,
+    className,
+    ...props
   }: {
     children: React.ReactNode;
     href: string;
+    className?: string;
+    [key: string]: unknown;
   }) => (
-    <a href={href} data-testid="mock-link">
+    <a href={href} className={className} data-testid="mock-link" {...props}>
       {children}
     </a>
   ),
@@ -31,13 +36,13 @@ const LayoutContent = ({ children }: { children: React.ReactNode }) => {
 
       <header className="relative z-10 bg-gradient-to-r from-pink-500 via-rose-400 to-pink-600 shadow-lg border-b-4 border-pink-200">
         <div className="container mx-auto px-4 py-6 flex justify-between items-center">
-          <a
+          <Link
             href="/"
             className="text-2xl font-bold text-white hover:text-pink-100 transition-colors duration-300 drop-shadow-sm"
             data-testid="mock-link"
           >
             🌸 Hotel Value Analyzer
-          </a>
+          </Link>
         </div>
       </header>
 
@@ -82,8 +87,8 @@ describe("Root Layout", () => {
       </LayoutContent>,
     );
 
-    const titleLink = screen.getByText(/Hotel Value Analyzer/);
-    expect(titleLink.closest("a")).toHaveAttribute("href", "/");
+    const titleLink = screen.getByTestId("mock-link");
+    expect(titleLink.getAttribute("href")).toBe("/");
   });
 
   it("has responsive design classes for mobile and desktop", () => {
@@ -115,8 +120,7 @@ describe("Root Layout", () => {
       </LayoutContent>,
     );
 
-    const titleLink = screen.getByText(/Hotel Value Analyzer/);
-    const linkElement = titleLink.closest("a");
+    const linkElement = screen.getByTestId("mock-link");
 
     expect(linkElement).not.toBeNull();
     if (linkElement) {
