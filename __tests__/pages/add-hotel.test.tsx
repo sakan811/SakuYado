@@ -29,6 +29,14 @@ describe("AddHotelPage", () => {
     expect(screen.getAllByText(/Submit & Compare/i)[0]).toBeTruthy();
   });
 
+  it("displays currency comparison disclaimer", () => {
+    render(<AddHotelPage />);
+
+    expect(
+      screen.getAllByText(/Please compare hotels within the same currency/)[0],
+    ).toBeTruthy();
+  });
+
   it("shows validation errors for empty fields", async () => {
     render(<AddHotelPage />);
 

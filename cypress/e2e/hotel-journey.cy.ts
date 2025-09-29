@@ -128,6 +128,26 @@ describe("Hotel Management Journey", () => {
         cy.get('[data-testid="add-first-hotel"]').click();
         cy.url().should("include", "/hotels/add");
       });
+
+      it("should display currency comparison disclaimer on add hotel page", () => {
+        cy.visit("/hotels/add");
+
+        // Should display the currency comparison disclaimer
+        cy.contains("Please compare hotels within the same currency").should(
+          "be.visible",
+        );
+
+        // Should have warning styling (amber color)
+        cy.contains("Please compare hotels within the same currency").should(
+          "have.class",
+          "text-amber-600",
+        );
+
+        // Should contain warning icon
+        cy.contains("⚠️ Please compare hotels within the same currency").should(
+          "be.visible",
+        );
+      });
     });
   });
 });
