@@ -129,6 +129,9 @@ export default function AddHotelPage() {
           <p className="text-sm sm:text-base md:text-lg text-pink-600">
             Share your hotel details to find the best value
           </p>
+          <p className="text-xs sm:text-sm text-amber-600 font-medium mt-2">
+            ⚠️ Please compare hotels within the same currency
+          </p>
         </div>
 
         {/* Form Card - enhanced responsive design */}
