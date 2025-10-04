@@ -1,5 +1,5 @@
 // __tests__/pages/compare-hotels.test.tsx
-import { describe, expect, it, vi, beforeEach } from "vitest";
+import { describe, expect, it, vi, beforeEach, afterEach } from "vitest";
 import { cleanup, render, screen } from "../test-utils";
 import userEvent from "@testing-library/user-event";
 import CompareHotelsPage from "../../src/app/hotels/compare/page";
@@ -302,5 +302,101 @@ describe("CompareHotelsPage", () => {
     // Note: Component displays "0" for zero values and "0.01" for the calculated value
     expect(screen.getAllByText("0").length).toBeGreaterThan(0); // 0/100 = 0 (displayed as "0")
     expect(screen.getAllByText("0.01").length).toBeGreaterThan(0); // 10/1000 = 0.01
+  });
+
+  describe("localStorage Error Handling", () => {
+    let originalLocalStorage: Storage;
+
+    beforeEach(() => {
+      originalLocalStorage = window.localStorage;
+    });
+
+    afterEach(() => {
+      Object.defineProperty(window, "localStorage", {
+        value: originalLocalStorage,
+        writable: true,
+      });
+      cleanup();
+    });
+
+    it("handles corrupted JSON in localStorage gracefully", async () => {
+      // Mock localStorage with corrupted data
+      const mockLocalStorage = {
+        getItem: vi.fn(() => '{"malformed": json}'),
+        setItem: vi.fn(),
+        removeItem: vi.fn(),
+        clear: vi.fn(),
+      };
+
+      Object.defineProperty(window, "localStorage", {
+        value: mockLocalStorage,
+        writable: true,
+      });
+
+      render(<CompareHotelsPage />);
+
+      // Should show empty state instead of crashing
+      expect(screen.getByText("No Hotels Added Yet")).toBeTruthy();
+    });
+
+    it("handles unavailable localStorage", async () => {
+      // Remove localStorage entirely
+      Object.defineProperty(window, "localStorage", {
+        value: undefined,
+        writable: true,
+      });
+
+      render(<CompareHotelsPage />);
+
+      // Should show empty state gracefully
+      expect(screen.getByText("No Hotels Added Yet")).toBeTruthy();
+    });
+
+    it("handles localStorage with mixed data types", () => {
+      const mockLocalStorage = {
+        getItem: vi.fn(() =>
+          JSON.stringify([
+            { name: "Valid Hotel", price: 100, rating: 8, currency: "USD" },
+            "invalid string entry",
+            { name: "Missing Price", rating: 9, currency: "EUR" },
+            {
+              name: "Invalid Rating",
+              price: 200,
+              rating: "not a number",
+              currency: "GBP",
+            },
+            null,
+            undefined,
+          ]),
+        ),
+        setItem: vi.fn(),
+        removeItem: vi.fn(),
+        clear: vi.fn(),
+      };
+
+      Object.defineProperty(window, "localStorage", {
+        value: mockLocalStorage,
+        writable: true,
+      });
+
+      render(<CompareHotelsPage />);
+
+      // Should either show valid hotels or handle gracefully by showing empty state
+      // The component should filter out invalid entries
+      const emptyState = screen.queryByText("No Hotels Added Yet");
+      const validHotels = screen.queryAllByText("Valid Hotel");
+
+      if (validHotels.length > 0) {
+        // Component shows valid hotels and filters out invalid ones
+        // Expect to find valid hotel in both mobile and desktop views
+        expect(validHotels.length).toBeGreaterThan(0);
+        // Should not show invalid entries
+        expect(screen.queryByText("invalid string entry")).toBeNull();
+        expect(screen.queryByText("Invalid Rating")).toBeNull();
+      } else {
+        // Component shows empty state due to strict validation
+        expect(emptyState).toBeTruthy();
+      }
+    });
   });
 });
