@@ -34,7 +34,6 @@ interface HotelState {
 type HotelAction =
   | { type: "SET_LOADING"; payload: boolean }
   | { type: "SET_ERROR"; payload: string | null }
-  | { type: "SET_HOTELS"; payload: Hotel[] }
   | { type: "ADD_HOTEL"; payload: Omit<Hotel, "valueScore"> }
   | { type: "CLEAR_HOTELS" }
   | { type: "SET_LAST_USED_CURRENCY"; payload: string }
@@ -63,8 +62,6 @@ function hotelReducer(state: HotelState, action: HotelAction): HotelState {
       return { ...state, isLoading: action.payload };
     case "SET_ERROR":
       return { ...state, error: action.payload };
-    case "SET_HOTELS":
-      return { ...state, hotels: action.payload };
     case "ADD_HOTEL": {
       const newHotel: Hotel = {
         ...action.payload,
@@ -88,8 +85,6 @@ function hotelReducer(state: HotelState, action: HotelAction): HotelState {
         lastUsedCurrency: action.payload.currency,
         isLoading: false,
       };
-    default:
-      return state;
   }
 }
 
