@@ -11,9 +11,10 @@ SakuYado is a hotel value comparison web application that helps users find the b
 ### Tech Stack
 
 - **Next.js 15** with App Router
-- **React 18** with TypeScript
-- **Tailwind CSS v4** for styling
+- **React 19.2.0** with TypeScript
+- **Tailwind CSS v4.1.14** for styling
 - **React Context + useReducer** for state management
+- **Vitest** for unit testing with V8 coverage provider
 
 ### Core Architecture Pattern
 
