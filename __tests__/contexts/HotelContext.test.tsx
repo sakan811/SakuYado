@@ -45,7 +45,7 @@ function TestComponent() {
               rating: 8,
               currency: "USD"
             });
-          } catch (error) {
+          } catch {
             // Handle error silently for test
           }
         }}
@@ -251,7 +251,7 @@ describe("HotelContext", () => {
       const originalLocalStorage = window.localStorage;
 
       // Use delete to remove localStorage property entirely
-      delete (window as any).localStorage;
+      delete (window as Window & { localStorage?: Storage }).localStorage;
 
       renderWithProvider();
 
