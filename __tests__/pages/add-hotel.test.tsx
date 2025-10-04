@@ -1,6 +1,6 @@
 // __tests__/pages/add-hotel.test.tsx
-import { describe, expect, it, vi, beforeEach, afterEach } from "vitest";
-import { render, screen, cleanup } from "../test-utils";
+import { describe, expect, it, vi, beforeEach } from "vitest";
+import { render, screen, cleanup, waitFor } from "../test-utils";
 import userEvent from "@testing-library/user-event";
 import AddHotelPage from "../../src/app/hotels/add/page";
 
@@ -9,8 +9,62 @@ const mockPush = vi.fn();
 vi.mock("next/navigation", () => ({
   useRouter: () => ({
     push: mockPush,
+    back: vi.fn(),
+    forward: vi.fn(),
+    refresh: vi.fn(),
+    replace: vi.fn(),
+    prefetch: vi.fn(),
   }),
 }));
+
+// Test Helper Functions
+const getFormElements = () => ({
+  nameInput: screen.getAllByLabelText(/Hotel Name/i)[0],
+  priceInput: screen.getAllByLabelText(/Price/i)[0],
+  ratingInput: screen.getAllByLabelText(/Rating/i)[0],
+  currencySelect: document.getElementById("currency") as HTMLSelectElement,
+  submitButton: screen.getAllByText(/Submit & Compare/i)[0],
+});
+
+const fillForm = async (
+  user: ReturnType<typeof userEvent.setup>,
+  data: {
+    name?: string;
+    price?: string;
+    rating?: string;
+    currency?: string;
+  },
+  clearFirst = true
+) => {
+  const { nameInput, priceInput, ratingInput, currencySelect } = getFormElements();
+
+  if (clearFirst) {
+    await user.clear(nameInput);
+    await user.clear(priceInput);
+    await user.clear(ratingInput);
+  }
+
+  if (data.name !== undefined) await user.type(nameInput, data.name);
+  if (data.price !== undefined) await user.type(priceInput, data.price);
+  if (data.rating !== undefined) await user.type(ratingInput, data.rating);
+  if (data.currency && currencySelect) {
+    await user.selectOptions(currencySelect, data.currency);
+  }
+};
+
+const mockLocalStorageSetItem = () => {
+  const originalSetItem = localStorage.setItem;
+  let savedData: string | null = null;
+  localStorage.setItem = vi.fn((key, value) => {
+    if (key === "hotels") {
+      savedData = value;
+    }
+    return originalSetItem.call(localStorage, key, value);
+  });
+  return { originalSetItem, getSavedData: () => savedData };
+};
+
+const waitForFormUpdate = () => new Promise(resolve => setTimeout(resolve, 100));
 
 describe("AddHotelPage", () => {
   beforeEach(() => {
@@ -23,10 +77,11 @@ describe("AddHotelPage", () => {
     render(<AddHotelPage />);
 
     expect(screen.getAllByText("Add Hotel Information")[0]).toBeTruthy();
-    expect(screen.getAllByLabelText(/Hotel Name/i)[0]).toBeTruthy();
-    expect(screen.getAllByLabelText(/Price/i)[0]).toBeTruthy();
-    expect(screen.getAllByLabelText(/Rating/i)[0]).toBeTruthy();
-    expect(screen.getAllByText(/Submit & Compare/i)[0]).toBeTruthy();
+    const { nameInput, priceInput, ratingInput, submitButton } = getFormElements();
+    expect(nameInput).toBeTruthy();
+    expect(priceInput).toBeTruthy();
+    expect(ratingInput).toBeTruthy();
+    expect(submitButton).toBeTruthy();
   });
 
   it("displays currency comparison disclaimer", () => {
@@ -39,182 +94,110 @@ describe("AddHotelPage", () => {
 
   it("shows validation errors for empty fields", async () => {
     render(<AddHotelPage />);
+    const { submitButton } = getFormElements();
 
-    // Submit the form without filling any fields
-    const submitButtons = screen.getAllByText(/Submit & Compare/i);
-    await userEvent.click(submitButtons[0]);
+    await userEvent.click(submitButton);
 
-    // Check that navigation did not occur
     expect(mockPush).not.toHaveBeenCalled();
-
-    // Check that localStorage wasn't updated
     const savedHotels = JSON.parse(localStorage.getItem("hotels") || "[]");
     expect(savedHotels).toHaveLength(0);
   });
 
-  it("validates field values appropriately", async () => {
+  it.each([
+    { name: "Test Hotel", price: "-50", rating: "11", description: "negative price and high rating" },
+    { name: "Valid Name", price: "abc", rating: "5", description: "non-numeric price" },
+    { name: "Valid Name", price: "100", rating: "-1", description: "negative rating" },
+  ])("validates field values appropriately - $description", async ({ name, price, rating }) => {
     const user = userEvent.setup();
     render(<AddHotelPage />);
+    const { submitButton } = getFormElements();
 
-    // Get input fields and submit button
-    const nameInput = screen.getAllByLabelText(/Hotel Name/i)[0];
-    const priceInput = screen.getAllByLabelText(/Price/i)[0];
-    const ratingInput = screen.getAllByLabelText(/Rating/i)[0];
-    const submitButton = screen.getAllByText(/Submit & Compare/i)[0];
-
-    // Enter valid name but invalid price and rating
-    await user.type(nameInput, "Test Hotel");
-    await user.clear(priceInput);
-    await user.type(priceInput, "-50");
-    await user.type(ratingInput, "11");
-
-    // Trigger validation by attempting submission
+    await fillForm(user, { name, price, rating }, false);
     await user.click(submitButton);
 
-    // Check if validation was called and form submission was prevented
     expect(mockPush).not.toHaveBeenCalled();
-
-    // Check that localStorage wasn't updated since validation failed
     const savedHotels = JSON.parse(localStorage.getItem("hotels") || "[]");
     expect(savedHotels).toHaveLength(0);
   });
 
-  it("successfully submits the form with valid data and proper data types", async () => {
-    const user = userEvent.setup();
-    render(<AddHotelPage />);
-
-    // Get input fields
-    const nameInput = screen.getAllByLabelText(/Hotel Name/i)[0];
-    const priceInput = screen.getAllByLabelText(/Price/i)[0];
-    const ratingInput = screen.getAllByLabelText(/Rating/i)[0];
-    const currencySelect = document.getElementById(
-      "currency",
-    ) as HTMLSelectElement;
-    const submitButton = screen.getAllByText(/Submit & Compare/i)[0];
-
-    // Fill valid form data
-    await user.clear(nameInput);
-    await user.type(nameInput, "Grand Hotel");
-    await user.clear(priceInput);
-    await user.type(priceInput, "150");
-    await user.clear(ratingInput);
-    await user.type(ratingInput, "8.5");
-    await user.selectOptions(currencySelect, "USD");
-
-    // Mock localStorage.setItem
-    const originalSetItem = localStorage.setItem;
-    let savedData: string | null = null;
-    localStorage.setItem = vi.fn((key, value) => {
-      if (key === "hotels") {
-        savedData = value;
-      }
-      return originalSetItem.call(localStorage, key, value);
-    });
-
-    // Submit form
-    await user.click(submitButton);
-
-    // Wait for state updates
-    await new Promise((resolve) => setTimeout(resolve, 300));
-
-    // Restore original localStorage.setItem
-    localStorage.setItem = originalSetItem; // Parse the saved data
-    const savedHotels = savedData ? JSON.parse(savedData) : [];
-
-    // Verify the expected hotel data was saved
-    expect(savedHotels).toHaveLength(1);
-
-    // Check if the last hotel added matches our test data with proper types
-    const lastHotel = savedHotels[0];
-    expect(lastHotel).toEqual({
+  describe("Successful Form Submissions", () => {
+  it.each([
+    {
       name: "Grand Hotel",
-      price: 150, // Should be number, not string
-      rating: 8.5, // Should be number, not string
-      currency: "USD", // Default currency
-    });
+      price: "150",
+      rating: "8.5",
+      currency: "USD",
+      expected: { name: "Grand Hotel", price: 150, rating: 8.5, currency: "USD" },
+      description: "basic hotel with USD currency"
+    },
+    {
+      name: "Budget Inn",
+      price: "50.25",
+      rating: "7",
+      currency: "EUR",
+      expected: { name: "Budget Inn", price: 50.25, rating: 7, currency: "EUR" },
+      description: "budget hotel with decimal price"
+    },
+    {
+      name: "Luxury Suite",
+      price: "500",
+      rating: "9.9",
+      currency: "GBP",
+      expected: { name: "Luxury Suite", price: 500, rating: 9.9, currency: "GBP" },
+      description: "luxury hotel with high rating"
+    }
+  ])("successfully submits form with $description", async ({ name, price, rating, currency, expected }) => {
+    const user = userEvent.setup();
+    render(<AddHotelPage />);
+    const { submitButton } = getFormElements();
 
-    // Check that navigation was called
+    await fillForm(user, { name, price, rating, currency });
+
+    const { originalSetItem, getSavedData } = mockLocalStorageSetItem();
+    await user.click(submitButton);
+    await waitForFormUpdate();
+    localStorage.setItem = originalSetItem;
+
+    const savedHotels = getSavedData() ? JSON.parse(getSavedData()!) : [];
+    expect(savedHotels).toHaveLength(1);
+    expect(savedHotels[0]).toEqual(expected);
     expect(mockPush).toHaveBeenCalledWith("/hotels/compare");
   });
 
-  it("adds hotel to existing hotels in localStorage with currency", async () => {
+  it("adds hotel to existing hotels in localStorage", async () => {
     const user = userEvent.setup();
 
-    // Setup existing hotels in localStorage
     const existingHotels = [
       { name: "Existing Hotel", price: 100, rating: 7, currency: "EUR" },
     ];
     localStorage.setItem("hotels", JSON.stringify(existingHotels));
 
     render(<AddHotelPage />);
+    const { submitButton } = getFormElements();
 
-    // Fill valid form data
-    const nameInput = screen.getAllByLabelText(/Hotel Name/i)[0];
-    const priceInput = screen.getAllByLabelText(/Price/i)[0];
-    const ratingInput = screen.getAllByLabelText(/Rating/i)[0];
-    const submitButton = screen.getAllByText(/Submit & Compare/i)[0];
+    await fillForm(user, { name: "New Hotel", price: "200", rating: "9", currency: "EUR" });
 
-    await user.clear(nameInput);
-    await user.type(nameInput, "New Hotel");
-    await user.clear(priceInput);
-    await user.type(priceInput, "200");
-    await user.clear(ratingInput);
-    await user.type(ratingInput, "9");
-
-    // Change currency - get by id instead of role with name
-    const currencySelect = document.getElementById(
-      "currency",
-    ) as HTMLSelectElement;
-    await user.selectOptions(currencySelect, "EUR");
-
-    // Mock localStorage.setItem
-    const originalSetItem = localStorage.setItem;
-    let savedData: string | null = null;
-    localStorage.setItem = vi.fn((key, value) => {
-      if (key === "hotels") {
-        savedData = value;
-      }
-      return originalSetItem.call(localStorage, key, value);
-    });
-
-    // Submit form
+    const { originalSetItem, getSavedData } = mockLocalStorageSetItem();
     await user.click(submitButton);
-
-    // Wait for state updates
-    await new Promise((resolve) => setTimeout(resolve, 300));
-
-    // Restore original localStorage.setItem
+    await waitForFormUpdate();
     localStorage.setItem = originalSetItem;
-    // Parse the saved data
-    const savedHotels = savedData ? JSON.parse(savedData) : [];
 
-    // Verify the final localStorage state
+    const savedHotels = getSavedData() ? JSON.parse(getSavedData()!) : [];
     expect(savedHotels).toHaveLength(2);
-
-    // Check if existing hotel was preserved
-    expect(savedHotels[0]).toEqual({
-      name: "Existing Hotel",
-      price: 100,
-      rating: 7,
-      currency: "EUR",
-    });
-
-    // Check if the new hotel was added with correct types and currency
+    expect(savedHotels[0]).toEqual(existingHotels[0]);
     expect(savedHotels[1]).toEqual({
       name: "New Hotel",
-      price: 200, // Should be number, not string
-      rating: 9, // Should be number, not string
+      price: 200,
+      rating: 9,
       currency: "EUR",
     });
-
-    // Check that navigation was called
     expect(mockPush).toHaveBeenCalledWith("/hotels/compare");
   });
+});
 
   it("has a working link to compare page", async () => {
     render(<AddHotelPage />);
 
-    // Fix: Use getAllByText to handle multiple instances, consistent with other tests
     const comparePageLinks = screen.getAllByText(/View Compare Page/);
     expect(comparePageLinks.length).toBeGreaterThan(0);
 
@@ -228,455 +211,346 @@ describe("AddHotelPage", () => {
   it("saves and loads currency preference", async () => {
     const user = userEvent.setup();
 
-    // Set a currency preference
     localStorage.setItem("lastUsedCurrency", "EUR");
-
     render(<AddHotelPage />);
+    const { currencySelect } = getFormElements();
 
-    // Check if the saved currency is selected
-    const currencySelect = document.getElementById(
-      "currency",
-    ) as HTMLSelectElement;
     expect(currencySelect.value).toBe("EUR");
-
-    // Change currency and verify it's saved
     await user.selectOptions(currencySelect, "GBP");
     expect(localStorage.getItem("lastUsedCurrency")).toBe("GBP");
   });
 
   describe("Edge Cases", () => {
-    it("handles extremely large price values", async () => {
-      const user = userEvent.setup();
-      render(<AddHotelPage />);
+  it.each([
+    {
+      name: "Expensive Hotel",
+      price: "999999999.99",
+      rating: "10",
+      expectedPrice: 999999999.99,
+      description: "extremely large price values"
+    },
+    {
+      name: "Budget Hotel",
+      price: "0.01",
+      rating: "5",
+      expectedPrice: 0.01,
+      description: "very small decimal prices"
+    },
+    {
+      name: "Hôtel André & Co. (★★★★★) 日本語",
+      price: "150",
+      rating: "8.5",
+      expectedPrice: 150,
+      description: "special characters in hotel names"
+    }
+  ])("handles $description", async ({ name, price, rating, expectedPrice }) => {
+    const user = userEvent.setup();
+    render(<AddHotelPage />);
+    const { submitButton } = getFormElements();
 
-      const nameInput = screen.getAllByLabelText(/Hotel Name/i)[0];
-      const priceInput = screen.getAllByLabelText(/Price/i)[0];
-      const ratingInput = screen.getAllByLabelText(/Rating/i)[0];
+    await fillForm(user, { name, price, rating });
+    await user.click(submitButton);
 
-      await user.clear(nameInput);
-      await user.clear(priceInput);
-      await user.clear(ratingInput);
+    const savedHotels = JSON.parse(localStorage.getItem("hotels") || "[]");
+    expect(savedHotels).toHaveLength(1);
+    expect(savedHotels[0].name).toBe(name);
+    expect(savedHotels[0].price).toBe(expectedPrice);
+    expect(mockPush).toHaveBeenCalledWith("/hotels/compare");
+  });
 
-      await user.type(nameInput, "Expensive Hotel");
-      await user.type(priceInput, "999999999.99");
-      await user.type(ratingInput, "10");
+    it.each([
+    { rating: "0.1", expected: 0.1, description: "minimum valid rating" },
+    { rating: "10", expected: 10, description: "maximum valid rating" },
+    { rating: "5.5", expected: 5.5, description: "mid-range decimal rating" },
+  ])("handles boundary rating value: $description", async ({ rating, expected }) => {
+    const user = userEvent.setup();
 
-      const submitButton = screen.getAllByText(/Submit & Compare/i)[0];
-      await user.click(submitButton);
+    localStorage.clear();
+    mockPush.mockClear();
+    cleanup();
+    render(<AddHotelPage />);
 
-      const savedHotels = JSON.parse(localStorage.getItem("hotels") || "[]");
-      expect(savedHotels).toHaveLength(1);
-      expect(savedHotels[0].price).toBe(999999999.99);
+    const { submitButton } = getFormElements();
+    await fillForm(user, { name: `Hotel ${rating}`, price: "100", rating });
+    await user.click(submitButton);
+
+    await waitForFormUpdate();
+
+    const savedHotels = JSON.parse(localStorage.getItem("hotels") || "[]");
+    expect(savedHotels).toHaveLength(1);
+    expect(savedHotels[0].rating).toBe(expected);
+    expect(mockPush).toHaveBeenCalledWith("/hotels/compare");
+  });
+
+  it("handles zero rating as edge case", async () => {
+    const user = userEvent.setup();
+    render(<AddHotelPage />);
+    const { submitButton } = getFormElements();
+
+    await fillForm(user, { name: "Zero Rating Hotel", price: "100", rating: "0" });
+    await user.click(submitButton);
+
+    await waitForFormUpdate();
+
+    const savedHotels = JSON.parse(localStorage.getItem("hotels") || "[]");
+
+    if (savedHotels.length > 0) {
+      expect(savedHotels[0].rating).toBe(0);
       expect(mockPush).toHaveBeenCalledWith("/hotels/compare");
-    });
-
-    it("handles very small decimal prices", async () => {
-      const user = userEvent.setup();
-      render(<AddHotelPage />);
-
-      const nameInput = screen.getAllByLabelText(/Hotel Name/i)[0];
-      const priceInput = screen.getAllByLabelText(/Price/i)[0];
-      const ratingInput = screen.getAllByLabelText(/Rating/i)[0];
-
-      await user.clear(nameInput);
-      await user.clear(priceInput);
-      await user.clear(ratingInput);
-
-      await user.type(nameInput, "Budget Hotel");
-      await user.type(priceInput, "0.01");
-      await user.type(ratingInput, "5");
-
-      const submitButton = screen.getAllByText(/Submit & Compare/i)[0];
-      await user.click(submitButton);
-
-      const savedHotels = JSON.parse(localStorage.getItem("hotels") || "[]");
-      expect(savedHotels).toHaveLength(1);
-      expect(savedHotels[0].price).toBe(0.01);
-      expect(mockPush).toHaveBeenCalledWith("/hotels/compare");
-    });
-
-    it("handles special characters in hotel names", async () => {
-      const user = userEvent.setup();
-      render(<AddHotelPage />);
-
-      const specialName = "Hôtel André & Co. (★★★★★) 日本語";
-
-      const nameInput = screen.getAllByLabelText(/Hotel Name/i)[0];
-      const priceInput = screen.getAllByLabelText(/Price/i)[0];
-      const ratingInput = screen.getAllByLabelText(/Rating/i)[0];
-
-      await user.clear(nameInput);
-      await user.clear(priceInput);
-      await user.clear(ratingInput);
-
-      await user.type(nameInput, specialName);
-      await user.type(priceInput, "150");
-      await user.type(ratingInput, "8.5");
-
-      const submitButton = screen.getAllByText(/Submit & Compare/i)[0];
-      await user.click(submitButton);
-
-      const savedHotels = JSON.parse(localStorage.getItem("hotels") || "[]");
-      expect(savedHotels).toHaveLength(1);
-      expect(savedHotels[0].name).toBe(specialName);
-      expect(mockPush).toHaveBeenCalledWith("/hotels/compare");
-    });
-
-    it("handles boundary rating values", async () => {
-      const user = userEvent.setup();
-
-      // Test exact boundaries - only include values that should actually pass validation
-      const testCases = [
-        { rating: "0.1", expected: 0.1 }, // Avoid exact 0 which might be treated as invalid
-        { rating: "10", expected: 10 },
-        { rating: "5.5", expected: 5.5 },
-      ];
-
-      for (const testCase of testCases) {
-        // Clear storage and mocks for each iteration
-        localStorage.clear();
-        mockPush.mockClear();
-        cleanup();
-
-        // Re-render component for each test case to ensure clean state
-        render(<AddHotelPage />);
-
-        const nameInput = screen.getAllByLabelText(/Hotel Name/i)[0];
-        const priceInput = screen.getAllByLabelText(/Price/i)[0];
-        const ratingInput = screen.getAllByLabelText(/Rating/i)[0];
-
-        await user.clear(nameInput);
-        await user.clear(priceInput);
-        await user.clear(ratingInput);
-
-        await user.type(nameInput, `Hotel ${testCase.rating}`);
-        await user.type(priceInput, "100");
-        await user.type(ratingInput, testCase.rating);
-
-        const submitButton = screen.getAllByText(/Submit & Compare/i)[0];
-        await user.click(submitButton);
-
-        // Wait for any async operations to complete
-        await new Promise((resolve) => setTimeout(resolve, 100));
-
-        const savedHotels = JSON.parse(localStorage.getItem("hotels") || "[]");
-
-        // Check that data was saved successfully for valid ratings
-        expect(savedHotels).toHaveLength(1);
-        expect(savedHotels[0].rating).toBe(testCase.expected);
-        expect(mockPush).toHaveBeenCalledWith("/hotels/compare");
-      }
-    });
-
-    it("handles zero rating as edge case", async () => {
-      const user = userEvent.setup();
-      render(<AddHotelPage />);
-
-      const nameInput = screen.getAllByLabelText(/Hotel Name/i)[0];
-      const priceInput = screen.getAllByLabelText(/Price/i)[0];
-      const ratingInput = screen.getAllByLabelText(/Rating/i)[0];
-
-      await user.clear(nameInput);
-      await user.clear(priceInput);
-      await user.clear(ratingInput);
-
-      await user.type(nameInput, "Zero Rating Hotel");
-      await user.type(priceInput, "100");
-      await user.type(ratingInput, "0");
-
-      const submitButton = screen.getAllByText(/Submit & Compare/i)[0];
-      await user.click(submitButton);
-
-      // Wait for validation
-      await new Promise((resolve) => setTimeout(resolve, 100));
-
-      // Check if zero rating is accepted or rejected by the component
-      const savedHotels = JSON.parse(localStorage.getItem("hotels") || "[]");
-
-      if (savedHotels.length > 0) {
-        // If zero rating is accepted as valid
-        expect(savedHotels[0].rating).toBe(0);
-        expect(mockPush).toHaveBeenCalledWith("/hotels/compare");
-      } else {
-        // If zero rating is rejected as invalid
-        expect(mockPush).not.toHaveBeenCalled();
-      }
-    });
-
-    it("rejects invalid rating values", async () => {
-      const user = userEvent.setup();
-
-      const invalidRatings = [
-        { value: "-1", description: "negative rating" },
-        { value: "11", description: "rating above 10" },
-        { value: "abc", description: "non-numeric rating" },
-        { value: "5.5.5", description: "malformed decimal" },
-      ];
-
-      for (const invalidRating of invalidRatings) {
-        // Clear storage and mocks for each iteration
-        localStorage.clear();
-        mockPush.mockClear();
-        cleanup();
-
-        // Re-render component for each test case
-        render(<AddHotelPage />);
-
-        const nameInput = screen.getAllByLabelText(/Hotel Name/i)[0];
-        const priceInput = screen.getAllByLabelText(/Price/i)[0];
-        const ratingInput = screen.getAllByLabelText(/Rating/i)[0];
-
-        await user.clear(nameInput);
-        await user.clear(priceInput);
-        await user.clear(ratingInput);
-
-        await user.type(nameInput, "Test Hotel");
-        await user.type(priceInput, "100");
-        await user.type(ratingInput, invalidRating.value);
-
-        const submitButton = screen.getAllByText(/Submit & Compare/i)[0];
-        await user.click(submitButton);
-
-        // Wait for any validation to complete
-        await new Promise((resolve) => setTimeout(resolve, 100));
-
-        // Should not navigate if validation fails
-        expect(mockPush).not.toHaveBeenCalled();
-
-        // Should not save invalid data to localStorage
-        const savedHotels = JSON.parse(localStorage.getItem("hotels") || "[]");
-        expect(savedHotels).toHaveLength(0);
-      }
-    });
-
-    it("rejects empty rating value", async () => {
-      const user = userEvent.setup();
-      render(<AddHotelPage />);
-
-      const nameInput = screen.getAllByLabelText(/Hotel Name/i)[0];
-      const priceInput = screen.getAllByLabelText(/Price/i)[0];
-      const ratingInput = screen.getAllByLabelText(/Rating/i)[0];
-
-      await user.clear(nameInput);
-      await user.clear(priceInput);
-      await user.clear(ratingInput);
-
-      await user.type(nameInput, "Test Hotel");
-      await user.type(priceInput, "100");
-      // Don't type anything in rating field (leave it empty)
-
-      const submitButton = screen.getAllByText(/Submit & Compare/i)[0];
-      await user.click(submitButton);
-
-      // Wait for validation
-      await new Promise((resolve) => setTimeout(resolve, 100));
-
-      // Should not navigate if validation fails
+    } else {
       expect(mockPush).not.toHaveBeenCalled();
+    }
+  });
 
-      // Should not save invalid data to localStorage
-      const savedHotels = JSON.parse(localStorage.getItem("hotels") || "[]");
-      expect(savedHotels).toHaveLength(0);
-    });
+    it.each([
+    { rating: "-1", description: "negative rating" },
+    { rating: "11", description: "rating above 10" },
+    { rating: "abc", description: "non-numeric rating" },
+    { rating: "5.5.5", description: "malformed decimal" },
+    { rating: "", description: "empty rating value" },
+  ])("rejects invalid rating value: $description", async ({ rating }) => {
+    const user = userEvent.setup();
+
+    localStorage.clear();
+    mockPush.mockClear();
+    cleanup();
+    render(<AddHotelPage />);
+
+    const { submitButton } = getFormElements();
+
+    if (rating === "") {
+      await fillForm(user, { name: "Test Hotel", price: "100" });
+      // Don't fill rating to test empty validation
+    } else {
+      await fillForm(user, { name: "Test Hotel", price: "100", rating });
+    }
+
+    await user.click(submitButton);
+    await waitForFormUpdate();
+
+    expect(mockPush).not.toHaveBeenCalled();
+    const savedHotels = JSON.parse(localStorage.getItem("hotels") || "[]");
+    expect(savedHotels).toHaveLength(0);
+  });
 
     it("handles whitespace in inputs", async () => {
-      const user = userEvent.setup();
-      render(<AddHotelPage />);
+    const user = userEvent.setup();
+    render(<AddHotelPage />);
+    const { submitButton } = getFormElements();
 
-      const nameInput = screen.getAllByLabelText(/Hotel Name/i)[0];
-      const priceInput = screen.getAllByLabelText(/Price/i)[0];
-      const ratingInput = screen.getAllByLabelText(/Rating/i)[0];
-
-      await user.clear(nameInput);
-      await user.clear(priceInput);
-      await user.clear(ratingInput);
-
-      await user.type(nameInput, "  Trimmed Hotel  ");
-      await user.type(priceInput, " 100.50 ");
-      await user.type(ratingInput, " 8.5 ");
-
-      const submitButton = screen.getAllByText(/Submit & Compare/i)[0];
-      await user.click(submitButton);
-
-      const savedHotels = JSON.parse(localStorage.getItem("hotels") || "[]");
-      expect(savedHotels).toHaveLength(1);
-
-      // Test actual behavior - inputs might be trimmed or preserved
-      const savedHotel = savedHotels[0];
-      expect(savedHotel.name).toMatch(/Trimmed Hotel/); // Should contain the text
-      expect(savedHotel.price).toBe(100.5);
-      expect(savedHotel.rating).toBe(8.5);
-      expect(mockPush).toHaveBeenCalledWith("/hotels/compare");
+    await fillForm(user, {
+      name: "  Trimmed Hotel  ",
+      price: " 100.50 ",
+      rating: " 8.5 "
     });
+    await user.click(submitButton);
 
-    it("rejects missing required fields", async () => {
-      const user = userEvent.setup();
-      render(<AddHotelPage />);
+    const savedHotels = JSON.parse(localStorage.getItem("hotels") || "[]");
+    expect(savedHotels).toHaveLength(1);
 
-      const nameInput = screen.getAllByLabelText(/Hotel Name/i)[0];
-      const priceInput = screen.getAllByLabelText(/Price/i)[0];
-      const ratingInput = screen.getAllByLabelText(/Rating/i)[0];
+    const savedHotel = savedHotels[0];
+    expect(savedHotel.name).toMatch(/Trimmed Hotel/);
+    expect(savedHotel.price).toBe(100.5);
+    expect(savedHotel.rating).toBe(8.5);
+    expect(mockPush).toHaveBeenCalledWith("/hotels/compare");
+  });
 
-      // Test missing hotel name
-      await user.clear(nameInput);
-      await user.clear(priceInput);
-      await user.clear(ratingInput);
+  it.each([
+    { missingField: "name", description: "missing hotel name" },
+    { missingField: "price", description: "empty price field" },
+  ])("rejects missing required fields: $description", async ({ missingField }) => {
+    const user = userEvent.setup();
+    render(<AddHotelPage />);
+    const { submitButton } = getFormElements();
 
-      await user.type(priceInput, "100");
-      await user.type(ratingInput, "8");
+    const formData: { name?: string; price?: string; rating?: string } = {
+      name: "Test Hotel",
+      price: "100",
+      rating: "8"
+    };
 
-      const submitButton = screen.getAllByText(/Submit & Compare/i)[0];
-      await user.click(submitButton);
+    delete formData[missingField as keyof typeof formData];
 
-      // Wait for validation
-      await new Promise((resolve) => setTimeout(resolve, 100));
+    if (missingField !== "name") await fillForm(user, formData);
+    if (missingField !== "price") await fillForm(user, formData);
 
-      expect(mockPush).not.toHaveBeenCalled();
-      expect(JSON.parse(localStorage.getItem("hotels") || "[]")).toHaveLength(0);
-    });
+    await user.click(submitButton);
+    await waitForFormUpdate();
 
-    it("handles empty price field validation", async () => {
-      const user = userEvent.setup();
-      render(<AddHotelPage />);
-
-      const nameInput = screen.getAllByLabelText(/Hotel Name/i)[0];
-      const priceInput = screen.getAllByLabelText(/Price/i)[0];
-      const ratingInput = screen.getAllByLabelText(/Rating/i)[0];
-
-      await user.clear(nameInput);
-      await user.clear(priceInput);
-      await user.clear(ratingInput);
-
-      await user.type(nameInput, "Test Hotel");
-      // Leave price empty
-      await user.type(ratingInput, "8");
-
-      const submitButton = screen.getAllByText(/Submit & Compare/i)[0];
-      await user.click(submitButton);
-
-      // Wait for validation
-      await new Promise((resolve) => setTimeout(resolve, 100));
-
-      // Should not navigate or save with empty price
-      expect(mockPush).not.toHaveBeenCalled();
-      const savedHotels = JSON.parse(localStorage.getItem("hotels") || "[]");
-      expect(savedHotels).toHaveLength(0);
-    });
+    expect(mockPush).not.toHaveBeenCalled();
+    const savedHotels = JSON.parse(localStorage.getItem("hotels") || "[]");
+    expect(savedHotels).toHaveLength(0);
+  });
 
     it("demonstrates parseFloat behavior with malformed decimals", () => {
-      // This is a unit test to document JavaScript's parseFloat behavior
-      // which affects how the component handles certain inputs
-      expect(parseFloat("1.2.3")).toBe(1.2); // parseFloat stops at first invalid character
-      expect(parseFloat("abc")).toBeNaN();
-      expect(parseFloat("-50")).toBe(-50);
-      expect(parseFloat("")).toBeNaN();
-    });
+    expect(parseFloat("1.2.3")).toBe(1.2);
+    expect(parseFloat("abc")).toBeNaN();
+    expect(parseFloat("-50")).toBe(-50);
+    expect(parseFloat("")).toBeNaN();
+  });
 
-    it("handles zero price as edge case", async () => {
-      const user = userEvent.setup();
-      render(<AddHotelPage />);
+  it("handles zero price as edge case", async () => {
+    const user = userEvent.setup();
+    render(<AddHotelPage />);
+    const { submitButton } = getFormElements();
 
-      const nameInput = screen.getAllByLabelText(/Hotel Name/i)[0];
-      const priceInput = screen.getAllByLabelText(/Price/i)[0];
-      const ratingInput = screen.getAllByLabelText(/Rating/i)[0];
+    await fillForm(user, { name: "Free Hotel", price: "0", rating: "8" });
+    await user.click(submitButton);
 
-      await user.clear(nameInput);
-      await user.clear(priceInput);
-      await user.clear(ratingInput);
+    await waitForFormUpdate();
 
-      await user.type(nameInput, "Free Hotel");
-      await user.type(priceInput, "0");
-      await user.type(ratingInput, "8");
+    const savedHotels = JSON.parse(localStorage.getItem("hotels") || "[]");
 
-      const submitButton = screen.getAllByText(/Submit & Compare/i)[0];
-      await user.click(submitButton);
-
-      // Wait for validation
-      await new Promise((resolve) => setTimeout(resolve, 100));
-
-      // Check if zero price is accepted or rejected by the component
-      const savedHotels = JSON.parse(localStorage.getItem("hotels") || "[]");
-
-      if (savedHotels.length > 0) {
-        // If zero price is accepted as valid
-        expect(savedHotels[0].price).toBe(0);
-        expect(mockPush).toHaveBeenCalledWith("/hotels/compare");
-      } else {
-        // If zero price is rejected as invalid
-        expect(mockPush).not.toHaveBeenCalled();
-      }
-    });
-
-    it("handles extremely long hotel names", async () => {
-      const user = userEvent.setup();
-      render(<AddHotelPage />);
-
-      const nameInput = screen.getAllByLabelText(/Hotel Name/i)[0];
-      const priceInput = screen.getAllByLabelText(/Price/i)[0];
-      const ratingInput = screen.getAllByLabelText(/Rating/i)[0];
-
-      // Test with long hotel name but much shorter to avoid timeout
-      const longName = "A".repeat(50); // Reduced significantly to prevent timeout
-
-      await user.clear(nameInput);
-      await user.clear(priceInput);
-      await user.clear(ratingInput);
-
-      await user.type(nameInput, longName);
-      await user.type(priceInput, "100");
-      await user.type(ratingInput, "8");
-
-      const submitButton = screen.getAllByText(/Submit & Compare/i)[0];
-      await user.click(submitButton);
-
-      // Wait for form submission
-      await new Promise((resolve) => setTimeout(resolve, 100));
-
-      const savedHotels = JSON.parse(localStorage.getItem("hotels") || "[]");
-
-      // Should accept long names (most forms don't have length validation)
-      expect(savedHotels).toHaveLength(1);
-      expect(savedHotels[0].name).toBe(longName);
-      expect(savedHotels[0].price).toBe(100);
-      expect(savedHotels[0].rating).toBe(8);
+    if (savedHotels.length > 0) {
+      expect(savedHotels[0].price).toBe(0);
       expect(mockPush).toHaveBeenCalledWith("/hotels/compare");
-    }, 10000); // Add 10 second timeout to be safe
+    } else {
+      expect(mockPush).not.toHaveBeenCalled();
+    }
+  });
 
-    it("preserves currency selection between form submissions", async () => {
-      const user = userEvent.setup();
-      render(<AddHotelPage />);
+  it("handles extremely long hotel names", async () => {
+    const user = userEvent.setup();
+    render(<AddHotelPage />);
+    const { submitButton } = getFormElements();
 
-      // Fix: Use document.getElementById directly since the select doesn't have a label
-      const currencySelect = document.getElementById(
-        "currency",
-      ) as HTMLSelectElement;
+    const longName = "A".repeat(50);
+    await fillForm(user, { name: longName, price: "100", rating: "8" });
+    await user.click(submitButton);
 
-      // Change currency to EUR
-      await user.selectOptions(currencySelect, "EUR");
+    await waitForFormUpdate();
 
-      // Fill and submit form
-      const nameInput = screen.getAllByLabelText(/Hotel Name/i)[0];
-      const priceInput = screen.getAllByLabelText(/Price/i)[0];
-      const ratingInput = screen.getAllByLabelText(/Rating/i)[0];
+    const savedHotels = JSON.parse(localStorage.getItem("hotels") || "[]");
+    expect(savedHotels).toHaveLength(1);
+    expect(savedHotels[0].name).toBe(longName);
+    expect(savedHotels[0].price).toBe(100);
+    expect(savedHotels[0].rating).toBe(8);
+    expect(mockPush).toHaveBeenCalledWith("/hotels/compare");
+  }, 10000);
 
-      await user.clear(nameInput);
-      await user.clear(priceInput);
-      await user.clear(ratingInput);
+  it("preserves currency selection between form submissions", async () => {
+    const user = userEvent.setup();
+    render(<AddHotelPage />);
+    const { currencySelect, submitButton } = getFormElements();
 
-      await user.type(nameInput, "European Hotel");
-      await user.type(priceInput, "150");
-      await user.type(ratingInput, "9");
+    await user.selectOptions(currencySelect, "EUR");
+    await fillForm(user, { name: "European Hotel", price: "150", rating: "9" });
+    await user.click(submitButton);
 
-      const submitButton = screen.getAllByText(/Submit & Compare/i)[0];
-      await user.click(submitButton);
+    const savedHotels = JSON.parse(localStorage.getItem("hotels") || "[]");
+    expect(savedHotels).toHaveLength(1);
+    expect(savedHotels[0].currency).toBe("EUR");
+    expect(localStorage.getItem("lastUsedCurrency")).toBe("EUR");
+    expect(mockPush).toHaveBeenCalledWith("/hotels/compare");
+  });
+  });
 
-      const savedHotels = JSON.parse(localStorage.getItem("hotels") || "[]");
-      expect(savedHotels).toHaveLength(1);
-      expect(savedHotels[0].currency).toBe("EUR");
+  describe("Error Handling", () => {
+  it.each([
+    {
+      mockType: "setItem",
+      errorMessage: "localStorage quota exceeded",
+      description: "localStorage.setItem throws an error"
+    },
+    {
+      mockType: "getItem",
+      errorMessage: "Storage read failed",
+      description: "localStorage.getItem fails during initialization"
+    }
+  ])("should display error message when $description", async ({ mockType, errorMessage }) => {
+    const user = userEvent.setup();
+    const originalMethod = localStorage[mockType as keyof typeof localStorage];
 
-      // Check that currency preference was saved
-      expect(localStorage.getItem("lastUsedCurrency")).toBe("EUR");
-      expect(mockPush).toHaveBeenCalledWith("/hotels/compare");
+    if (mockType === "setItem") {
+      localStorage.setItem = vi.fn(() => {
+        throw new Error(errorMessage);
+      });
+    } else {
+      localStorage.getItem = vi.fn(() => {
+        throw new Error(errorMessage);
+      });
+    }
+
+    render(<AddHotelPage />);
+    const { submitButton } = getFormElements();
+
+    await fillForm(user, { name: "Test Hotel", price: "100", rating: "8" });
+    await user.click(submitButton);
+
+    await waitFor(() => {
+      expect(screen.getByText(/Unable to save hotel data/i)).toBeTruthy();
     });
+
+    expect(mockPush).not.toHaveBeenCalled();
+    localStorage[mockType as keyof typeof localStorage] = originalMethod;
+  });
+
+  it("should preserve existing form data when localStorage fails", async () => {
+    const user = userEvent.setup();
+    const originalSetItem = localStorage.setItem;
+
+    localStorage.setItem = vi.fn(() => {
+      throw new Error("Storage failed");
+    });
+
+    render(<AddHotelPage />);
+    const { nameInput, priceInput, ratingInput, submitButton } = getFormElements();
+
+    const formData = { name: "Test Hotel", price: "100", rating: "8" };
+    await fillForm(user, formData);
+    await user.click(submitButton);
+
+    await waitFor(() => {
+      expect(screen.getByText(/Unable to save hotel data/i)).toBeTruthy();
+    });
+
+    expect((nameInput as HTMLInputElement).value).toBe(formData.name);
+    expect((priceInput as HTMLInputElement).value).toBe(formData.price);
+    expect((ratingInput as HTMLInputElement).value).toBe(formData.rating);
+
+    localStorage.setItem = originalSetItem;
+  });
+
+  it("should handle localStorage unavailability error specifically", async () => {
+    const user = userEvent.setup();
+    const originalLocalStorage = window.localStorage;
+
+    // Mock localStorage methods to throw "not available" errors
+    const mockStorage = {
+      getItem: vi.fn(() => {
+        throw new Error("localStorage is not available");
+      }),
+      setItem: vi.fn(() => {
+        throw new Error("localStorage is not available");
+      }),
+      removeItem: vi.fn(),
+      clear: vi.fn(),
+      length: 0,
+      key: vi.fn(),
+    };
+
+    Object.defineProperty(window, 'localStorage', {
+      value: mockStorage,
+      writable: true,
+      configurable: true,
+    });
+
+    render(<AddHotelPage />);
+    const { submitButton } = getFormElements();
+
+    await fillForm(user, { name: "Test Hotel", price: "100", rating: "8" });
+    await user.click(submitButton);
+
+    await waitFor(() => {
+      expect(screen.getByText(/Unable to save hotel data/i)).toBeTruthy();
+    });
+
+    expect(mockPush).not.toHaveBeenCalled();
+    Object.defineProperty(window, 'localStorage', {
+      value: originalLocalStorage,
+      writable: true,
+      configurable: true,
+    });
+  });
   });
 });
