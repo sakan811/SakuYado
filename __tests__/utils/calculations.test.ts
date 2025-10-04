@@ -23,7 +23,7 @@ import {
   getMaximumRating,
   getTopValueScore,
   calculateHotelStatistics,
-  getHotelCount
+  getHotelCount,
 } from "@/utils/calculations";
 import type { Hotel } from "@/types/hotel";
 
@@ -82,10 +82,28 @@ describe("calculateValueScore", () => {
 
 describe("sortHotelsByValueScore", () => {
   const mockHotels: Hotel[] = [
-    { name: "Budget Hotel", price: 5000, rating: 3.5, currency: "JPY", valueScore: 0.014 },
-    { name: "Luxury Hotel", price: 20000, rating: 4.8, currency: "JPY", valueScore: 0.006 },
-    { name: "Mid-range Hotel", price: 10000, rating: 4.2, currency: "JPY", valueScore: 0.014 },
-    { name: "No Score Hotel", price: 8000, rating: 3.8, currency: "JPY" }
+    {
+      name: "Budget Hotel",
+      price: 5000,
+      rating: 3.5,
+      currency: "JPY",
+      valueScore: 0.014,
+    },
+    {
+      name: "Luxury Hotel",
+      price: 20000,
+      rating: 4.8,
+      currency: "JPY",
+      valueScore: 0.006,
+    },
+    {
+      name: "Mid-range Hotel",
+      price: 10000,
+      rating: 4.2,
+      currency: "JPY",
+      valueScore: 0.014,
+    },
+    { name: "No Score Hotel", price: 8000, rating: 3.8, currency: "JPY" },
   ];
 
   it("should sort hotels by value score in descending order", () => {
@@ -98,10 +116,10 @@ describe("sortHotelsByValueScore", () => {
 
   it("should handle hotels without valueScore (treated as 0)", () => {
     const sorted = sortHotelsByValueScore(mockHotels);
-    const noScoreHotel = sorted.find(h => h.name === "No Score Hotel");
+    const noScoreHotel = sorted.find((h) => h.name === "No Score Hotel");
     expect(noScoreHotel).toBeDefined();
-    expect(mockHotels.findIndex(h => h.name === "No Score Hotel")).toBe(3);
-    expect(sorted.findIndex(h => h.name === "No Score Hotel")).toBe(3); // Should be last (index 3)
+    expect(mockHotels.findIndex((h) => h.name === "No Score Hotel")).toBe(3);
+    expect(sorted.findIndex((h) => h.name === "No Score Hotel")).toBe(3); // Should be last (index 3)
   });
 
   it("should return a new array (not mutate original)", () => {
@@ -121,7 +139,7 @@ describe("getMinimumPrice", () => {
     const hotels: Hotel[] = [
       { name: "Hotel A", price: 10000, rating: 4.0, currency: "JPY" },
       { name: "Hotel B", price: 8000, rating: 4.2, currency: "JPY" },
-      { name: "Hotel C", price: 12000, rating: 3.8, currency: "JPY" }
+      { name: "Hotel C", price: 12000, rating: 3.8, currency: "JPY" },
     ];
     expect(getMinimumPrice(hotels)).toBe(8000);
   });
@@ -132,7 +150,7 @@ describe("getMinimumPrice", () => {
 
   it("should handle single hotel", () => {
     const hotels: Hotel[] = [
-      { name: "Solo Hotel", price: 15000, rating: 4.5, currency: "JPY" }
+      { name: "Solo Hotel", price: 15000, rating: 4.5, currency: "JPY" },
     ];
     expect(getMinimumPrice(hotels)).toBe(15000);
   });
@@ -140,7 +158,7 @@ describe("getMinimumPrice", () => {
   it("should handle negative prices (though should not occur in practice)", () => {
     const hotels: Hotel[] = [
       { name: "Hotel A", price: 10000, rating: 4.0, currency: "JPY" },
-      { name: "Hotel B", price: -5000, rating: 4.2, currency: "JPY" }
+      { name: "Hotel B", price: -5000, rating: 4.2, currency: "JPY" },
     ];
     expect(getMinimumPrice(hotels)).toBe(-5000);
   });
@@ -151,7 +169,7 @@ describe("getMaximumRating", () => {
     const hotels: Hotel[] = [
       { name: "Hotel A", price: 10000, rating: 3.8, currency: "JPY" },
       { name: "Hotel B", price: 8000, rating: 4.5, currency: "JPY" },
-      { name: "Hotel C", price: 12000, rating: 4.2, currency: "JPY" }
+      { name: "Hotel C", price: 12000, rating: 4.2, currency: "JPY" },
     ];
     expect(getMaximumRating(hotels)).toBe(4.5);
   });
@@ -162,7 +180,7 @@ describe("getMaximumRating", () => {
 
   it("should handle single hotel", () => {
     const hotels: Hotel[] = [
-      { name: "Solo Hotel", price: 15000, rating: 4.7, currency: "JPY" }
+      { name: "Solo Hotel", price: 15000, rating: 4.7, currency: "JPY" },
     ];
     expect(getMaximumRating(hotels)).toBe(4.7);
   });
@@ -171,7 +189,7 @@ describe("getMaximumRating", () => {
     const hotels: Hotel[] = [
       { name: "Hotel A", price: 10000, rating: 4.15, currency: "JPY" },
       { name: "Hotel B", price: 8000, rating: 4.85, currency: "JPY" },
-      { name: "Hotel C", price: 12000, rating: 4.75, currency: "JPY" }
+      { name: "Hotel C", price: 12000, rating: 4.75, currency: "JPY" },
     ];
     expect(getMaximumRating(hotels)).toBe(4.85);
   });
@@ -180,8 +198,20 @@ describe("getMaximumRating", () => {
 describe("getTopValueScore", () => {
   it("should return the value score of the first hotel in the array", () => {
     const hotels: Hotel[] = [
-      { name: "First Hotel", price: 10000, rating: 4.5, currency: "JPY", valueScore: 0.089 },
-      { name: "Second Hotel", price: 15000, rating: 4.0, currency: "JPY", valueScore: 0.053 }
+      {
+        name: "First Hotel",
+        price: 10000,
+        rating: 4.5,
+        currency: "JPY",
+        valueScore: 0.089,
+      },
+      {
+        name: "Second Hotel",
+        price: 15000,
+        rating: 4.0,
+        currency: "JPY",
+        valueScore: 0.053,
+      },
     ];
     expect(getTopValueScore(hotels)).toBe(0.089);
   });
@@ -193,15 +223,33 @@ describe("getTopValueScore", () => {
   it("should return 0 when first hotel has no valueScore", () => {
     const hotels: Hotel[] = [
       { name: "No Score Hotel", price: 10000, rating: 4.5, currency: "JPY" },
-      { name: "Second Hotel", price: 15000, rating: 4.0, currency: "JPY", valueScore: 0.053 }
+      {
+        name: "Second Hotel",
+        price: 15000,
+        rating: 4.0,
+        currency: "JPY",
+        valueScore: 0.053,
+      },
     ];
     expect(getTopValueScore(hotels)).toBe(0);
   });
 
   it("should return the value score even if higher scores exist later in array", () => {
     const hotels: Hotel[] = [
-      { name: "First Hotel", price: 10000, rating: 4.5, currency: "JPY", valueScore: 0.025 },
-      { name: "Second Hotel", price: 15000, rating: 4.0, currency: "JPY", valueScore: 0.053 }
+      {
+        name: "First Hotel",
+        price: 10000,
+        rating: 4.5,
+        currency: "JPY",
+        valueScore: 0.025,
+      },
+      {
+        name: "Second Hotel",
+        price: 15000,
+        rating: 4.0,
+        currency: "JPY",
+        valueScore: 0.053,
+      },
     ];
     expect(getTopValueScore(hotels)).toBe(0.025); // Returns first hotel's score, not max
   });
@@ -212,7 +260,7 @@ describe("getHotelCount", () => {
     const hotels: Hotel[] = [
       { name: "Hotel A", price: 10000, rating: 4.0, currency: "JPY" },
       { name: "Hotel B", price: 8000, rating: 4.2, currency: "JPY" },
-      { name: "Hotel C", price: 12000, rating: 3.8, currency: "JPY" }
+      { name: "Hotel C", price: 12000, rating: 3.8, currency: "JPY" },
     ];
     expect(getHotelCount(hotels)).toBe(3);
   });
@@ -225,9 +273,27 @@ describe("getHotelCount", () => {
 describe("calculateHotelStatistics", () => {
   it("should return complete statistics for hotels array", () => {
     const hotels: Hotel[] = [
-      { name: "Budget Hotel", price: 5000, rating: 3.5, currency: "JPY", valueScore: 0.014 },
-      { name: "Luxury Hotel", price: 20000, rating: 4.8, currency: "JPY", valueScore: 0.006 },
-      { name: "Mid-range Hotel", price: 10000, rating: 4.2, currency: "JPY", valueScore: 0.014 }
+      {
+        name: "Budget Hotel",
+        price: 5000,
+        rating: 3.5,
+        currency: "JPY",
+        valueScore: 0.014,
+      },
+      {
+        name: "Luxury Hotel",
+        price: 20000,
+        rating: 4.8,
+        currency: "JPY",
+        valueScore: 0.006,
+      },
+      {
+        name: "Mid-range Hotel",
+        price: 10000,
+        rating: 4.2,
+        currency: "JPY",
+        valueScore: 0.014,
+      },
     ];
 
     const stats = calculateHotelStatistics(hotels);
@@ -235,7 +301,7 @@ describe("calculateHotelStatistics", () => {
       count: 3,
       topScore: 0.014,
       lowestPrice: 5000,
-      highestRating: 4.8
+      highestRating: 4.8,
     });
   });
 
@@ -245,14 +311,20 @@ describe("calculateHotelStatistics", () => {
       count: 0,
       topScore: 0,
       lowestPrice: 0,
-      highestRating: 0
+      highestRating: 0,
     });
   });
 
   it("should handle hotels without value scores", () => {
     const hotels: Hotel[] = [
-      { name: "Scored Hotel", price: 12000, rating: 4.5, currency: "JPY", valueScore: 0.025 },
-      { name: "No Score Hotel", price: 8000, rating: 4.0, currency: "JPY" }
+      {
+        name: "Scored Hotel",
+        price: 12000,
+        rating: 4.5,
+        currency: "JPY",
+        valueScore: 0.025,
+      },
+      { name: "No Score Hotel", price: 8000, rating: 4.0, currency: "JPY" },
     ];
 
     const stats = calculateHotelStatistics(hotels);
