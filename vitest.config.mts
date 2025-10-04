@@ -9,7 +9,7 @@ export default defineConfig({
     setupFiles: ["./__tests__/vitest-setup.ts"],
     css: false,
     coverage: {
-      provider: "istanbul",
+      provider: "v8",
       reporter: ["text"],
       exclude: [
         "next.config.ts",
