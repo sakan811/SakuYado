@@ -60,13 +60,23 @@ vi.mock("next/image", () => ({
     className?: string;
     [key: string]: unknown;
   }) => (
-    <img
-      src={src}
-      alt={alt}
-      width={width}
-      height={height}
-      className={className}
+    <div
       data-testid="mock-image"
+      data-src={src}
+      data-alt={alt}
+      data-width={width.toString()}
+      data-height={height.toString()}
+      className={className}
+      role="img"
+      aria-label={alt}
+      style={{
+        display: "inline-block",
+        width: `${width}px`,
+        height: `${height}px`,
+        backgroundImage: `url(${src})`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+      }}
       {...props}
     />
   ),
@@ -84,7 +94,7 @@ describe("Layout Metadata (lines 24-51)", () => {
     expect(metadata).toBeDefined();
     expect(metadata.title).toBe("SakuYado - Hotel Value Analyzer");
     expect(metadata.description).toBe(
-      "Compare hotels based on review-per-price ratio to get the most value for your money with SakuYado"
+      "Compare hotels based on review-per-price ratio to get the most value for your money with SakuYado",
     );
     expect(metadata.keywords).toEqual([
       "hotel comparison",
@@ -101,7 +111,7 @@ describe("Layout Metadata (lines 24-51)", () => {
     expect(metadata.openGraph).toBeDefined();
     expect(metadata.openGraph?.title).toBe("SakuYado - Hotel Value Analyzer");
     expect(metadata.openGraph?.description).toBe(
-      "Compare hotels based on review-per-price ratio to get the most value for your money with SakuYado"
+      "Compare hotels based on review-per-price ratio to get the most value for your money with SakuYado",
     );
     expect(metadata.openGraph?.url).toBe("https://sakuyado.fukudev.org");
     expect(metadata.openGraph?.siteName).toBe("SakuYado");
@@ -138,7 +148,7 @@ describe("RootLayout Component (lines 77-128)", () => {
     render(
       <RootLayout>
         <div data-testid="test-content">Test Content</div>
-      </RootLayout>
+      </RootLayout>,
     );
 
     const htmlElement = document.documentElement;
@@ -149,7 +159,7 @@ describe("RootLayout Component (lines 77-128)", () => {
     render(
       <RootLayout>
         <div data-testid="test-content">Test Content</div>
-      </RootLayout>
+      </RootLayout>,
     );
 
     const bodyElement = document.body;
@@ -165,10 +175,12 @@ describe("RootLayout Component (lines 77-128)", () => {
     render(
       <RootLayout>
         <div data-testid="test-content">Test Content</div>
-      </RootLayout>
+      </RootLayout>,
     );
 
-    const scriptTag = document.querySelector('script[type="application/ld+json"]');
+    const scriptTag = document.querySelector(
+      'script[type="application/ld+json"]',
+    );
     expect(scriptTag).not.toBeNull();
 
     if (scriptTag) {
@@ -185,10 +197,12 @@ describe("RootLayout Component (lines 77-128)", () => {
     render(
       <RootLayout>
         <div data-testid="test-content">Test Content</div>
-      </RootLayout>
+      </RootLayout>,
     );
 
-    const backgroundContainer = document.querySelector(".fixed.inset-0.overflow-hidden.pointer-events-none.z-0");
+    const backgroundContainer = document.querySelector(
+      ".fixed.inset-0.overflow-hidden.pointer-events-none.z-0",
+    );
     expect(backgroundContainer).not.toBeNull();
 
     // Check for decorative elements
@@ -215,7 +229,7 @@ describe("RootLayout Component (lines 77-128)", () => {
     render(
       <RootLayout>
         <div data-testid="test-content">Test Content</div>
-      </RootLayout>
+      </RootLayout>,
     );
 
     const header = document.querySelector("header");
@@ -235,7 +249,7 @@ describe("RootLayout Component (lines 77-128)", () => {
     render(
       <RootLayout>
         <div data-testid="test-content">Test Content</div>
-      </RootLayout>
+      </RootLayout>,
     );
 
     const headerContainer = document.querySelector("header > .container");
@@ -252,7 +266,7 @@ describe("RootLayout Component (lines 77-128)", () => {
     render(
       <RootLayout>
         <div data-testid="test-content">Test Content</div>
-      </RootLayout>
+      </RootLayout>,
     );
 
     const logoLink = screen.getByTestId("mock-link");
@@ -274,15 +288,19 @@ describe("RootLayout Component (lines 77-128)", () => {
     render(
       <RootLayout>
         <div data-testid="test-content">Test Content</div>
-      </RootLayout>
+      </RootLayout>,
     );
 
     const logoImage = screen.getByTestId("mock-image");
     expect(logoImage).not.toBeNull();
-    expect(logoImage.getAttribute("src")).toBe("/android-chrome-512x512.png");
-    expect(logoImage.getAttribute("alt")).toBe("SakuYado Logo");
-    expect(logoImage.getAttribute("width")).toBe("32");
-    expect(logoImage.getAttribute("height")).toBe("32");
+    expect(logoImage.getAttribute("data-src")).toBe(
+      "/android-chrome-512x512.png",
+    );
+    expect(logoImage.getAttribute("data-alt")).toBe("SakuYado Logo");
+    expect(logoImage.getAttribute("data-width")).toBe("32");
+    expect(logoImage.getAttribute("data-height")).toBe("32");
+    expect(logoImage.getAttribute("role")).toBe("img");
+    expect(logoImage.getAttribute("aria-label")).toBe("SakuYado Logo");
     expect(logoImage.classList.contains("w-8")).toBe(true);
     expect(logoImage.classList.contains("h-8")).toBe(true);
   });
@@ -291,7 +309,7 @@ describe("RootLayout Component (lines 77-128)", () => {
     render(
       <RootLayout>
         <div data-testid="test-content">Test Content</div>
-      </RootLayout>
+      </RootLayout>,
     );
 
     expect(screen.getByText("SakuYado")).toBeTruthy();
@@ -301,7 +319,7 @@ describe("RootLayout Component (lines 77-128)", () => {
     render(
       <RootLayout>
         <div data-testid="test-content">Test Content</div>
-      </RootLayout>
+      </RootLayout>,
     );
 
     const hotelProvider = screen.getByTestId("hotel-provider");
@@ -312,7 +330,7 @@ describe("RootLayout Component (lines 77-128)", () => {
     render(
       <RootLayout>
         <div data-testid="test-content">Test Content</div>
-      </RootLayout>
+      </RootLayout>,
     );
 
     const main = document.querySelector("main");
@@ -329,7 +347,7 @@ describe("RootLayout Component (lines 77-128)", () => {
     render(
       <RootLayout>
         <div data-testid="test-content">Test Content</div>
-      </RootLayout>
+      </RootLayout>,
     );
 
     expect(screen.getByTestId("test-content")).toBeTruthy();
@@ -340,7 +358,7 @@ describe("RootLayout Component (lines 77-128)", () => {
     render(
       <RootLayout>
         <div data-testid="test-content">Test Content</div>
-      </RootLayout>
+      </RootLayout>,
     );
 
     const decorativeBackground = document.querySelector(".fixed.inset-0");
@@ -356,14 +374,14 @@ describe("RootLayout Component (lines 77-128)", () => {
     render(
       <RootLayout>
         <div data-testid="test-content">Test Content</div>
-      </RootLayout>
+      </RootLayout>,
     );
 
     // Check responsive containers
     const containers = document.querySelectorAll(".container");
     expect(containers.length).toBe(2); // Header and main should both have container class
 
-    containers.forEach(container => {
+    containers.forEach((container) => {
       expect(container.classList.contains("mx-auto")).toBe(true);
       expect(container.classList.contains("px-4")).toBe(true);
     });
@@ -373,16 +391,17 @@ describe("RootLayout Component (lines 77-128)", () => {
     render(
       <RootLayout>
         <div data-testid="test-content">Test Content</div>
-      </RootLayout>
+      </RootLayout>,
     );
 
     // Check for proper lang attribute
     const htmlElement = document.documentElement;
     expect(htmlElement.lang).toBe("en");
 
-    // Check for alt text on logo image
+    // Check for accessibility attributes on logo image
     const logoImage = screen.getByTestId("mock-image");
-    expect(logoImage.getAttribute("alt")).toBe("SakuYado Logo");
+    expect(logoImage.getAttribute("aria-label")).toBe("SakuYado Logo");
+    expect(logoImage.getAttribute("role")).toBe("img");
 
     // Check for semantic HTML structure
     expect(document.querySelector("header")).not.toBeNull();
@@ -399,7 +418,7 @@ describe("Layout Integration", () => {
     render(
       <RootLayout>
         <div data-testid="test-content">Integration Test Content</div>
-      </RootLayout>
+      </RootLayout>,
     );
 
     // Verify all major components are present
@@ -407,7 +426,9 @@ describe("Layout Integration", () => {
     expect(document.querySelector("body")).not.toBeNull();
     expect(document.querySelector("header")).not.toBeNull();
     expect(document.querySelector("main")).not.toBeNull();
-    expect(document.querySelector('script[type="application/ld+json"]')).not.toBeNull();
+    expect(
+      document.querySelector('script[type="application/ld+json"]'),
+    ).not.toBeNull();
 
     // Verify content is rendered
     expect(screen.getByTestId("test-content")).toBeTruthy();

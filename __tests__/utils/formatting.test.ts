@@ -4,7 +4,7 @@ import {
   formatRating,
   formatValueScore,
   formatNumber,
-  formatHotelData
+  formatHotelData,
 } from "@/utils/formatting";
 
 describe("Formatting Utility Functions", () => {
@@ -68,7 +68,9 @@ describe("Formatting Utility Functions", () => {
       expect(formatNumber(0.999, 0)).toBe("1");
       expect(formatNumber(0.999, 1)).toBe("1.0");
       expect(formatNumber(0.999, 2)).toBe("1.00");
-      expect(formatNumber(Number.MAX_SAFE_INTEGER, 2)).toBe("9007199254740991.00");
+      expect(formatNumber(Number.MAX_SAFE_INTEGER, 2)).toBe(
+        "9007199254740991.00",
+      );
     });
   });
 

@@ -37,9 +37,15 @@ describe("Select", () => {
     const select = screen.getByRole("combobox");
     expect(select).toBeInTheDocument();
 
-    expect(screen.getByRole("option", { name: "Option 1" })).toBeInTheDocument();
-    expect(screen.getByRole("option", { name: "Option 2" })).toBeInTheDocument();
-    expect(screen.getByRole("option", { name: "Option 3" })).toBeInTheDocument();
+    expect(
+      screen.getByRole("option", { name: "Option 1" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("option", { name: "Option 2" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("option", { name: "Option 3" }),
+    ).toBeInTheDocument();
   });
 
   it("renders label when provided", () => {
@@ -51,7 +57,13 @@ describe("Select", () => {
   });
 
   it("renders label with icon when provided", () => {
-    render(<Select options={defaultOptions} label="Test Label with Icon" icon="🏨" />);
+    render(
+      <Select
+        options={defaultOptions}
+        label="Test Label with Icon"
+        icon="🏨"
+      />,
+    );
 
     const icon = screen.getByText("🏨");
     const label = screen.getByText("Test Label with Icon");
@@ -62,7 +74,9 @@ describe("Select", () => {
   });
 
   it("associates label with select element using htmlFor", () => {
-    render(<Select options={defaultOptions} label="Test Label" id="test-select" />);
+    render(
+      <Select options={defaultOptions} label="Test Label" id="test-select" />,
+    );
 
     const label = screen.getByText("Test Label");
     const select = screen.getByRole("combobox");
@@ -75,7 +89,11 @@ describe("Select", () => {
     render(<Select options={defaultOptions} error="This field is required" />);
 
     const select = screen.getByRole("combobox");
-    expect(select).toHaveClass("border-red-300", "focus:border-red-400", "focus:ring-red-400");
+    expect(select).toHaveClass(
+      "border-red-300",
+      "focus:border-red-400",
+      "focus:ring-red-400",
+    );
   });
 
   it("displays error message when error prop is provided", () => {
@@ -132,12 +150,22 @@ describe("Select", () => {
         options={defaultOptions}
         error="Error message"
         className="additional-class"
-      />
+      />,
     );
 
     const select = screen.getByRole("combobox");
-    expect(select).toHaveClass("w-full", "px-2", "py-2", "border-2", "border-pink-200");
-    expect(select).toHaveClass("border-red-300", "focus:border-red-400", "focus:ring-red-400");
+    expect(select).toHaveClass(
+      "w-full",
+      "px-2",
+      "py-2",
+      "border-2",
+      "border-pink-200",
+    );
+    expect(select).toHaveClass(
+      "border-red-300",
+      "focus:border-red-400",
+      "focus:ring-red-400",
+    );
     expect(select).toHaveClass("additional-class");
   });
 });

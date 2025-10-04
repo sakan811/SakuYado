@@ -43,7 +43,7 @@ function TestComponent() {
               name: "Test Hotel",
               price: 100,
               rating: 8,
-              currency: "USD"
+              currency: "USD",
             });
           } catch {
             // Handle error silently for test
@@ -70,7 +70,7 @@ function renderWithProvider() {
   return render(
     <HotelProvider>
       <TestComponent />
-    </HotelProvider>
+    </HotelProvider>,
   );
 }
 
@@ -182,7 +182,9 @@ describe("HotelContext", () => {
       });
 
       // State should remain consistent
-      expect(screen.getAllByTestId("currency")[0]).toHaveTextContent(initialCurrency);
+      expect(screen.getAllByTestId("currency")[0]).toHaveTextContent(
+        initialCurrency,
+      );
     });
 
     it("should handle state management correctly", async () => {
@@ -289,10 +291,15 @@ describe("HotelContext", () => {
       addButton.click();
 
       // Wait for async operation to complete
-      await waitFor(() => {
-        // Error state should be set
-        expect(screen.getAllByTestId("error")[0]).not.toHaveTextContent("no-error");
-      }, { timeout: 1000 });
+      await waitFor(
+        () => {
+          // Error state should be set
+          expect(screen.getAllByTestId("error")[0]).not.toHaveTextContent(
+            "no-error",
+          );
+        },
+        { timeout: 1000 },
+      );
 
       // Restore original method
       localStorage.setItem = originalSetItem;
@@ -432,7 +439,10 @@ describe("HotelContext", () => {
       await waitFor(() => {
         expect(screen.getAllByTestId("currency")[0]).toHaveTextContent("EUR");
       });
-      expect(localStorage.setItem).toHaveBeenCalledWith("lastUsedCurrency", "EUR");
+      expect(localStorage.setItem).toHaveBeenCalledWith(
+        "lastUsedCurrency",
+        "EUR",
+      );
     });
 
     it("should handle errors when setting currency preference", async () => {
