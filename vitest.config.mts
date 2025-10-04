@@ -15,7 +15,7 @@ export default defineConfig({
         "next.config.ts",
         "postcss.config.mjs",
         "scripts/**",
-        "**/*.config.{js,ts,mjs}",
+        "**/*.config.{js,ts,mjs,mts}",
         "**/*.d.ts",
         "node_modules/**",
         ".next/**",
