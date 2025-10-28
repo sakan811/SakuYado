@@ -36,7 +36,7 @@
     "@vitest/coverage-v8": "3.2.4",
     "cypress": "^15.5.0",
     "eslint": "^9.37.0",
-    "eslint-config-next": "15.5.6",
+    "eslint-config-next": "16.0.0",
     "eslint-config-prettier": "^10.1.8",
     "jsdom": "^27.0.1",
     "prettier": "^3.6.2",
