@@ -20,7 +20,7 @@
     "@testing-library/user-event": "^14.6.1",
     "@vercel/analytics": "^1.6.1",
     "next": "16.1.1",
-    "react": "^19.2.0",
+    "react": "^19.2.3",
     "react-dom": "^19.2.0"
   },
   "devDependencies": {
