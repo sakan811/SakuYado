@@ -23,7 +23,16 @@ import { useHotel } from "@/contexts/HotelContext";
 import { calculateHotelStatistics } from "@/utils/calculations";
 import { formatPrice, formatRating } from "@/utils/formatting";
 import { generateHotelComparisonSchema } from "@/utils/structured-data";
-import { Button, Card, LoadingSpinner } from "@/components";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardHeader,
+  CardContent,
+  CardFooter,
+  CardTitle,
+  CardDescription,
+  LoadingSpinner,
+} from "@/components";
 
 export default function CompareHotelsPage() {
   const { state, clearAllHotels } = useHotel();
@@ -37,68 +46,70 @@ export default function CompareHotelsPage() {
       size="sm"
       className={`mb-4 ${index === 0 ? "" : "hover:border-pink-300"}`}
     >
-      {/* Card Header */}
-      <div className="flex items-start justify-between mb-3">
-        <div className="flex items-center space-x-2">
+      <CardContent className="space-y-3">
+        {/* Card Header */}
+        <div className="flex items-start justify-between">
+          <div className="flex items-center space-x-2">
+            <div
+              className={`
+              w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm
+              ${index === 0 ? "bg-pink-500 text-white" : "bg-gray-200 text-gray-700"}
+            `}
+            >
+              {index + 1}
+            </div>
+            {index === 0 && <span className="text-lg">👑</span>}
+          </div>
           <div
             className={`
-            w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm
-            ${index === 0 ? "bg-pink-500 text-white" : "bg-gray-200 text-gray-700"}
+            px-3 py-1 rounded-full text-xs font-bold
+            ${
+              index === 0
+                ? "bg-pink-200 text-pink-800"
+                : "bg-gray-100 text-gray-700"
+            }
           `}
+            data-testid={`hotel-value-score-${index}`}
           >
-            {index + 1}
+            {hotel.valueScore}
           </div>
-          {index === 0 && <span className="text-lg">👑</span>}
         </div>
-        <div
-          className={`
-          px-3 py-1 rounded-full text-xs font-bold
-          ${
-            index === 0
-              ? "bg-pink-200 text-pink-800"
-              : "bg-gray-100 text-gray-700"
-          }
-        `}
-          data-testid={`hotel-value-score-${index}`}
+
+        {/* Hotel Name */}
+        <h3
+          className="font-bold text-lg sm:text-xl text-pink-800"
+          data-testid={`hotel-name-${index}`}
         >
-          {hotel.valueScore}
-        </div>
-      </div>
+          {hotel.name}
+          {index === 0 && (
+            <span className="block text-sm font-normal text-pink-600 mt-1">
+              🌸 Best Value
+            </span>
+          )}
+        </h3>
 
-      {/* Hotel Name */}
-      <h3
-        className="font-bold text-lg sm:text-xl text-pink-800 mb-3"
-        data-testid={`hotel-name-${index}`}
-      >
-        {hotel.name}
-        {index === 0 && (
-          <span className="block text-sm font-normal text-pink-600 mt-1">
-            🌸 Best Value
-          </span>
-        )}
-      </h3>
-
-      {/* Hotel Details Grid */}
-      <div className="grid grid-cols-2 gap-3 text-sm">
-        <div className="bg-pink-50 p-3 rounded-lg">
-          <div className="text-pink-600 font-medium mb-1">💰 Price</div>
-          <div
-            className="font-bold text-pink-800"
-            data-testid={`hotel-price-${index}`}
-          >
-            {formatPrice(hotel.price, hotel.currency)}
+        {/* Hotel Details Grid */}
+        <div className="grid grid-cols-2 gap-3 text-sm">
+          <div className="bg-pink-50 p-3 rounded-lg">
+            <div className="text-pink-600 font-medium mb-1">💰 Price</div>
+            <div
+              className="font-bold text-pink-800"
+              data-testid={`hotel-price-${index}`}
+            >
+              {formatPrice(hotel.price, hotel.currency)}
+            </div>
+          </div>
+          <div className="bg-rose-50 p-3 rounded-lg">
+            <div className="text-rose-600 font-medium mb-1">⭐ Rating</div>
+            <div
+              className="font-bold text-rose-800"
+              data-testid={`hotel-rating-${index}`}
+            >
+              {formatRating(hotel.rating)}
+            </div>
           </div>
         </div>
-        <div className="bg-rose-50 p-3 rounded-lg">
-          <div className="text-rose-600 font-medium mb-1">⭐ Rating</div>
-          <div
-            className="font-bold text-rose-800"
-            data-testid={`hotel-rating-${index}`}
-          >
-            {formatRating(hotel.rating)}
-          </div>
-        </div>
-      </div>
+      </CardContent>
     </Card>
   );
 
@@ -141,24 +152,25 @@ export default function CompareHotelsPage() {
             size="lg"
             className="text-center max-w-2xl mx-auto"
           >
-            <div className="text-6xl sm:text-7xl md:text-8xl mb-4 sm:mb-6">
-              🌸
-            </div>
-            <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-pink-800 mb-3 sm:mb-4">
-              No Hotels Added Yet
-            </h2>
-            <p className="text-sm sm:text-base md:text-lg text-pink-600 mb-6 sm:mb-8">
-              Start your journey by adding your first hotel to compare
-            </p>
-            <Link href="/hotels/add" data-testid="add-first-hotel">
+            <CardContent className="text-center space-y-4 sm:space-y-6">
+              <div className="text-6xl sm:text-7xl md:text-8xl">🌸</div>
+              <CardTitle className="text-xl sm:text-2xl md:text-3xl text-pink-800">
+                No Hotels Added Yet
+              </CardTitle>
+              <CardDescription className="text-sm sm:text-base md:text-lg text-pink-600">
+                Start your journey by adding your first hotel to compare
+              </CardDescription>
               <Button
-                variant="primary"
+                asChild
+                variant="default"
                 size="lg"
                 className="text-base sm:text-lg"
               >
-                🌸 Add Your First Hotel
+                <Link href="/hotels/add" data-testid="add-first-hotel">
+                  🌸 Add Your First Hotel
+                </Link>
               </Button>
-            </Link>
+            </CardContent>
           </Card>
         ) : (
           <>
@@ -281,39 +293,40 @@ export default function CompareHotelsPage() {
 
             {/* Value Score Explanation */}
             <Card variant="gradient" size="md" className="mt-6 sm:mt-8">
-              <div className="flex items-center space-x-2 sm:space-x-3 mb-2">
-                <span className="text-xl sm:text-2xl">🧮</span>
-                <h3 className="text-base sm:text-lg font-bold text-pink-800">
-                  Value Score Calculation
-                </h3>
-              </div>
-              <p className="text-sm sm:text-base text-pink-700">
-                <strong className="text-pink-800">Value Score</strong> = Rating
-                ÷ Price
-                <span className="block sm:inline sm:ml-2 text-xs sm:text-sm">
-                  (higher score = better value for money)
-                </span>
-              </p>
+              <CardContent className="space-y-2">
+                <div className="flex items-center space-x-2 sm:space-x-3">
+                  <span className="text-xl sm:text-2xl">🧮</span>
+                  <CardTitle className="text-base sm:text-lg text-pink-800">
+                    Value Score Calculation
+                  </CardTitle>
+                </div>
+                <CardDescription className="text-sm sm:text-base text-pink-700">
+                  <strong className="text-pink-800">Value Score</strong> =
+                  Rating ÷ Price
+                  <span className="block sm:inline sm:ml-2 text-xs sm:text-sm">
+                    (higher score = better value for money)
+                  </span>
+                </CardDescription>
+              </CardContent>
             </Card>
 
             {/* Action Buttons - Enhanced Mobile Layout */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 mt-6 sm:mt-8">
-              <Link href="/hotels/add" data-testid="add-another-hotel">
-                <Button
-                  variant="primary"
-                  size="lg"
-                  fullWidth
-                  className="text-base sm:text-lg"
-                >
-                  🌸 Add Another Hotel
-                </Button>
-              </Link>
               <Button
-                variant="danger"
+                asChild
+                variant="default"
                 size="lg"
-                fullWidth
+                className="w-full text-base sm:text-lg"
+              >
+                <Link href="/hotels/add" data-testid="add-another-hotel">
+                  🌸 Add Another Hotel
+                </Link>
+              </Button>
+              <Button
+                variant="destructive"
+                size="lg"
+                className="w-full text-base sm:text-lg"
                 onClick={clearAllHotels}
-                className="text-base sm:text-lg"
               >
                 🗑️ Clear All Hotels
               </Button>

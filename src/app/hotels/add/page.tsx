@@ -24,7 +24,18 @@ import { CURRENCIES } from "@/constants/currencies";
 import { useHotel } from "@/contexts/HotelContext";
 import { validateHotelForm, type ValidationError } from "@/utils/validation";
 import { generateAddHotelPageSchema } from "@/utils/structured-data";
-import { Button, Input, Select, Card, ErrorMessage } from "@/components";
+import { Button } from "@/components/ui/button";
+import {
+  Input,
+  Select,
+  Card,
+  CardHeader,
+  CardContent,
+  CardFooter,
+  CardTitle,
+  CardDescription,
+  ErrorMessage,
+} from "@/components";
 
 export default function AddHotelPage() {
   const router = useRouter();
@@ -136,121 +147,132 @@ export default function AddHotelPage() {
 
         {/* Form Card - enhanced responsive design */}
         <Card variant="gradient" size="md" className="shadow-xl sm:shadow-2xl">
-          <form
-            onSubmit={handleSubmit}
-            className="space-y-4 sm:space-y-6"
-            noValidate
-          >
-            {/* General Error Message */}
-            <ErrorMessage message={errors.general} />
+          <CardHeader>
+            <CardTitle className="text-xl sm:text-2xl md:text-3xl text-pink-800">
+              🌸 Add New Hotel
+            </CardTitle>
+            <CardDescription className="text-sm sm:text-base text-pink-600">
+              Enter hotel details to calculate value score
+            </CardDescription>
+          </CardHeader>
 
-            {/* Hotel Name - responsive input */}
-            <Input
-              type="text"
-              id="name"
-              name="name"
-              data-testid="hotel-name"
-              value={formData.name}
-              onChange={handleChange}
-              label="Hotel Name"
-              icon="🏨"
-              placeholder="Enter hotel name"
-              error={errors.name}
-            />
+          <CardContent>
+            <form
+              onSubmit={handleSubmit}
+              className="space-y-4 sm:space-y-6"
+              noValidate
+            >
+              {/* General Error Message */}
+              <ErrorMessage message={errors.general} />
 
-            {/* Price and Currency - enhanced responsive layout */}
-            <div>
-              <label
-                htmlFor="price"
-                className="block text-sm sm:text-base font-bold text-pink-800 mb-2"
-              >
-                💰 Price
-              </label>
+              {/* Hotel Name - responsive input */}
+              <Input
+                type="text"
+                id="name"
+                name="name"
+                data-testid="hotel-name"
+                value={formData.name}
+                onChange={handleChange}
+                label="Hotel Name"
+                icon="🏨"
+                placeholder="Enter hotel name"
+                error={errors.name}
+              />
 
-              {/* Mobile: stacked, Tablet+: side-by-side with equal widths */}
-              <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
-                {/* Price Input - equal width on desktop */}
-                <div className="flex-1 sm:flex-1">
-                  <Input
-                    type="text"
-                    id="price"
-                    name="price"
-                    data-testid="hotel-price"
-                    value={formData.price}
-                    onChange={handleChange}
-                    placeholder="Enter price"
-                  />
+              {/* Price and Currency - enhanced responsive layout */}
+              <div>
+                <label
+                  htmlFor="price"
+                  className="block text-sm sm:text-base font-bold text-pink-800 mb-2"
+                >
+                  💰 Price
+                </label>
+
+                {/* Mobile: stacked, Tablet+: side-by-side with equal widths */}
+                <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
+                  {/* Price Input - equal width on desktop */}
+                  <div className="flex-1 sm:flex-1">
+                    <Input
+                      type="text"
+                      id="price"
+                      name="price"
+                      data-testid="hotel-price"
+                      value={formData.price}
+                      onChange={handleChange}
+                      placeholder="Enter price"
+                    />
+                  </div>
+
+                  {/* Currency dropdown - equal width on desktop */}
+                  <div className="w-full sm:flex-1">
+                    <Select
+                      id="currency"
+                      name="currency"
+                      data-testid="hotel-currency"
+                      value={formData.currency}
+                      onChange={handleChange}
+                      options={CURRENCIES.map((currency) => ({
+                        value: currency.code,
+                        label: `${currency.code} - ${currency.name}`,
+                      }))}
+                    />
+                  </div>
                 </div>
 
-                {/* Currency dropdown - equal width on desktop */}
-                <div className="w-full sm:flex-1">
-                  <Select
-                    id="currency"
-                    name="currency"
-                    data-testid="hotel-currency"
-                    value={formData.currency}
-                    onChange={handleChange}
-                    options={CURRENCIES.map((currency) => ({
-                      value: currency.code,
-                      label: `${currency.code} - ${currency.name}`,
-                    }))}
-                  />
-                </div>
+                {errors.price && (
+                  <p className="mt-1 sm:mt-2 text-xs sm:text-sm text-red-500 font-medium">
+                    {errors.price}
+                  </p>
+                )}
               </div>
 
-              {errors.price && (
-                <p className="mt-1 sm:mt-2 text-xs sm:text-sm text-red-500 font-medium">
-                  {errors.price}
-                </p>
-              )}
-            </div>
+              {/* Rating - responsive input */}
+              <Input
+                type="text"
+                id="rating"
+                name="rating"
+                data-testid="hotel-rating"
+                value={formData.rating}
+                onChange={handleChange}
+                label="Rating (0-10)"
+                icon="⭐"
+                placeholder="Enter rating"
+                error={errors.rating}
+              />
 
-            {/* Rating - responsive input */}
-            <Input
-              type="text"
-              id="rating"
-              name="rating"
-              data-testid="hotel-rating"
-              value={formData.rating}
-              onChange={handleChange}
-              label="Rating (0-10)"
-              icon="⭐"
-              placeholder="Enter rating"
-              error={errors.rating}
-            />
-
-            {/* Submit Button - enhanced responsive */}
-            <Button
-              type="submit"
-              data-testid="add-hotel-button"
-              variant="primary"
-              size="md"
-              fullWidth
-            >
-              🌸 Submit & Compare
-            </Button>
-
-            {/* Secondary Actions - responsive layout */}
-            <div className="space-y-3 sm:space-y-4">
-              <Link href="/hotels/compare" className="block w-full">
-                <Button
-                  variant="secondary"
-                  size="md"
-                  fullWidth
-                  className="text-center"
-                >
-                  👀 View Compare Page
-                </Button>
-              </Link>
-
-              <Link
-                href="/"
-                className="block w-full text-center text-sm sm:text-base text-pink-600 hover:text-pink-800 font-medium transition-colors duration-300"
+              {/* Submit Button - enhanced responsive */}
+              <Button
+                type="submit"
+                data-testid="add-hotel-button"
+                variant="default"
+                size="lg"
+                className="w-full"
               >
-                ← Back to Home
-              </Link>
-            </div>
-          </form>
+                🌸 Submit & Compare
+              </Button>
+
+              {/* Secondary Actions - responsive layout */}
+              <div className="space-y-3 sm:space-y-4">
+                <Button
+                  asChild
+                  variant="secondary"
+                  size="lg"
+                  className="w-full"
+                >
+                  <Link href="/hotels/compare">
+                    👀 View Compare Page
+                  </Link>
+                </Button>
+
+                <Link
+                  href="/"
+                  className="block w-full text-center text-sm sm:text-base text-pink-600 hover:text-pink-800 font-medium transition-colors duration-300"
+                >
+                  ← Back to Home
+                </Link>
+              </div>
+            </form>
+          </CardContent>
         </Card>
 
         {/* Decorative Elements - responsive */}
