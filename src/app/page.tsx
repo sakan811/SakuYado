@@ -93,6 +93,19 @@ export default function ResponsiveHomePage() {
           🌸
         </span>
       </div>
+
+      {/* License Footer */}
+      <footer className="text-center text-xs sm:text-sm text-pink-400/70 py-4 px-4">
+        © 2025-2026 SakuYado •{" "}
+        <Link
+          href="https://www.gnu.org/licenses/agpl-3.0.html"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="hover:text-pink-300 underline underline-offset-2"
+        >
+          AGPL-3.0
+        </Link>
+      </footer>
     </div>
   );
 }
