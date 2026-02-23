@@ -15,9 +15,17 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-export { Button } from "./Button";
+export { Button } from "./button";
 export { Input } from "./Input";
 export { Select } from "./Select";
-export { Card } from "./Card";
+export {
+  Card,
+  CardHeader,
+  CardFooter,
+  CardTitle,
+  CardAction,
+  CardDescription,
+  CardContent,
+} from "./Card";
 export { ErrorMessage } from "./ErrorMessage";
 export { LoadingSpinner } from "./LoadingSpinner";
