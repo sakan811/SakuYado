@@ -16,13 +16,8 @@
  */
 
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-} from "@/components";
+import { Button } from "@/components/ui/Button";
+import { Card, CardHeader, CardTitle, CardDescription } from "@/components";
 
 export default function ResponsiveHomePage() {
   return (
@@ -32,12 +27,8 @@ export default function ResponsiveHomePage() {
         <Card className="relative bg-gradient-to-br from-pink-500 via-rose-400 to-pink-600 text-white rounded-2xl overflow-hidden shadow-xl border-0">
           {/* Decorative elements */}
           <div className="absolute inset-0 bg-gradient-to-r from-pink-500/90 to-rose-500/90 z-0"></div>
-          <div className="absolute top-2 right-2 text-3xl opacity-20">
-            🌸
-          </div>
-          <div className="absolute bottom-2 left-2 text-xl opacity-15">
-            🌸
-          </div>
+          <div className="absolute top-2 right-2 text-3xl opacity-20">🌸</div>
+          <div className="absolute bottom-2 left-2 text-xl opacity-15">🌸</div>
 
           <CardHeader className="relative z-10 text-center pt-6 pb-4">
             <div className="mb-2">
@@ -45,13 +36,11 @@ export default function ResponsiveHomePage() {
             </div>
             <CardTitle className="text-2xl font-bold text-white mb-1 leading-tight">
               Find the Best Value Hotels
-              <span className="block text-pink-100 mt-0.5">
-                with SakuYado
-              </span>
+              <span className="block text-pink-100 mt-0.5">with SakuYado</span>
             </CardTitle>
             <CardDescription className="text-sm text-pink-50 leading-relaxed">
-              Compare hotels based on review-per-price ratio to get the most value
-              for your money
+              Compare hotels based on review-per-price ratio to get the most
+              value for your money
             </CardDescription>
           </CardHeader>
         </Card>
@@ -76,9 +65,7 @@ export default function ResponsiveHomePage() {
             size="lg"
             className="w-full sm:flex-1 bg-pink-600 text-white hover:bg-pink-700"
           >
-            <Link href="/hotels/compare">
-              Compare Hotels
-            </Link>
+            <Link href="/hotels/compare">Compare Hotels</Link>
           </Button>
         </div>
       </div>

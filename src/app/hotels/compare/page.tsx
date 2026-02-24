@@ -23,7 +23,7 @@ import { useHotel } from "@/contexts/HotelContext";
 import { calculateHotelStatistics } from "@/utils/calculations";
 import { formatPrice, formatRating } from "@/utils/formatting";
 import { generateHotelComparisonSchema } from "@/utils/structured-data";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/Button";
 import {
   Card,
   CardHeader,

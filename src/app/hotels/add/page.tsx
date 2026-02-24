@@ -24,10 +24,14 @@ import { CURRENCIES } from "@/constants/currencies";
 import { useHotel } from "@/contexts/HotelContext";
 import { validateHotelForm, type ValidationError } from "@/utils/validation";
 import { generateAddHotelPageSchema } from "@/utils/structured-data";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/Button";
 import {
   Input,
   Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
   Card,
   CardHeader,
   CardContent,
@@ -35,6 +39,11 @@ import {
   CardTitle,
   CardDescription,
   ErrorMessage,
+  Field,
+  FieldGroup,
+  FieldLabel,
+  FieldSet,
+  FieldError,
 } from "@/components";
 
 export default function AddHotelPage() {
@@ -156,90 +165,107 @@ export default function AddHotelPage() {
             </CardDescription>
           </CardHeader>
 
-          <CardContent>
-            <form
-              onSubmit={handleSubmit}
-              className="space-y-4 sm:space-y-6"
-              noValidate
-            >
+          <form onSubmit={handleSubmit} className="flex flex-col" noValidate>
+            <CardContent className="space-y-4 sm:space-y-6">
               {/* General Error Message */}
               <ErrorMessage message={errors.general} />
 
-              {/* Hotel Name - responsive input */}
-              <Input
-                type="text"
-                id="name"
-                name="name"
-                data-testid="hotel-name"
-                value={formData.name}
-                onChange={handleChange}
-                label="Hotel Name"
-                icon="🏨"
-                placeholder="Enter hotel name"
-                error={errors.name}
-              />
-
-              {/* Price and Currency - enhanced responsive layout */}
-              <div>
-                <label
-                  htmlFor="price"
-                  className="block text-sm sm:text-base font-bold text-pink-800 mb-2"
-                >
-                  💰 Price
-                </label>
-
-                {/* Mobile: stacked, Tablet+: side-by-side with equal widths */}
-                <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
-                  {/* Price Input - equal width on desktop */}
-                  <div className="flex-1 sm:flex-1">
+              <FieldSet>
+                <FieldGroup className="gap-4 sm:gap-6">
+                  {/* Hotel Name */}
+                  <Field>
+                    <FieldLabel htmlFor="name">
+                      <span className="mr-2">🏨</span>
+                      Hotel Name
+                    </FieldLabel>
                     <Input
                       type="text"
-                      id="price"
-                      name="price"
-                      data-testid="hotel-price"
-                      value={formData.price}
+                      id="name"
+                      name="name"
+                      data-testid="hotel-name"
+                      value={formData.name}
                       onChange={handleChange}
-                      placeholder="Enter price"
+                      placeholder="Enter hotel name"
+                      aria-invalid={!!errors.name}
                     />
+                    {errors.name && (
+                      <FieldError className="text-red-500 font-medium text-xs sm:text-sm">
+                        {errors.name}
+                      </FieldError>
+                    )}
+                  </Field>
+
+                  {/* Price and Currency */}
+                  <div className="flex flex-col sm:flex-row gap-4 sm:gap-6">
+                    <Field className="flex-1">
+                      <FieldLabel htmlFor="price">
+                        <span className="mr-2">💰</span>
+                        Price
+                      </FieldLabel>
+                      <Input
+                        type="text"
+                        id="price"
+                        name="price"
+                        data-testid="hotel-price"
+                        value={formData.price}
+                        onChange={handleChange}
+                        placeholder="Enter price"
+                        aria-invalid={!!errors.price}
+                      />
+                      {errors.price && (
+                        <FieldError className="text-red-500 font-medium text-xs sm:text-sm">
+                          {errors.price}
+                        </FieldError>
+                      )}
+                    </Field>
+
+                    <Field className="flex-1">
+                      <FieldLabel htmlFor="currency">Currency</FieldLabel>
+                      <Select
+                        value={formData.currency}
+                        onValueChange={(value) => handleChange({ target: { name: 'currency', value } } as any)}
+                      >
+                        <SelectTrigger id="currency" data-testid="hotel-currency">
+                          <SelectValue placeholder="Select currency" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {CURRENCIES.map((currency) => (
+                            <SelectItem key={currency.code} value={currency.code}>
+                              {currency.code} - {currency.name}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </Field>
                   </div>
 
-                  {/* Currency dropdown - equal width on desktop */}
-                  <div className="w-full sm:flex-1">
-                    <Select
-                      id="currency"
-                      name="currency"
-                      data-testid="hotel-currency"
-                      value={formData.currency}
+                  {/* Rating */}
+                  <Field>
+                    <FieldLabel htmlFor="rating">
+                      <span className="mr-2">⭐</span>
+                      Rating (0-10)
+                    </FieldLabel>
+                    <Input
+                      type="text"
+                      id="rating"
+                      name="rating"
+                      data-testid="hotel-rating"
+                      value={formData.rating}
                       onChange={handleChange}
-                      options={CURRENCIES.map((currency) => ({
-                        value: currency.code,
-                        label: `${currency.code} - ${currency.name}`,
-                      }))}
+                      placeholder="Enter rating"
+                      aria-invalid={!!errors.rating}
                     />
-                  </div>
-                </div>
+                    {errors.rating && (
+                      <FieldError className="text-red-500 font-medium text-xs sm:text-sm">
+                        {errors.rating}
+                      </FieldError>
+                    )}
+                  </Field>
+                </FieldGroup>
+              </FieldSet>
+            </CardContent>
 
-                {errors.price && (
-                  <p className="mt-1 sm:mt-2 text-xs sm:text-sm text-red-500 font-medium">
-                    {errors.price}
-                  </p>
-                )}
-              </div>
-
-              {/* Rating - responsive input */}
-              <Input
-                type="text"
-                id="rating"
-                name="rating"
-                data-testid="hotel-rating"
-                value={formData.rating}
-                onChange={handleChange}
-                label="Rating (0-10)"
-                icon="⭐"
-                placeholder="Enter rating"
-                error={errors.rating}
-              />
-
+            <CardFooter className="flex-col gap-3 sm:gap-4 mt-6 sm:mt-8">
               {/* Submit Button - enhanced responsive */}
               <Button
                 type="submit"
@@ -252,16 +278,14 @@ export default function AddHotelPage() {
               </Button>
 
               {/* Secondary Actions - responsive layout */}
-              <div className="space-y-3 sm:space-y-4">
+              <div className="w-full space-y-3 sm:space-y-4">
                 <Button
                   asChild
                   variant="secondary"
                   size="lg"
                   className="w-full"
                 >
-                  <Link href="/hotels/compare">
-                    👀 View Compare Page
-                  </Link>
+                  <Link href="/hotels/compare">👀 View Compare Page</Link>
                 </Button>
 
                 <Link
@@ -271,8 +295,8 @@ export default function AddHotelPage() {
                   ← Back to Home
                 </Link>
               </div>
-            </form>
-          </CardContent>
+            </CardFooter>
+          </form>
         </Card>
 
         {/* Decorative Elements - responsive */}
