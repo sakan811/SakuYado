@@ -17,6 +17,7 @@
     "test:all": "pnpm lint && pnpm format && pnpm build && pnpm test:run && pnpm e2e:dev"
   },
   "dependencies": {
+    "@tanstack/react-table": "^8.21.3",
     "@testing-library/user-event": "^14.6.1",
     "@vercel/analytics": "^1.6.1",
     "class-variance-authority": "^0.7.1",

@@ -18,6 +18,8 @@
 "use client";
 
 import Link from "next/link";
+import { columns } from "./columns";
+import { DataTable } from "./data-table";
 import { Hotel } from "@/types/hotel";
 import { useHotel } from "@/contexts/HotelContext";
 import { calculateHotelStatistics } from "@/utils/calculations";
@@ -186,108 +188,7 @@ export default function CompareHotelsPage() {
             {/* Desktop Table View */}
             <div className="hidden lg:block">
               <Card variant="gradient" size="lg" className="overflow-hidden">
-                <div className="overflow-x-auto">
-                  <table className="min-w-full">
-                    <thead className="bg-gradient-to-r from-pink-500 to-rose-500">
-                      <tr>
-                        <th className="py-3 lg:py-4 px-4 lg:px-6 text-left text-sm font-bold text-white uppercase tracking-wider">
-                          🏆 Rank
-                        </th>
-                        <th className="py-3 lg:py-4 px-4 lg:px-6 text-left text-sm font-bold text-white uppercase tracking-wider">
-                          🏨 Hotel
-                        </th>
-                        <th className="py-3 lg:py-4 px-4 lg:px-6 text-left text-sm font-bold text-white uppercase tracking-wider">
-                          💰 Price
-                        </th>
-                        <th className="py-3 lg:py-4 px-4 lg:px-6 text-left text-sm font-bold text-white uppercase tracking-wider">
-                          ⭐ Rating
-                        </th>
-                        <th className="py-3 lg:py-4 px-4 lg:px-6 text-left text-sm font-bold text-white uppercase tracking-wider">
-                          🌸 Value Score
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {hotels.map((hotel, index) => (
-                        <tr
-                          key={index}
-                          data-testid="hotel-row-desktop"
-                          className={`
-                            ${
-                              index === 0
-                                ? "bg-gradient-to-r from-pink-100 via-rose-100 to-pink-100 border-l-4 border-pink-400"
-                                : index % 2 === 0
-                                  ? "bg-white/70"
-                                  : "bg-pink-50/50"
-                            }
-                            hover:bg-gradient-to-r hover:from-pink-100 hover:to-rose-100 transition-all duration-300
-                            ${index !== hotels.length - 1 ? "border-b border-pink-200" : ""}
-                          `}
-                        >
-                          <td className="py-3 lg:py-4 px-4 lg:px-6 whitespace-nowrap">
-                            <div className="flex items-center space-x-2">
-                              <span className="text-base lg:text-lg font-bold text-pink-700">
-                                {index + 1}
-                              </span>
-                              {index === 0 && (
-                                <span className="text-yellow-500 text-lg lg:text-xl">
-                                  👑
-                                </span>
-                              )}
-                            </div>
-                          </td>
-                          <td className="py-3 lg:py-4 px-4 lg:px-6 whitespace-nowrap">
-                            <div
-                              className="font-bold text-pink-800 text-base lg:text-lg"
-                              data-testid={`hotel-name-${index}`}
-                            >
-                              {hotel.name}
-                              {index === 0 && (
-                                <span className="ml-2 text-pink-500 text-sm font-normal">
-                                  🌸 Best Value
-                                </span>
-                              )}
-                            </div>
-                          </td>
-                          <td className="py-3 lg:py-4 px-4 lg:px-6 whitespace-nowrap">
-                            <span
-                              className="font-semibold text-pink-700 text-base lg:text-lg"
-                              data-testid={`hotel-price-${index}`}
-                            >
-                              {formatPrice(hotel.price, hotel.currency)}
-                            </span>
-                          </td>
-                          <td className="py-3 lg:py-4 px-4 lg:px-6 whitespace-nowrap">
-                            <div className="flex items-center space-x-1">
-                              <span
-                                className="font-semibold text-pink-700 text-base lg:text-lg"
-                                data-testid={`hotel-rating-${index}`}
-                              >
-                                {formatRating(hotel.rating)}
-                              </span>
-                              <span className="text-yellow-500">⭐</span>
-                            </div>
-                          </td>
-                          <td className="py-3 lg:py-4 px-4 lg:px-6 whitespace-nowrap">
-                            <span
-                              className={`
-                              font-bold text-base lg:text-lg px-3 py-1 rounded-full
-                              ${
-                                index === 0
-                                  ? "bg-gradient-to-r from-pink-200 to-rose-200 text-pink-800"
-                                  : "bg-pink-100 text-pink-700"
-                              }
-                            `}
-                              data-testid={`hotel-value-score-${index}`}
-                            >
-                              {hotel.valueScore}
-                            </span>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
+                <DataTable columns={columns} data={hotels} />
               </Card>
             </div>
 
