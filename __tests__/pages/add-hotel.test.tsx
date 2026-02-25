@@ -22,7 +22,7 @@ const getFormElements = () => ({
   nameInput: screen.getAllByLabelText(/Hotel Name/i)[0],
   priceInput: screen.getAllByLabelText(/Price/i)[0],
   ratingInput: screen.getAllByLabelText(/Rating/i)[0],
-  currencySelect: document.getElementById("currency") as HTMLSelectElement,
+  currencySelect: document.getElementById("currency") as HTMLButtonElement,
   submitButton: screen.getAllByText(/Submit & Compare/i)[0],
 });
 
@@ -49,7 +49,12 @@ const fillForm = async (
   if (data.price !== undefined) await user.type(priceInput, data.price);
   if (data.rating !== undefined) await user.type(ratingInput, data.rating);
   if (data.currency && currencySelect) {
-    await user.selectOptions(currencySelect, data.currency);
+    await user.click(currencySelect);
+    const options = await screen.findAllByRole("option");
+    const targetOption = options.find((opt) => opt.textContent?.includes(data.currency!));
+    if (targetOption) {
+      await user.click(targetOption);
+    }
   }
 };
 
@@ -73,6 +78,7 @@ describe("AddHotelPage", () => {
     // Clear localStorage and mocks before each test
     localStorage.clear();
     mockPush.mockClear();
+    cleanup();
   });
 
   it("renders the add hotel form", () => {
@@ -259,8 +265,11 @@ describe("AddHotelPage", () => {
     render(<AddHotelPage />);
     const { currencySelect } = getFormElements();
 
-    expect(currencySelect.value).toBe("EUR");
-    await user.selectOptions(currencySelect, "GBP");
+    expect(currencySelect.textContent).toContain("EUR");
+    await user.click(currencySelect);
+    const options = await screen.findAllByRole("option");
+    const gbpOption = options.find((opt) => opt.textContent?.includes("GBP"));
+    if (gbpOption) await user.click(gbpOption);
     expect(localStorage.getItem("lastUsedCurrency")).toBe("GBP");
   });
 
@@ -490,7 +499,10 @@ describe("AddHotelPage", () => {
       render(<AddHotelPage />);
       const { currencySelect, submitButton } = getFormElements();
 
-      await user.selectOptions(currencySelect, "EUR");
+      await user.click(currencySelect);
+      const options = await screen.findAllByRole("option");
+      const eurOption = options.find((opt) => opt.textContent?.includes("EUR"));
+      if (eurOption) await user.click(eurOption);
       await fillForm(user, {
         name: "European Hotel",
         price: "150",

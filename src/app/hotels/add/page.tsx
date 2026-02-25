@@ -50,11 +50,18 @@ import {
 export default function AddHotelPage() {
   const router = useRouter();
   const { state, addHotel, setLastUsedCurrency } = useHotel();
-  const [formData, setFormData] = useState({
-    name: "",
-    price: "",
-    rating: "",
-    currency: state.lastUsedCurrency,
+  const [formData, setFormData] = useState(() => {
+    let currency = state.lastUsedCurrency;
+    try {
+      const saved =
+        typeof localStorage !== "undefined"
+          ? localStorage.getItem("lastUsedCurrency")
+          : null;
+      if (saved) currency = saved;
+    } catch {
+      // ignore – localStorage may not be available
+    }
+    return { name: "", price: "", rating: "", currency };
   });
   const [errors, setErrors] = useState<ValidationError>({
     name: "",
@@ -85,6 +92,10 @@ export default function AddHotelPage() {
         ...prev,
         currency: state.lastUsedCurrency,
       }));
+      // Sync any context-level error (e.g. failed to load saved data) to the form
+      if (state.error && !errors.general) {
+        setErrors((prev) => ({ ...prev, general: state.error! }));
+      }
     }
   }
 
@@ -135,8 +146,7 @@ export default function AddHotelPage() {
       } catch {
         setErrors((prev) => ({
           ...prev,
-          general:
-            state.error || "Unable to save hotel data. Please try again.",
+          general: "Unable to save hotel data. Please try again.",
         }));
       }
     }
