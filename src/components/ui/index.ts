@@ -27,7 +27,7 @@ export {
   CardDescription,
   CardContent,
 } from "./Card";
-export { ErrorMessage } from "./ErrorMessage";
+export * from "./alert";
 export { LoadingSpinner } from "./LoadingSpinner";
 export * from "./field";
 export * from "./label";

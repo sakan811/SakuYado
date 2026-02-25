@@ -17,7 +17,7 @@
 
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { CURRENCIES } from "@/constants/currencies";
@@ -38,7 +38,8 @@ import {
   CardFooter,
   CardTitle,
   CardDescription,
-  ErrorMessage,
+  Alert,
+  AlertDescription,
   Field,
   FieldGroup,
   FieldLabel,
@@ -65,14 +66,27 @@ export default function AddHotelPage() {
   const addHotelPageSchema = generateAddHotelPageSchema();
 
   // Initialize currency from context when it's available
-  useEffect(() => {
+
+  const [prevContext, setPrevContext] = useState({
+    isLoading: state.isLoading,
+    currency: state.lastUsedCurrency,
+  });
+
+  if (
+    state.isLoading !== prevContext.isLoading ||
+    state.lastUsedCurrency !== prevContext.currency
+  ) {
+    setPrevContext({
+      isLoading: state.isLoading,
+      currency: state.lastUsedCurrency,
+    });
     if (!state.isLoading) {
       setFormData((prev) => ({
         ...prev,
         currency: state.lastUsedCurrency,
       }));
     }
-  }, [state.isLoading, state.lastUsedCurrency]);
+  }
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
@@ -168,7 +182,13 @@ export default function AddHotelPage() {
           <form onSubmit={handleSubmit} className="flex flex-col" noValidate>
             <CardContent className="space-y-4 sm:space-y-6">
               {/* General Error Message */}
-              <ErrorMessage message={errors.general} />
+              {errors.general && (
+                <Alert variant="destructive" className="bg-red-50 border-red-200">
+                  <AlertDescription className="text-red-700 font-medium">
+                    {errors.general}
+                  </AlertDescription>
+                </Alert>
+              )}
 
               <FieldSet>
                 <FieldGroup className="gap-4 sm:gap-6">
@@ -223,7 +243,7 @@ export default function AddHotelPage() {
                       <FieldLabel htmlFor="currency">Currency</FieldLabel>
                       <Select
                         value={formData.currency}
-                        onValueChange={(value) => handleChange({ target: { name: 'currency', value } } as any)}
+                        onValueChange={(value) => handleChange({ target: { name: 'currency', value } } as React.ChangeEvent<HTMLSelectElement>)}
                       >
                         <SelectTrigger id="currency" data-testid="hotel-currency">
                           <SelectValue placeholder="Select currency" />
