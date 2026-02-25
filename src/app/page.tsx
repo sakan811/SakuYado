@@ -34,11 +34,11 @@ export default function ResponsiveHomePage() {
             <div className="mb-2">
               <span className="text-2xl sm:text-3xl md:text-4xl">🌸</span>
             </div>
-            <CardTitle className="text-2xl font-bold text-white mb-1 leading-tight">
-              Find the Best Value Hotels
-              <span className="block text-pink-100 mt-0.5">with SakuYado</span>
+            <CardTitle className="text-3xl sm:text-4xl font-bold text-white mb-1 leading-tight">
+              <span className="whitespace-nowrap">Find the Best Value Hotels</span>
+              <span className="block text-xl sm:text-2xl text-pink-100 mt-1">with SakuYado</span>
             </CardTitle>
-            <CardDescription className="text-sm text-pink-50 leading-relaxed">
+            <CardDescription className="text-base text-pink-50 leading-relaxed">
               Compare hotels based on review-per-price ratio to get the most
               value for your money
             </CardDescription>
