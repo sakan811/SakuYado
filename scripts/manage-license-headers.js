@@ -56,6 +56,7 @@ const SKIP_DIRS = [
   ".git",
   "cypress",
   "scripts", // Skip the scripts directory to avoid modifying this file
+  "src/components/ui", // Skip shadcn ui directory
 ];
 
 // Files to skip

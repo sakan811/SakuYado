@@ -28,7 +28,6 @@ export {
   CardContent,
 } from "./Card";
 export * from "./alert";
-export { LoadingSpinner } from "./LoadingSpinner";
 export * from "./field";
 export * from "./label";
 export * from "./separator";

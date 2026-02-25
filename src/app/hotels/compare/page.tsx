@@ -32,7 +32,6 @@ import {
   CardContent,
   CardTitle,
   CardDescription,
-  LoadingSpinner,
 } from "@/components";
 
 export default function CompareHotelsPage() {
@@ -64,11 +63,10 @@ export default function CompareHotelsPage() {
           <div
             className={`
             px-3 py-1 rounded-full text-xs font-bold
-            ${
-              index === 0
+            ${index === 0
                 ? "bg-pink-200 text-pink-800"
                 : "bg-gray-100 text-gray-700"
-            }
+              }
           `}
             data-testid={`hotel-value-score-${index}`}
           >
@@ -116,7 +114,14 @@ export default function CompareHotelsPage() {
   );
 
   if (isLoading) {
-    return <LoadingSpinner message="Loading hotel comparisons..." />;
+    return (
+      <div className="flex flex-col justify-center items-center h-64 space-y-4">
+        <div className="text-4xl sm:text-6xl animate-pulse">🌸</div>
+        <div className="text-lg sm:text-xl text-pink-600 font-medium">
+          Loading hotel comparisons...
+        </div>
+      </div>
+    );
   }
 
   const hotelComparisonStructuredData = generateHotelComparisonSchema(hotels);
