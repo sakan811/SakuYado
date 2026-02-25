@@ -22,33 +22,34 @@ import { Card, CardHeader, CardTitle, CardDescription } from "@/components";
 export default function ResponsiveHomePage() {
   return (
     <div className="space-y-6 sm:space-y-8">
-      {/* Hero Section */}
-      <div className="max-w-lg mx-auto px-4">
-        <Card className="relative bg-gradient-to-br from-pink-500 via-rose-400 to-pink-600 text-white rounded-2xl overflow-hidden shadow-xl border-0">
-          {/* Decorative elements */}
-          <div className="absolute inset-0 bg-gradient-to-r from-pink-500/90 to-rose-500/90 z-0"></div>
-          <div className="absolute top-2 right-2 text-3xl opacity-20">🌸</div>
-          <div className="absolute bottom-2 left-2 text-xl opacity-15">🌸</div>
+      {/* Hero and Buttons Container */}
+      <div className="w-max max-w-full mx-auto px-4 space-y-6 sm:space-y-8 overflow-x-hidden">
+        {/* Hero Section */}
+        <div className="w-full">
+          <Card className="relative bg-gradient-to-br from-pink-500 via-rose-400 to-pink-600 text-white rounded-2xl overflow-hidden shadow-xl border-0">
+            {/* Decorative elements */}
+            <div className="absolute inset-0 bg-gradient-to-r from-pink-500/90 to-rose-500/90 z-0"></div>
+            <div className="absolute top-2 right-2 text-3xl opacity-20">🌸</div>
+            <div className="absolute bottom-2 left-2 text-xl opacity-15">🌸</div>
 
-          <CardHeader className="relative z-10 text-center pt-6 pb-4">
-            <div className="mb-2">
-              <span className="text-2xl sm:text-3xl md:text-4xl">🌸</span>
-            </div>
-            <CardTitle className="text-3xl sm:text-4xl font-bold text-white mb-1 leading-tight">
-              <span className="whitespace-nowrap">Find the Best Value Hotels</span>
-              <span className="block text-xl sm:text-2xl text-pink-100 mt-1">with SakuYado</span>
-            </CardTitle>
-            <CardDescription className="text-base text-pink-50 leading-relaxed">
-              Compare hotels based on review-per-price ratio to get the most
-              value for your money
-            </CardDescription>
-          </CardHeader>
-        </Card>
-      </div>
+            <CardHeader className="relative z-10 text-center pt-12 pb-10 px-6 sm:px-12">
+              <div className="mb-4">
+                <span className="text-4xl sm:text-5xl md:text-6xl">🌸</span>
+              </div>
+              <CardTitle className="text-4xl sm:text-5xl md:text-6xl font-bold text-white mb-2 leading-tight">
+                <span className="block whitespace-nowrap">Find the Best Value Hotels</span>
+                <span className="block text-2xl sm:text-3xl text-pink-100 mt-2">with SakuYado</span>
+              </CardTitle>
+              <CardDescription className="text-lg sm:text-xl text-pink-50 leading-relaxed max-w-lg mx-auto mt-4">
+                Compare hotels based on review-per-price ratio to get the most
+                value for your money
+              </CardDescription>
+            </CardHeader>
+          </Card>
+        </div>
 
-      {/* Action Buttons */}
-      <div className="max-w-lg mx-auto px-4">
-        <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
+        {/* Action Buttons */}
+        <div className="w-full flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
           <Button
             asChild
             variant="secondary"
