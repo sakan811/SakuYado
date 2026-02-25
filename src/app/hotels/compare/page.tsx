@@ -30,7 +30,6 @@ import {
   Card,
   CardHeader,
   CardContent,
-  CardFooter,
   CardTitle,
   CardDescription,
   LoadingSpinner,
@@ -48,7 +47,7 @@ export default function CompareHotelsPage() {
       size="sm"
       className={`mb-4 ${index === 0 ? "" : "hover:border-pink-300"}`}
     >
-      <CardContent className="space-y-3">
+      <CardHeader className="pb-2">
         {/* Card Header */}
         <div className="flex items-start justify-between">
           <div className="flex items-center space-x-2">
@@ -65,11 +64,10 @@ export default function CompareHotelsPage() {
           <div
             className={`
             px-3 py-1 rounded-full text-xs font-bold
-            ${
-              index === 0
+            ${index === 0
                 ? "bg-pink-200 text-pink-800"
                 : "bg-gray-100 text-gray-700"
-            }
+              }
           `}
             data-testid={`hotel-value-score-${index}`}
           >
@@ -78,8 +76,8 @@ export default function CompareHotelsPage() {
         </div>
 
         {/* Hotel Name */}
-        <h3
-          className="font-bold text-lg sm:text-xl text-pink-800"
+        <CardTitle
+          className="font-bold text-lg sm:text-xl text-pink-800 mt-2"
           data-testid={`hotel-name-${index}`}
         >
           {hotel.name}
@@ -88,8 +86,9 @@ export default function CompareHotelsPage() {
               🌸 Best Value
             </span>
           )}
-        </h3>
-
+        </CardTitle>
+      </CardHeader>
+      <CardContent className="space-y-3 pt-0">
         {/* Hotel Details Grid */}
         <div className="grid grid-cols-2 gap-3 text-sm">
           <div className="bg-pink-50 p-3 rounded-lg">
@@ -154,14 +153,16 @@ export default function CompareHotelsPage() {
             size="lg"
             className="text-center max-w-2xl mx-auto"
           >
-            <CardContent className="text-center space-y-4 sm:space-y-6">
+            <CardHeader className="space-y-4 sm:space-y-6 pb-4">
               <div className="text-6xl sm:text-7xl md:text-8xl">🌸</div>
-              <CardTitle className="text-xl sm:text-2xl md:text-3xl text-pink-800">
+              <CardTitle className="text-xl sm:text-2xl md:text-3xl text-pink-800 pt-2">
                 No Hotels Added Yet
               </CardTitle>
               <CardDescription className="text-sm sm:text-base md:text-lg text-pink-600">
                 Start your journey by adding your first hotel to compare
               </CardDescription>
+            </CardHeader>
+            <CardContent className="pt-0">
               <Button
                 asChild
                 variant="default"
@@ -194,13 +195,15 @@ export default function CompareHotelsPage() {
 
             {/* Value Score Explanation */}
             <Card variant="gradient" size="md" className="mt-6 sm:mt-8">
-              <CardContent className="space-y-2">
+              <CardHeader className="pb-2">
                 <div className="flex items-center space-x-2 sm:space-x-3">
                   <span className="text-xl sm:text-2xl">🧮</span>
                   <CardTitle className="text-base sm:text-lg text-pink-800">
                     Value Score Calculation
                   </CardTitle>
                 </div>
+              </CardHeader>
+              <CardContent className="pt-0">
                 <CardDescription className="text-sm sm:text-base text-pink-700">
                   <strong className="text-pink-800">Value Score</strong> =
                   Rating ÷ Price
@@ -238,48 +241,49 @@ export default function CompareHotelsPage() {
               data-testid="statistics"
               className="mt-6 sm:mt-8 grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4"
             >
-              <div className="bg-white/80 backdrop-blur p-3 sm:p-4 rounded-xl border border-pink-200 text-center">
+              <Card className="bg-white/80 backdrop-blur py-3 sm:py-4 rounded-xl border border-pink-200 text-center">
                 <div className="text-lg sm:text-xl font-bold text-pink-800">
                   {calculateHotelStatistics(hotels).count}
                 </div>
                 <div className="text-xs sm:text-sm text-pink-600">Hotels</div>
-              </div>
-              <div className="bg-white/80 backdrop-blur p-3 sm:p-4 rounded-xl border border-pink-200 text-center">
+              </Card>
+              <Card className="bg-white/80 backdrop-blur py-3 sm:py-4 rounded-xl border border-pink-200 text-center">
                 <div className="text-lg sm:text-xl font-bold text-rose-800">
                   {calculateHotelStatistics(hotels).topScore}
                 </div>
                 <div className="text-xs sm:text-sm text-rose-600">
                   Top Score
                 </div>
-              </div>
-              <div className="bg-white/80 backdrop-blur p-3 sm:p-4 rounded-xl border border-pink-200 text-center col-span-2 lg:col-span-1">
+              </Card>
+              <Card className="col-span-2 lg:col-span-1 bg-white/80 backdrop-blur py-3 sm:py-4 rounded-xl border border-pink-200 text-center">
                 <div className="text-lg sm:text-xl font-bold text-pink-800">
                   {formatPrice(calculateHotelStatistics(hotels).lowestPrice)}
                 </div>
                 <div className="text-xs sm:text-sm text-pink-600">
                   Lowest Price
                 </div>
-              </div>
-              <div className="bg-white/80 backdrop-blur p-3 sm:p-4 rounded-xl border border-pink-200 text-center col-span-2 lg:col-span-1">
+              </Card>
+              <Card className="col-span-2 lg:col-span-1 bg-white/80 backdrop-blur py-3 sm:py-4 rounded-xl border border-pink-200 text-center">
                 <div className="text-lg sm:text-xl font-bold text-rose-800">
                   {formatRating(calculateHotelStatistics(hotels).highestRating)}
                 </div>
                 <div className="text-xs sm:text-sm text-rose-600">
                   Highest Rating
                 </div>
-              </div>
+              </Card>
             </div>
           </>
         )}
 
         {/* Navigation Links */}
         <div className="text-center mt-8 sm:mt-12">
-          <Link
-            href="/"
-            className="inline-flex items-center text-sm sm:text-base text-pink-600 hover:text-pink-800 font-medium transition-colors duration-300"
+          <Button
+            asChild
+            variant="ghost"
+            className="text-pink-600 hover:text-pink-800 hover:bg-pink-100/50 transition-colors duration-300"
           >
-            ← Back to Home
-          </Link>
+            <Link href="/">← Back to Home</Link>
+          </Button>
         </div>
 
         {/* Decorative Elements */}

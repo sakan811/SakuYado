@@ -288,12 +288,13 @@ export default function AddHotelPage() {
                   <Link href="/hotels/compare">👀 View Compare Page</Link>
                 </Button>
 
-                <Link
-                  href="/"
-                  className="block w-full text-center text-sm sm:text-base text-pink-600 hover:text-pink-800 font-medium transition-colors duration-300"
+                <Button
+                  asChild
+                  variant="ghost"
+                  className="w-full text-pink-600 hover:text-pink-800 hover:bg-pink-100/50 transition-colors duration-300"
                 >
-                  ← Back to Home
-                </Link>
+                  <Link href="/">← Back to Home</Link>
+                </Button>
               </div>
             </CardFooter>
           </form>
