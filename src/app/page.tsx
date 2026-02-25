@@ -30,15 +30,21 @@ export default function ResponsiveHomePage() {
             {/* Decorative elements */}
             <div className="absolute inset-0 bg-gradient-to-r from-pink-500/90 to-rose-500/90 z-0"></div>
             <div className="absolute top-2 right-2 text-3xl opacity-20">🌸</div>
-            <div className="absolute bottom-2 left-2 text-xl opacity-15">🌸</div>
+            <div className="absolute bottom-2 left-2 text-xl opacity-15">
+              🌸
+            </div>
 
             <CardHeader className="relative z-10 text-center pt-12 pb-10 px-6 sm:px-12">
               <div className="mb-4">
                 <span className="text-4xl sm:text-5xl md:text-6xl">🌸</span>
               </div>
               <CardTitle className="text-4xl sm:text-5xl md:text-6xl font-bold text-white mb-2 leading-tight">
-                <span className="block whitespace-nowrap">Find the Best Value Hotels</span>
-                <span className="block text-2xl sm:text-3xl text-pink-100 mt-2">with SakuYado</span>
+                <span className="block whitespace-nowrap">
+                  Find the Best Value Hotels
+                </span>
+                <span className="block text-2xl sm:text-3xl text-pink-100 mt-2">
+                  with SakuYado
+                </span>
               </CardTitle>
               <CardDescription className="text-lg sm:text-xl text-pink-50 leading-relaxed max-w-lg mx-auto mt-4">
                 Compare hotels based on review-per-price ratio to get the most

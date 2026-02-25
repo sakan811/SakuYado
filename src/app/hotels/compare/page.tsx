@@ -64,10 +64,11 @@ export default function CompareHotelsPage() {
           <div
             className={`
             px-3 py-1 rounded-full text-xs font-bold
-            ${index === 0
+            ${
+              index === 0
                 ? "bg-pink-200 text-pink-800"
                 : "bg-gray-100 text-gray-700"
-              }
+            }
           `}
             data-testid={`hotel-value-score-${index}`}
           >

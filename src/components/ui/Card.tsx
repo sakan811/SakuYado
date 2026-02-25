@@ -24,7 +24,7 @@ const cardVariants = cva("flex flex-col rounded-xl border shadow-sm", {
 });
 
 interface CardProps
-  extends React.ComponentProps<"div">, VariantProps<typeof cardVariants> { }
+  extends React.ComponentProps<"div">, VariantProps<typeof cardVariants> {}
 
 function Card({ className, variant, size, ...props }: CardProps) {
   return (

@@ -183,7 +183,10 @@ export default function AddHotelPage() {
             <CardContent className="space-y-4 sm:space-y-6">
               {/* General Error Message */}
               {errors.general && (
-                <Alert variant="destructive" className="bg-red-50 border-red-200">
+                <Alert
+                  variant="destructive"
+                  className="bg-red-50 border-red-200"
+                >
                   <AlertDescription className="text-red-700 font-medium">
                     {errors.general}
                   </AlertDescription>
@@ -243,14 +246,24 @@ export default function AddHotelPage() {
                       <FieldLabel htmlFor="currency">Currency</FieldLabel>
                       <Select
                         value={formData.currency}
-                        onValueChange={(value) => handleChange({ target: { name: 'currency', value } } as React.ChangeEvent<HTMLSelectElement>)}
+                        onValueChange={(value) =>
+                          handleChange({
+                            target: { name: "currency", value },
+                          } as React.ChangeEvent<HTMLSelectElement>)
+                        }
                       >
-                        <SelectTrigger id="currency" data-testid="hotel-currency">
+                        <SelectTrigger
+                          id="currency"
+                          data-testid="hotel-currency"
+                        >
                           <SelectValue placeholder="Select currency" />
                         </SelectTrigger>
                         <SelectContent>
                           {CURRENCIES.map((currency) => (
-                            <SelectItem key={currency.code} value={currency.code}>
+                            <SelectItem
+                              key={currency.code}
+                              value={currency.code}
+                            >
                               {currency.code} - {currency.name}
                             </SelectItem>
                           ))}
