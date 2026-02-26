@@ -69,7 +69,6 @@ const organizationStructuredData = {
   featureList: [
     "Hotel price comparison",
     "Value score calculation",
-    "Multi-currency support",
     "Rating analysis",
   ],
 };
