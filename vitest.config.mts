@@ -31,7 +31,6 @@ export default defineConfig({
         "src/components/index.ts",
         "src/components/ui/index.ts",
       ],
-
     },
   },
 });

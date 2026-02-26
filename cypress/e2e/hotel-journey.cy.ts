@@ -76,10 +76,7 @@ describe("Hotel Journey", () => {
           "contain",
           "Persistent Hotel",
         );
-        cy.get('[data-testid="hotel-price-0"]').should(
-          "contain",
-          "200.00 USD",
-        );
+        cy.get('[data-testid="hotel-price-0"]').should("contain", "200.00 USD");
         cy.get('[data-testid="hotel-rating-0"]').should("contain", "9.0");
       });
 

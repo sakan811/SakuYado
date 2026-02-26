@@ -51,7 +51,9 @@ const fillForm = async (
   if (data.currency && currencySelect) {
     await user.click(currencySelect);
     const options = await screen.findAllByRole("option");
-    const targetOption = options.find((opt) => opt.textContent?.includes(data.currency!));
+    const targetOption = options.find((opt) =>
+      opt.textContent?.includes(data.currency!),
+    );
     if (targetOption) {
       await user.click(targetOption);
     }
@@ -542,7 +544,11 @@ describe("AddHotelPage", () => {
     await user.type(ratingInput, "5");
 
     // The errors should be cleared as the user types, allowing eventual submission
-    await fillForm(user, { name: "otel Test", price: "00", rating: ".0" }, false);
+    await fillForm(
+      user,
+      { name: "otel Test", price: "00", rating: ".0" },
+      false,
+    );
     await user.click(submitButton);
 
     await waitFor(() => {

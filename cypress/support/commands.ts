@@ -28,4 +28,4 @@ Cypress.Commands.add(
   },
 );
 
-export { };
+export {};
