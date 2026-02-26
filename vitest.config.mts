@@ -31,7 +31,7 @@ export default defineConfig({
         "src/components/index.ts",
         "src/components/ui/index.ts",
         "src/app/docs",
-        "src/components/Mermaid.tsx"
+        "src/components/Mermaid.tsx",
       ],
     },
   },
