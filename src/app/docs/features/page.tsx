@@ -105,6 +105,10 @@ export default function FeaturesPage() {
                   label: "Data Validation",
                   desc: "Ensures all hotel entries meet quality standards",
                 },
+                {
+                  label: "Currency Consistency",
+                  desc: "Requires comparing hotels using the same metric currency for accurate mathematical value scoring",
+                },
               ].map((item) => (
                 <li key={item.label} className="flex items-start gap-3">
                   <span className="mt-0.5 w-1.5 h-1.5 rounded-full bg-rose-400 flex-shrink-0" />
