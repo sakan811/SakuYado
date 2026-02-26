@@ -27,10 +27,13 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "lucide-react": "^0.575.0",
+    "mdx-mermaid": "^2.0.3",
+    "mermaid": "^11.12.3",
     "next": "16.1.6",
     "radix-ui": "^1.4.3",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
+    "react-zoom-pan-pinch": "^3.7.0",
     "tailwind-merge": "^3.5.0"
   },
   "devDependencies": {
