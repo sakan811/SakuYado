@@ -17,6 +17,7 @@
 
 import Link from "next/link";
 import type { Metadata } from "next";
+import { Card, Separator } from "@/components/ui";
 
 export const metadata: Metadata = {
   title: "SakuYado Docs — Overview",
@@ -70,7 +71,7 @@ export default function DocsIndexPage() {
       </div>
 
       {/* Quick-start formula card */}
-      <div className="bg-gradient-to-br from-pink-50 to-rose-50 border border-pink-200 rounded-2xl p-6 mb-12">
+      <Card className="bg-gradient-to-br from-pink-50 to-rose-50 border-pink-200 rounded-2xl p-6 mb-12 shadow-sm">
         <p className="text-sm font-semibold text-pink-600 uppercase tracking-widest mb-3">
           The Core Formula
         </p>
@@ -92,7 +93,7 @@ export default function DocsIndexPage() {
           Higher score = better value. Hotels are automatically ranked by this
           score.
         </p>
-      </div>
+      </Card>
 
       {/* Section cards */}
       <h2 className="text-xl font-bold text-gray-800 mb-5">
@@ -103,46 +104,49 @@ export default function DocsIndexPage() {
           <Link
             key={section.href}
             href={section.href}
-            className="group block bg-white border border-pink-100 hover:border-pink-300 rounded-2xl p-6 shadow-sm hover:shadow-md transition-all duration-200 hover:-translate-y-0.5"
+            className="group block h-full"
           >
-            <div className="flex items-start justify-between mb-3">
-              <span className="text-3xl group-hover:scale-110 transition-transform duration-200">
-                {section.icon}
-              </span>
-              <span
-                className={`text-xs font-semibold px-2.5 py-1 rounded-full ${section.badgeColor}`}
-              >
-                {section.badge}
-              </span>
-            </div>
-            <h3 className="font-bold text-gray-900 text-lg mb-2 group-hover:text-pink-700 transition-colors">
-              {section.title}
-            </h3>
-            <p className="text-sm text-gray-500 leading-relaxed">
-              {section.description}
-            </p>
-            <div className="mt-4 flex items-center gap-1 text-pink-500 text-sm font-medium">
-              Read more
-              <svg
-                className="w-4 h-4 group-hover:translate-x-1 transition-transform"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth={2}
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M9 5l7 7-7 7"
-                />
-              </svg>
-            </div>
+            <Card className="bg-white border-pink-100 group-hover:border-pink-300 rounded-2xl p-6 shadow-sm group-hover:shadow-md transition-all duration-200 group-hover:-translate-y-0.5 h-full flex flex-col">
+              <div className="flex items-start justify-between mb-3">
+                <span className="text-3xl group-hover:scale-110 transition-transform duration-200">
+                  {section.icon}
+                </span>
+                <span
+                  className={`text-xs font-semibold px-2.5 py-1 rounded-full ${section.badgeColor}`}
+                >
+                  {section.badge}
+                </span>
+              </div>
+              <h3 className="font-bold text-gray-900 text-lg mb-2 group-hover:text-pink-700 transition-colors">
+                {section.title}
+              </h3>
+              <p className="text-sm text-gray-500 leading-relaxed flex-1">
+                {section.description}
+              </p>
+              <div className="mt-4 flex items-center gap-1 text-pink-500 text-sm font-medium">
+                Read more
+                <svg
+                  className="w-4 h-4 group-hover:translate-x-1 transition-transform"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth={2}
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M9 5l7 7-7 7"
+                  />
+                </svg>
+              </div>
+            </Card>
           </Link>
         ))}
       </div>
 
       {/* Tech stack pills */}
-      <div className="mt-12 pt-8 border-t border-pink-100">
+      <div className="mt-12 pt-8">
+        <Separator className="mb-8 bg-pink-100" />
         <p className="text-sm font-semibold text-gray-500 mb-4">Built with</p>
         <div className="flex flex-wrap gap-2">
           {[

@@ -16,6 +16,7 @@
  */
 
 import type { Metadata } from "next";
+import { Card, Separator } from "@/components/ui";
 
 export const metadata: Metadata = {
   title: "SakuYado Docs — Features",
@@ -43,13 +44,14 @@ export default function FeaturesPage() {
 
       {/* Core Functionality */}
       <section className="mb-10">
-        <h2 className="text-xl font-bold text-gray-800 mb-6 pb-2 border-b border-pink-100">
+        <h2 className="text-xl font-bold text-gray-800 mb-4">
           Core Functionality
         </h2>
+        <Separator className="mb-6 bg-pink-100" />
 
         <div className="space-y-6">
           {/* Hotel Value Calculation */}
-          <div className="bg-gradient-to-br from-pink-50 to-white border border-pink-100 rounded-2xl p-6">
+          <Card className="bg-gradient-to-br from-pink-50 to-white border-pink-100 rounded-2xl p-6 shadow-sm">
             <h3 className="font-bold text-gray-900 text-base mb-4 flex items-center gap-2">
               <span className="text-xl">🏆</span> Hotel Value Calculation
             </h3>
@@ -87,10 +89,10 @@ export default function FeaturesPage() {
                 </li>
               ))}
             </ul>
-          </div>
+          </Card>
 
           {/* Hotel Management */}
-          <div className="bg-white border border-pink-100 rounded-2xl p-6 shadow-sm">
+          <Card className="bg-white border-pink-100 rounded-2xl p-6 shadow-sm">
             <h3 className="font-bold text-gray-900 text-base mb-4 flex items-center gap-2">
               <span className="text-xl">🏨</span> Hotel Management
             </h3>
@@ -120,10 +122,10 @@ export default function FeaturesPage() {
                 </li>
               ))}
             </ul>
-          </div>
+          </Card>
 
           {/* Comparison Features */}
-          <div className="bg-white border border-pink-100 rounded-2xl p-6 shadow-sm">
+          <Card className="bg-white border-pink-100 rounded-2xl p-6 shadow-sm">
             <h3 className="font-bold text-gray-900 text-base mb-4 flex items-center gap-2">
               <span className="text-xl">📊</span> Comparison Features
             </h3>
@@ -157,15 +159,16 @@ export default function FeaturesPage() {
                 </li>
               ))}
             </ul>
-          </div>
+          </Card>
         </div>
       </section>
 
       {/* User Experience */}
       <section className="mb-10">
-        <h2 className="text-xl font-bold text-gray-800 mb-6 pb-2 border-b border-pink-100">
+        <h2 className="text-xl font-bold text-gray-800 mb-4">
           User Experience
         </h2>
+        <Separator className="mb-6 bg-pink-100" />
 
         <div className="grid sm:grid-cols-2 gap-4">
           {[
@@ -189,9 +192,9 @@ export default function FeaturesPage() {
               ],
             },
           ].map((card) => (
-            <div
+            <Card
               key={card.title}
-              className="bg-white border border-pink-100 rounded-2xl p-5 shadow-sm"
+              className="bg-white border-pink-100 rounded-2xl p-5 shadow-sm"
             >
               <h3 className="font-bold text-gray-900 text-sm mb-3 flex items-center gap-2">
                 <span className="text-lg">{card.icon}</span> {card.title}
@@ -204,7 +207,7 @@ export default function FeaturesPage() {
                   </li>
                 ))}
               </ul>
-            </div>
+            </Card>
           ))}
         </div>
       </section>

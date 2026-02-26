@@ -31,3 +31,4 @@ export * from "./alert";
 export * from "./field";
 export * from "./label";
 export * from "./separator";
+export * from "./table";

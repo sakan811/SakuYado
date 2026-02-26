@@ -17,6 +17,19 @@
 
 import type { Metadata } from "next";
 import { Mermaid } from "@/components";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardContent,
+  Table,
+  TableHeader,
+  TableBody,
+  TableRow,
+  TableHead,
+  TableCell,
+  Separator,
+} from "@/components/ui";
 
 export const metadata: Metadata = {
   title: "SakuYado Docs — Architecture",
@@ -110,10 +123,11 @@ export default function ArchitecturePage() {
 
       {/* Overview diagram */}
       <section className="mb-12">
-        <h2 className="text-xl font-bold text-gray-800 mb-4 pb-2 border-b border-pink-100">
+        <h2 className="text-xl font-bold text-gray-800 mb-4">
           Source Architecture
         </h2>
-        <div className="rounded-2xl overflow-hidden border border-pink-100 shadow-sm bg-white p-4">
+        <Separator className="mb-4 bg-pink-100" />
+        <Card className="rounded-2xl overflow-hidden border-pink-100 shadow-sm bg-white p-4">
           <Mermaid
             chart={`flowchart TD
     Root([SakuYado React App]) --> Src[src/ Directory]
@@ -131,14 +145,15 @@ export default function ArchitecturePage() {
     Types --> HotelType(Hotel Interface)
     Utils --> Calcs(Scoring & formatting helpers)`}
           />
-        </div>
+        </Card>
       </section>
 
       {/* Tech stack */}
       <section className="mb-12">
-        <h2 className="text-xl font-bold text-gray-800 mb-6 pb-2 border-b border-pink-100">
+        <h2 className="text-xl font-bold text-gray-800 mb-4">
           Tech Stack
         </h2>
+        <Separator className="mb-6 bg-pink-100" />
         <div className="grid sm:grid-cols-2 gap-3">
           {[
             {
@@ -178,9 +193,9 @@ export default function ArchitecturePage() {
               color: "bg-pink-50 border-pink-200",
             },
           ].map((tech) => (
-            <div
+            <Card
               key={tech.name}
-              className={`flex items-center gap-3 p-4 rounded-xl border ${tech.color}`}
+              className={`flex flex-row items-center gap-3 p-4 rounded-xl border ${tech.color} shadow-none`}
             >
               <span className="text-xl">{tech.icon}</span>
               <div>
@@ -189,17 +204,18 @@ export default function ArchitecturePage() {
                 </p>
                 <p className="text-xs text-gray-500">{tech.detail}</p>
               </div>
-            </div>
+            </Card>
           ))}
         </div>
       </section>
 
       {/* Core Architecture Pattern */}
       <section className="mb-12">
-        <h2 className="text-xl font-bold text-gray-800 mb-4 pb-2 border-b border-pink-100">
+        <h2 className="text-xl font-bold text-gray-800 mb-4">
           Core Architecture Pattern
         </h2>
-        <div className="bg-gradient-to-br from-pink-50 to-rose-50 border border-pink-200 rounded-2xl p-6 mb-6">
+        <Separator className="mb-4 bg-pink-100" />
+        <Card className="bg-gradient-to-br from-pink-50 to-rose-50 border-pink-200 rounded-2xl p-6 mb-6">
           <p className="text-sm font-bold text-pink-700 mb-3">
             Component-Based Architecture with Context API
           </p>
@@ -215,7 +231,7 @@ export default function ArchitecturePage() {
               </li>
             ))}
           </ol>
-        </div>
+        </Card>
 
         <div className="grid sm:grid-cols-3 gap-3">
           {[
@@ -235,26 +251,27 @@ export default function ArchitecturePage() {
               icon: "📱",
             },
           ].map((card) => (
-            <div
+            <Card
               key={card.title}
-              className="bg-white border border-pink-100 rounded-xl p-4 shadow-sm"
+              className="bg-white border-pink-100 rounded-xl p-4 shadow-sm"
             >
               <span className="text-2xl mb-2 block">{card.icon}</span>
               <p className="font-semibold text-gray-800 text-sm mb-1">
                 {card.title}
               </p>
               <p className="text-xs text-gray-500">{card.desc}</p>
-            </div>
+            </Card>
           ))}
         </div>
       </section>
 
       {/* App Router Architecture */}
       <section className="mb-12">
-        <h2 className="text-xl font-bold text-gray-800 mb-4 pb-2 border-b border-pink-100">
+        <h2 className="text-xl font-bold text-gray-800 mb-4">
           App Router Architecture
         </h2>
-        <div className="rounded-2xl overflow-hidden border border-pink-100 shadow-sm bg-white p-4 mb-6">
+        <Separator className="mb-4 bg-pink-100" />
+        <Card className="rounded-2xl overflow-hidden border-pink-100 shadow-sm bg-white p-4 mb-6">
           <Mermaid
             chart={`flowchart TD
     Root([Root Route: /]) --> Layout[Global Root Layout]
@@ -268,56 +285,51 @@ export default function ArchitecturePage() {
     DocsLayout --> DocsArch(Architecture: /docs/architecture)
     DocsLayout --> DocsFeat(Features: /docs/features)`}
           />
-        </div>
+        </Card>
 
         {/* Pages table */}
         <h3 className="font-bold text-gray-800 text-base mb-3">
           Application Pages
         </h3>
-        <div className="border border-pink-100 rounded-xl overflow-hidden">
-          <table className="w-full text-sm">
-            <thead className="bg-pink-50">
-              <tr>
-                <th className="text-left px-4 py-3 text-xs font-semibold text-pink-700 uppercase tracking-wider">
-                  File
-                </th>
-                <th className="text-left px-4 py-3 text-xs font-semibold text-pink-700 uppercase tracking-wider">
-                  Route
-                </th>
-                <th className="text-left px-4 py-3 text-xs font-semibold text-pink-700 uppercase tracking-wider">
-                  Description
-                </th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-pink-50 bg-white">
+        <Card className="border-pink-100 rounded-xl overflow-hidden shadow-none">
+          <Table>
+            <TableHeader className="bg-pink-50">
+              <TableRow>
+                <TableHead className="px-4 text-pink-700">File</TableHead>
+                <TableHead className="px-4 text-pink-700">Route</TableHead>
+                <TableHead className="px-4 text-pink-700">Description</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
               {pages.map((page) => (
-                <tr key={page.path} className="hover:bg-pink-50/40">
-                  <td className="px-4 py-3">
+                <TableRow key={page.path} className="hover:bg-pink-50/40">
+                  <TableCell className="px-4 py-3">
                     <code className="text-xs bg-pink-50 text-pink-700 px-1.5 py-0.5 rounded font-mono">
                       {page.path}
                     </code>
-                  </td>
-                  <td className="px-4 py-3">
+                  </TableCell>
+                  <TableCell className="px-4 py-3">
                     <code className="text-xs bg-rose-50 text-rose-700 px-1.5 py-0.5 rounded font-mono">
                       {page.route}
                     </code>
-                  </td>
-                  <td className="px-4 py-3 text-gray-600 text-xs">
+                  </TableCell>
+                  <TableCell className="px-4 py-3 text-gray-600 text-xs">
                     {page.desc}
-                  </td>
-                </tr>
+                  </TableCell>
+                </TableRow>
               ))}
-            </tbody>
-          </table>
-        </div>
+            </TableBody>
+          </Table>
+        </Card>
       </section>
 
       {/* Component Architecture */}
       <section className="mb-12">
-        <h2 className="text-xl font-bold text-gray-800 mb-4 pb-2 border-b border-pink-100">
+        <h2 className="text-xl font-bold text-gray-800 mb-4">
           Component Architecture
         </h2>
-        <div className="rounded-2xl overflow-hidden border border-pink-100 shadow-sm bg-white p-4 mb-6">
+        <Separator className="mb-4 bg-pink-100" />
+        <Card className="rounded-2xl overflow-hidden border-pink-100 shadow-sm bg-white p-4 mb-6">
           <Mermaid
             chart={`flowchart TD
     App(Next.js App) --> ContextProvider{Hotel Context Provider}
@@ -337,45 +349,41 @@ export default function ArchitecturePage() {
     AddForm -- "Triggers dispatch cases" --> ContextProvider
     CompareTable -- "Reads context state" --> ContextProvider`}
           />
-        </div>
+        </Card>
 
         <h3 className="font-bold text-gray-800 text-base mb-3">
           UI Component Library
         </h3>
-        <div className="border border-pink-100 rounded-xl overflow-hidden">
-          <table className="w-full text-sm">
-            <thead className="bg-pink-50">
-              <tr>
-                <th className="text-left px-4 py-3 text-xs font-semibold text-pink-700 uppercase tracking-wider">
-                  Component
-                </th>
-                <th className="text-left px-4 py-3 text-xs font-semibold text-pink-700 uppercase tracking-wider">
-                  Purpose
-                </th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-pink-50 bg-white">
+        <Card className="border-pink-100 rounded-xl overflow-hidden shadow-none">
+          <Table>
+            <TableHeader className="bg-pink-50">
+              <TableRow>
+                <TableHead className="px-4 text-pink-700">Component</TableHead>
+                <TableHead className="px-4 text-pink-700">Purpose</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
               {uiComponents.map((comp) => (
-                <tr key={comp.name} className="hover:bg-pink-50/40">
-                  <td className="px-4 py-3">
+                <TableRow key={comp.name} className="hover:bg-pink-50/40">
+                  <TableCell className="px-4 py-3">
                     <code className="text-xs bg-pink-50 text-pink-700 px-2 py-1 rounded-lg font-mono font-semibold">
                       {comp.name}
                     </code>
-                  </td>
-                  <td className="px-4 py-3 text-gray-600 text-xs">
+                  </TableCell>
+                  <TableCell className="px-4 py-3 text-gray-600 text-xs">
                     {comp.purpose}
-                  </td>
-                </tr>
+                  </TableCell>
+                </TableRow>
               ))}
-            </tbody>
-          </table>
-        </div>
+            </TableBody>
+          </Table>
+        </Card>
 
         {/* Design patterns */}
         <h3 className="font-bold text-gray-800 text-base mt-6 mb-3">
           Component Design Patterns
         </h3>
-        <div className="space-y-3">
+        <div className="grid gap-3">
           {[
             {
               label: "Stateless Components",
@@ -390,9 +398,9 @@ export default function ArchitecturePage() {
               desc: "Semantic HTML, ARIA labels, keyboard navigation, screen reader support",
             },
           ].map((pattern) => (
-            <div
+            <Card
               key={pattern.label}
-              className="flex gap-3 bg-white border border-pink-100 rounded-xl p-4"
+              className="flex flex-row gap-3 bg-white border-pink-100 rounded-xl p-4 shadow-none"
             >
               <span className="text-pink-400 mt-0.5">●</span>
               <div>
@@ -401,7 +409,7 @@ export default function ArchitecturePage() {
                 </p>
                 <p className="text-xs text-gray-500 mt-0.5">{pattern.desc}</p>
               </div>
-            </div>
+            </Card>
           ))}
         </div>
       </section>

@@ -17,6 +17,7 @@
 
 import type { Metadata } from "next";
 import Link from "next/link";
+import { Separator } from "@/components/ui";
 
 export const metadata: Metadata = {
   title: "SakuYado Docs",
@@ -86,7 +87,7 @@ export default function DocsLayout({
           </nav>
 
           {/* Divider */}
-          <div className="my-6 border-t border-pink-100" />
+          <Separator className="my-6 bg-pink-100" />
 
           {/* Back to app */}
           <Link
