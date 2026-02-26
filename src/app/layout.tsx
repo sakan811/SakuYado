@@ -114,6 +114,15 @@ export default function RootLayout({
               />
               SakuYado
             </Link>
+            <nav className="flex items-center gap-1">
+              <Link
+                href="/docs"
+                className="flex items-center gap-1.5 text-sm font-medium text-pink-100 hover:text-white hover:bg-white/10 px-3 py-1.5 rounded-lg transition-all duration-200"
+              >
+                <span>📚</span>
+                Docs
+              </Link>
+            </nav>
           </div>
         </header>
 
