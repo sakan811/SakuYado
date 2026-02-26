@@ -21,7 +21,7 @@ import { Card, Separator } from "@/components/ui";
 export const metadata: Metadata = {
   title: "SakuYado Docs — Features",
   description:
-    "Learn about SakuYado's core features: hotel value scoring, multi-currency support, and comparison tools.",
+    "Learn about SakuYado's core features: hotel value scoring, smart ranking, and comparison tools.",
 };
 
 export default function FeaturesPage() {
@@ -38,7 +38,7 @@ export default function FeaturesPage() {
         </h1>
         <p className="text-gray-500 text-base leading-relaxed">
           Everything you can do with SakuYado — from adding hotels to comparing
-          value scores across currencies.
+          value scores.
         </p>
       </div>
 
@@ -61,11 +61,6 @@ export default function FeaturesPage() {
                   label: "Review/Price Score",
                   desc: "Automatically calculates value scores using the formula",
                   code: "Rating ÷ Price",
-                },
-                {
-                  label: "Multi-Currency Support",
-                  desc: "Handle different currencies with automatic conversion",
-                  code: null,
                 },
                 {
                   label: "Smart Ranking",

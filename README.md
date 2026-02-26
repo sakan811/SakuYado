@@ -8,7 +8,7 @@ A beautiful web application that helps you find the best value accommodations by
 
 ## What it does
 
-- Add hotel information (name, price, rating, currency)
+- Add hotel information (name, price, rating)
 - Automatically calculates value scores (Rating ÷ Price)
 - Ranks hotels by best value
 - Compare multiple hotels side-by-side

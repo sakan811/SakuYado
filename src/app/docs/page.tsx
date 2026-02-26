@@ -30,7 +30,7 @@ const sections = [
     title: "Features",
     href: "/docs/features",
     description:
-      "Explore all features: value scoring, multi-currency support, hotel management, comparison tools, and responsive design.",
+      "Explore all features: value scoring, hotel management, comparison tools, and responsive design.",
     badge: "User Guide",
     badgeColor: "bg-pink-100 text-pink-700",
   },
