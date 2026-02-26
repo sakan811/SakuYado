@@ -44,8 +44,16 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
     p: ({ children }) => (
       <p className="text-gray-600 leading-relaxed mb-4">{children}</p>
     ),
-    ul: ({ children }) => <ul className="list-disc list-inside mb-4 space-y-2 text-gray-600">{children}</ul>,
-    ol: ({ children }) => <ol className="list-decimal list-inside mb-4 space-y-2 text-gray-600">{children}</ol>,
+    ul: ({ children }) => (
+      <ul className="list-disc list-inside mb-4 space-y-2 text-gray-600">
+        {children}
+      </ul>
+    ),
+    ol: ({ children }) => (
+      <ol className="list-decimal list-inside mb-4 space-y-2 text-gray-600">
+        {children}
+      </ol>
+    ),
     hr: () => <Separator className="my-8 bg-pink-100" />,
     table: (props) => (
       <Card className="my-6 overflow-hidden border-pink-100 shadow-none">

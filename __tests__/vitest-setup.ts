@@ -57,6 +57,7 @@ if (typeof window !== "undefined") {
         this.isPrimary = params.isPrimary || true;
       }
     }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     window.PointerEvent = PointerEvent as any;
   }
   window.HTMLElement.prototype.hasPointerCapture = vi.fn();

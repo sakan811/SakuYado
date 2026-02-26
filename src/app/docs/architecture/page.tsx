@@ -19,9 +19,6 @@ import type { Metadata } from "next";
 import { Mermaid } from "@/components";
 import {
   Card,
-  CardHeader,
-  CardTitle,
-  CardContent,
   Table,
   TableHeader,
   TableBody,
@@ -150,9 +147,7 @@ export default function ArchitecturePage() {
 
       {/* Tech stack */}
       <section className="mb-12">
-        <h2 className="text-xl font-bold text-gray-800 mb-4">
-          Tech Stack
-        </h2>
+        <h2 className="text-xl font-bold text-gray-800 mb-4">Tech Stack</h2>
         <Separator className="mb-6 bg-pink-100" />
         <div className="grid sm:grid-cols-2 gap-3">
           {[
@@ -297,7 +292,9 @@ export default function ArchitecturePage() {
               <TableRow>
                 <TableHead className="px-4 text-pink-700">File</TableHead>
                 <TableHead className="px-4 text-pink-700">Route</TableHead>
-                <TableHead className="px-4 text-pink-700">Description</TableHead>
+                <TableHead className="px-4 text-pink-700">
+                  Description
+                </TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
