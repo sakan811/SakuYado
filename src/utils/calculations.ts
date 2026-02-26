@@ -16,25 +16,13 @@
  */
 
 import { Hotel } from "@/types/hotel";
-import { CURRENCIES } from "@/constants/currencies";
 
-export function calculateValueScore(
-  rating: number,
-  price: number,
-  currency: string,
-): number {
+export function calculateValueScore(rating: number, price: number): number {
   if (price <= 0) {
     throw new Error("Price must be greater than 0");
   }
 
-  const currencyData = CURRENCIES.find((c) => c.code === currency);
-  if (!currencyData) {
-    throw new Error(`Unsupported currency: ${currency}`);
-  }
-
-  const normalizedPrice = price * currencyData.multiplier;
-
-  return +(rating / normalizedPrice).toFixed(4);
+  return +(rating / price).toFixed(4);
 }
 
 export function sortHotelsByValueScore(hotels: Hotel[]): Hotel[] {

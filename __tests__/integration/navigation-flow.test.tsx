@@ -195,51 +195,6 @@ describe("Navigation Flow Integration", () => {
     unmountCompare();
   });
 
-  it("handles currency selection across navigation", async () => {
-    const user = userEvent.setup();
-
-    // Set a currency preference
-    localStorage.setItem("lastUsedCurrency", "EUR");
-
-    const { unmount: unmountAdd } = render(<AddHotelPage />);
-
-    // Wait for component to load saved currency
-    await vi.waitFor(() => {
-      const currencySelect = document.getElementById(
-        "currency",
-      ) as HTMLButtonElement;
-      expect(currencySelect.textContent).toContain("EUR");
-    });
-
-    // Add hotel with EUR currency
-    const nameInput = screen.getByLabelText(/Hotel Name/i);
-    const priceInput = screen.getByLabelText(/Price/i);
-    const ratingInput = screen.getByLabelText(/Rating/i);
-
-    await user.clear(nameInput);
-    await user.type(nameInput, "Euro Hotel");
-    await user.clear(priceInput);
-    await user.type(priceInput, "120");
-    await user.clear(ratingInput);
-    await user.type(ratingInput, "8.5");
-
-    const submitButton = screen.getByText(/Submit & Compare/i);
-    await user.click(submitButton);
-
-    // Clean up add page before testing compare page
-    unmountAdd();
-
-    // Verify currency is preserved in compare page
-    const { unmount: unmountCompare } = render(<CompareHotelsPage />);
-
-    // Wait for component to load and display data - handle duplicates
-    await vi.waitFor(() => {
-      const priceElements = screen.getAllByText(/120\.00 EUR/);
-      expect(priceElements.length).toBeGreaterThan(0);
-    });
-
-    unmountCompare();
-  });
 
   it("tests complete multi-hotel comparison workflow", async () => {
     // Add multiple hotels to localStorage

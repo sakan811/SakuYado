@@ -260,20 +260,7 @@ describe("AddHotelPage", () => {
     }
   });
 
-  it("saves and loads currency preference", async () => {
-    const user = userEvent.setup();
 
-    localStorage.setItem("lastUsedCurrency", "EUR");
-    render(<AddHotelPage />);
-    const { currencySelect } = getFormElements();
-
-    expect(currencySelect.textContent).toContain("EUR");
-    await user.click(currencySelect);
-    const options = await screen.findAllByRole("option");
-    const gbpOption = options.find((opt) => opt.textContent?.includes("GBP"));
-    if (gbpOption) await user.click(gbpOption);
-    expect(localStorage.getItem("lastUsedCurrency")).toBe("GBP");
-  });
 
   describe("Edge Cases", () => {
     it.each([
@@ -496,28 +483,7 @@ describe("AddHotelPage", () => {
       expect(mockPush).toHaveBeenCalledWith("/hotels/compare");
     }, 10000);
 
-    it("preserves currency selection between form submissions", async () => {
-      const user = userEvent.setup();
-      render(<AddHotelPage />);
-      const { currencySelect, submitButton } = getFormElements();
 
-      await user.click(currencySelect);
-      const options = await screen.findAllByRole("option");
-      const eurOption = options.find((opt) => opt.textContent?.includes("EUR"));
-      if (eurOption) await user.click(eurOption);
-      await fillForm(user, {
-        name: "European Hotel",
-        price: "150",
-        rating: "9",
-      });
-      await user.click(submitButton);
-
-      const savedHotels = JSON.parse(localStorage.getItem("hotels") || "[]");
-      expect(savedHotels).toHaveLength(1);
-      expect(savedHotels[0].currency).toBe("EUR");
-      expect(localStorage.getItem("lastUsedCurrency")).toBe("EUR");
-      expect(mockPush).toHaveBeenCalledWith("/hotels/compare");
-    });
   });
 
   it("clears field-level error when user types in a field with an existing error (line 118 branch)", async () => {

@@ -31,50 +31,30 @@ describe("calculateValueScore", () => {
   describe("price validation", () => {
     it("should throw error when price is 0", () => {
       expect(() => {
-        calculateValueScore(4.5, 0, "JPY");
+        calculateValueScore(4.5, 0);
       }).toThrow("Price must be greater than 0");
     });
 
     it("should throw error when price is negative", () => {
       expect(() => {
-        calculateValueScore(4.5, -100, "JPY");
+        calculateValueScore(4.5, -100);
       }).toThrow("Price must be greater than 0");
     });
   });
 
-  describe("currency validation", () => {
-    it("should throw error for unsupported currency", () => {
-      expect(() => {
-        calculateValueScore(4.5, 100, "INVALID");
-      }).toThrow("Unsupported currency: INVALID");
-    });
-
-    it("should throw error for empty currency string", () => {
-      expect(() => {
-        calculateValueScore(4.5, 100, "");
-      }).toThrow("Unsupported currency: ");
-    });
-
-    it("should throw error for null/undefined currency", () => {
-      expect(() => {
-        calculateValueScore(4.5, 100, null as unknown as string);
-      }).toThrow("Unsupported currency: null");
-    });
-  });
-
   describe("successful calculations", () => {
-    it("should calculate value score correctly for JPY", () => {
-      const result = calculateValueScore(4.5, 10000, "JPY");
-      expect(result).toBeCloseTo(0.0672);
+    it("should calculate value score correctly", () => {
+      const result = calculateValueScore(4.5, 10000);
+      expect(result).toBeCloseTo(0.0005);
     });
 
-    it("should calculate value score correctly for USD", () => {
-      const result = calculateValueScore(4.0, 100, "USD");
+    it("should calculate value score correctly with different parameters", () => {
+      const result = calculateValueScore(4.0, 100);
       expect(result).toBeCloseTo(0.04);
     });
 
     it("should return value with 4 decimal places", () => {
-      const result = calculateValueScore(3.5, 5000, "JPY");
+      const result = calculateValueScore(3.5, 5000);
       expect(result.toString()).toMatch(/^\d+\.\d{4}$/);
     });
   });

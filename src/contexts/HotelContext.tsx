@@ -26,7 +26,6 @@ import {
 
 interface HotelState {
   hotels: Hotel[];
-  lastUsedCurrency: string;
   isLoading: boolean;
   error: string | null;
 }
@@ -36,22 +35,16 @@ type HotelAction =
   | { type: "SET_ERROR"; payload: string | null }
   | { type: "ADD_HOTEL"; payload: Omit<Hotel, "valueScore"> }
   | { type: "CLEAR_HOTELS" }
-  | { type: "SET_LAST_USED_CURRENCY"; payload: string }
-  | {
-      type: "INITIALIZE_STATE";
-      payload: { hotels: Hotel[]; currency: string };
-    };
+  | { type: "INITIALIZE_STATE"; payload: { hotels: Hotel[] } };
 
 interface HotelContextType {
   state: HotelState;
   addHotel: (hotel: Omit<Hotel, "valueScore">) => Promise<void>;
   clearAllHotels: () => void;
-  setLastUsedCurrency: (currency: string) => void;
 }
 
 const initialState: HotelState = {
   hotels: [],
-  lastUsedCurrency: "USD",
   isLoading: true,
   error: null,
 };
@@ -68,7 +61,6 @@ function hotelReducer(state: HotelState, action: HotelAction): HotelState {
         valueScore: calculateValueScore(
           action.payload.rating,
           action.payload.price,
-          action.payload.currency,
         ),
       };
       const updatedHotels = sortHotelsByValueScore([...state.hotels, newHotel]);
@@ -76,13 +68,10 @@ function hotelReducer(state: HotelState, action: HotelAction): HotelState {
     }
     case "CLEAR_HOTELS":
       return { ...state, hotels: [], error: null };
-    case "SET_LAST_USED_CURRENCY":
-      return { ...state, lastUsedCurrency: action.payload };
     case "INITIALIZE_STATE":
       return {
         ...state,
         hotels: action.payload.hotels,
-        lastUsedCurrency: action.payload.currency,
         isLoading: false,
       };
   }
@@ -103,7 +92,6 @@ export function HotelProvider({ children }: { children: React.ReactNode }) {
         }
 
         const savedHotels = JSON.parse(localStorage.getItem("hotels") || "[]");
-        const savedCurrency = localStorage.getItem("lastUsedCurrency") || "USD";
 
         // Filter out invalid hotels
         const validHotels = savedHotels.filter((hotel: unknown) => {
@@ -115,7 +103,6 @@ export function HotelProvider({ children }: { children: React.ReactNode }) {
             typeof hotelObj.name === "string" &&
             typeof hotelObj.price === "number" &&
             typeof hotelObj.rating === "number" &&
-            typeof hotelObj.currency === "string" &&
             hotelObj.name.trim() !== "" &&
             hotelObj.price > 0 &&
             hotelObj.rating >= 0 &&
@@ -126,20 +113,13 @@ export function HotelProvider({ children }: { children: React.ReactNode }) {
         const processedHotels = sortHotelsByValueScore(
           validHotels.map((hotel: Hotel) => ({
             ...hotel,
-            valueScore: calculateValueScore(
-              hotel.rating,
-              hotel.price,
-              hotel.currency,
-            ),
+            valueScore: calculateValueScore(hotel.rating, hotel.price),
           })),
         );
 
         dispatch({
           type: "INITIALIZE_STATE",
-          payload: {
-            hotels: processedHotels,
-            currency: savedCurrency,
-          },
+          payload: { hotels: processedHotels },
         });
       } catch (error) {
         console.error("Error loading data from localStorage:", error);
@@ -172,9 +152,6 @@ export function HotelProvider({ children }: { children: React.ReactNode }) {
 
       // Save to localStorage without valueScore (computed property)
       localStorage.setItem("hotels", JSON.stringify(updatedHotelsData));
-      localStorage.setItem("lastUsedCurrency", hotel.currency);
-
-      dispatch({ type: "SET_LAST_USED_CURRENCY", payload: hotel.currency });
     } catch (error) {
       console.error("Error saving hotel data:", error);
       dispatch({
@@ -200,26 +177,12 @@ export function HotelProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
-  const setLastUsedCurrency = (currency: string) => {
-    try {
-      /* v8 ignore start */
-      if (typeof localStorage !== "undefined" && localStorage) {
-        localStorage.setItem("lastUsedCurrency", currency);
-      }
-      /* v8 ignore stop */
-      dispatch({ type: "SET_LAST_USED_CURRENCY", payload: currency });
-    } catch (error) {
-      console.error("Error saving currency preference:", error);
-    }
-  };
-
   return (
     <HotelContext.Provider
       value={{
         state,
         addHotel,
         clearAllHotels,
-        setLastUsedCurrency,
       }}
     >
       {children}
