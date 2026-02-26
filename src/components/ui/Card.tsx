@@ -1,60 +1,108 @@
-/*
- * SakuYado - A web application that helps you find the best value accommodations
- * Copyright (C) 2025  Sakan Nirattisaykul
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published
- * by the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Affero General Public License for more details.
- *
- * along with this program.  If not, see <https://www.gnu.org/licenses/>.
- */
+import * as React from "react";
+import { cva, type VariantProps } from "class-variance-authority";
 
-import React from "react";
+import { cn } from "@/lib/utils";
 
-interface CardProps {
-  variant?: "default" | "gradient" | "highlight";
-  size?: "sm" | "md" | "lg";
-  className?: string;
-  children: React.ReactNode;
-  "data-testid"?: string;
+const cardVariants = cva("flex flex-col rounded-xl border shadow-sm", {
+  variants: {
+    variant: {
+      default: "bg-card text-card-foreground py-6",
+      gradient: "bg-gradient-to-br from-pink-50 to-rose-100 text-pink-800 py-6",
+      highlight:
+        "bg-gradient-to-br from-pink-100 to-rose-200 text-pink-900 py-4 border-pink-300",
+    },
+    size: {
+      sm: "gap-3 px-4",
+      md: "gap-4 px-6",
+      lg: "gap-6 px-8",
+    },
+  },
+  defaultVariants: {
+    variant: "default",
+    size: "md",
+  },
+});
+
+interface CardProps
+  extends React.ComponentProps<"div">, VariantProps<typeof cardVariants> {}
+
+function Card({ className, variant, size, ...props }: CardProps) {
+  return (
+    <div
+      data-slot="card"
+      data-variant={variant}
+      data-size={size}
+      className={cn(cardVariants({ variant, size, className }))}
+      {...props}
+    />
+  );
 }
 
-const Card: React.FC<CardProps> = ({
-  variant = "default",
-  size = "md",
-  className = "",
-  children,
-  "data-testid": testId,
-}) => {
-  const baseClasses =
-    "rounded-xl shadow-lg border-2 transition-all duration-300 sm:rounded-2xl";
-
-  const variantClasses = {
-    default: "bg-white border-pink-200 hover:border-pink-300",
-    gradient:
-      "bg-gradient-to-br from-white via-pink-50 to-rose-50 border-pink-200",
-    highlight: "bg-gradient-to-br from-pink-50 to-rose-50 border-pink-400",
-  };
-
-  const sizeClasses = {
-    sm: "p-3 sm:p-4",
-    md: "p-4 sm:p-6 md:p-8",
-    lg: "p-6 sm:p-8 md:p-12",
-  };
-
-  const combinedClasses = `${baseClasses} ${variantClasses[variant]} ${sizeClasses[size]} ${className}`;
-
+function CardHeader({ className, ...props }: React.ComponentProps<"div">) {
   return (
-    <div className={combinedClasses} data-testid={testId}>
-      {children}
-    </div>
+    <div
+      data-slot="card-header"
+      className={cn("flex flex-col gap-1.5", className)}
+      {...props}
+    />
   );
-};
+}
 
-export { Card };
+function CardTitle({ className, ...props }: React.ComponentProps<"div">) {
+  return (
+    <div
+      data-slot="card-title"
+      className={cn("leading-none font-semibold", className)}
+      {...props}
+    />
+  );
+}
+
+function CardDescription({ className, ...props }: React.ComponentProps<"div">) {
+  return (
+    <div
+      data-slot="card-description"
+      className={cn("text-muted-foreground text-sm", className)}
+      {...props}
+    />
+  );
+}
+
+function CardAction({ className, ...props }: React.ComponentProps<"div">) {
+  return (
+    <div
+      data-slot="card-action"
+      className={cn(
+        "col-start-2 row-span-2 row-start-1 self-start justify-self-end",
+        className,
+      )}
+      {...props}
+    />
+  );
+}
+
+function CardContent({ className, ...props }: React.ComponentProps<"div">) {
+  return (
+    <div data-slot="card-content" className={cn("", className)} {...props} />
+  );
+}
+
+function CardFooter({ className, ...props }: React.ComponentProps<"div">) {
+  return (
+    <div
+      data-slot="card-footer"
+      className={cn("flex items-center", className)}
+      {...props}
+    />
+  );
+}
+
+export {
+  Card,
+  CardHeader,
+  CardFooter,
+  CardTitle,
+  CardAction,
+  CardDescription,
+  CardContent,
+};

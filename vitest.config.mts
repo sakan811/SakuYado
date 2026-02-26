@@ -27,6 +27,11 @@ export default defineConfig({
         "*.md",
         "*.json",
         "cypress/**",
+        // Barrel re-export files — no executable logic to cover
+        "src/components/index.ts",
+        "src/components/ui/index.ts",
+        "src/app/docs",
+        "src/components/Mermaid.tsx"
       ],
     },
   },

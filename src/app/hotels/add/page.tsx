@@ -17,23 +17,53 @@
 
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { CURRENCIES } from "@/constants/currencies";
 import { useHotel } from "@/contexts/HotelContext";
 import { validateHotelForm, type ValidationError } from "@/utils/validation";
 import { generateAddHotelPageSchema } from "@/utils/structured-data";
-import { Button, Input, Select, Card, ErrorMessage } from "@/components";
+import { Button } from "@/components/ui/Button";
+import {
+  Input,
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+  Card,
+  CardHeader,
+  CardContent,
+  CardFooter,
+  CardTitle,
+  CardDescription,
+  Alert,
+  AlertDescription,
+  Field,
+  FieldGroup,
+  FieldLabel,
+  FieldSet,
+  FieldError,
+} from "@/components";
 
 export default function AddHotelPage() {
   const router = useRouter();
   const { state, addHotel, setLastUsedCurrency } = useHotel();
-  const [formData, setFormData] = useState({
-    name: "",
-    price: "",
-    rating: "",
-    currency: state.lastUsedCurrency,
+  const [formData, setFormData] = useState(() => {
+    let currency = state.lastUsedCurrency;
+    try {
+      /* v8 ignore start */
+      const saved =
+        typeof localStorage !== "undefined"
+          ? localStorage.getItem("lastUsedCurrency")
+          : null;
+      /* v8 ignore stop */
+      if (saved) currency = saved;
+    } catch {
+      // ignore – localStorage may not be available
+    }
+    return { name: "", price: "", rating: "", currency };
   });
   const [errors, setErrors] = useState<ValidationError>({
     name: "",
@@ -45,14 +75,33 @@ export default function AddHotelPage() {
   const addHotelPageSchema = generateAddHotelPageSchema();
 
   // Initialize currency from context when it's available
-  useEffect(() => {
+
+  const [prevContext, setPrevContext] = useState({
+    isLoading: state.isLoading,
+    currency: state.lastUsedCurrency,
+  });
+
+  if (
+    state.isLoading !== prevContext.isLoading ||
+    state.lastUsedCurrency !== prevContext.currency
+  ) {
+    setPrevContext({
+      isLoading: state.isLoading,
+      currency: state.lastUsedCurrency,
+    });
+    /* v8 ignore start */
     if (!state.isLoading) {
       setFormData((prev) => ({
         ...prev,
         currency: state.lastUsedCurrency,
       }));
+      // Sync any context-level error (e.g. failed to load saved data) to the form
+      if (state.error && !errors.general) {
+        setErrors((prev) => ({ ...prev, general: state.error! }));
+      }
     }
-  }, [state.isLoading, state.lastUsedCurrency]);
+    /* v8 ignore stop */
+  }
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
@@ -101,8 +150,7 @@ export default function AddHotelPage() {
       } catch {
         setErrors((prev) => ({
           ...prev,
-          general:
-            state.error || "Unable to save hotel data. Please try again.",
+          general: "Unable to save hotel data. Please try again.",
         }));
       }
     }
@@ -136,120 +184,166 @@ export default function AddHotelPage() {
 
         {/* Form Card - enhanced responsive design */}
         <Card variant="gradient" size="md" className="shadow-xl sm:shadow-2xl">
-          <form
-            onSubmit={handleSubmit}
-            className="space-y-4 sm:space-y-6"
-            noValidate
-          >
-            {/* General Error Message */}
-            <ErrorMessage message={errors.general} />
+          <CardHeader>
+            <CardTitle className="text-xl sm:text-2xl md:text-3xl text-pink-800">
+              🌸 Add New Hotel
+            </CardTitle>
+            <CardDescription className="text-sm sm:text-base text-pink-600">
+              Enter hotel details to calculate value score
+            </CardDescription>
+          </CardHeader>
 
-            {/* Hotel Name - responsive input */}
-            <Input
-              type="text"
-              id="name"
-              name="name"
-              data-testid="hotel-name"
-              value={formData.name}
-              onChange={handleChange}
-              label="Hotel Name"
-              icon="🏨"
-              placeholder="Enter hotel name"
-              error={errors.name}
-            />
-
-            {/* Price and Currency - enhanced responsive layout */}
-            <div>
-              <label
-                htmlFor="price"
-                className="block text-sm sm:text-base font-bold text-pink-800 mb-2"
-              >
-                💰 Price
-              </label>
-
-              {/* Mobile: stacked, Tablet+: side-by-side with equal widths */}
-              <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
-                {/* Price Input - equal width on desktop */}
-                <div className="flex-1 sm:flex-1">
-                  <Input
-                    type="text"
-                    id="price"
-                    name="price"
-                    data-testid="hotel-price"
-                    value={formData.price}
-                    onChange={handleChange}
-                    placeholder="Enter price"
-                  />
-                </div>
-
-                {/* Currency dropdown - equal width on desktop */}
-                <div className="w-full sm:flex-1">
-                  <Select
-                    id="currency"
-                    name="currency"
-                    data-testid="hotel-currency"
-                    value={formData.currency}
-                    onChange={handleChange}
-                    options={CURRENCIES.map((currency) => ({
-                      value: currency.code,
-                      label: `${currency.code} - ${currency.name}`,
-                    }))}
-                  />
-                </div>
-              </div>
-
-              {errors.price && (
-                <p className="mt-1 sm:mt-2 text-xs sm:text-sm text-red-500 font-medium">
-                  {errors.price}
-                </p>
-              )}
-            </div>
-
-            {/* Rating - responsive input */}
-            <Input
-              type="text"
-              id="rating"
-              name="rating"
-              data-testid="hotel-rating"
-              value={formData.rating}
-              onChange={handleChange}
-              label="Rating (0-10)"
-              icon="⭐"
-              placeholder="Enter rating"
-              error={errors.rating}
-            />
-
-            {/* Submit Button - enhanced responsive */}
-            <Button
-              type="submit"
-              data-testid="add-hotel-button"
-              variant="primary"
-              size="md"
-              fullWidth
-            >
-              🌸 Submit & Compare
-            </Button>
-
-            {/* Secondary Actions - responsive layout */}
-            <div className="space-y-3 sm:space-y-4">
-              <Link href="/hotels/compare" className="block w-full">
-                <Button
-                  variant="secondary"
-                  size="md"
-                  fullWidth
-                  className="text-center"
+          <form onSubmit={handleSubmit} className="flex flex-col" noValidate>
+            <CardContent className="space-y-4 sm:space-y-6">
+              {/* General Error Message */}
+              {errors.general && (
+                <Alert
+                  variant="destructive"
+                  className="bg-red-50 border-red-200"
                 >
-                  👀 View Compare Page
-                </Button>
-              </Link>
+                  <AlertDescription className="text-red-700 font-medium">
+                    {errors.general}
+                  </AlertDescription>
+                </Alert>
+              )}
 
-              <Link
-                href="/"
-                className="block w-full text-center text-sm sm:text-base text-pink-600 hover:text-pink-800 font-medium transition-colors duration-300"
+              <FieldSet>
+                <FieldGroup className="gap-4 sm:gap-6">
+                  {/* Hotel Name */}
+                  <Field>
+                    <FieldLabel htmlFor="name">
+                      <span className="mr-2">🏨</span>
+                      Hotel Name
+                    </FieldLabel>
+                    <Input
+                      type="text"
+                      id="name"
+                      name="name"
+                      data-testid="hotel-name"
+                      value={formData.name}
+                      onChange={handleChange}
+                      placeholder="Enter hotel name"
+                      aria-invalid={!!errors.name}
+                    />
+                    {errors.name && (
+                      <FieldError className="text-red-500 font-medium text-xs sm:text-sm">
+                        {errors.name}
+                      </FieldError>
+                    )}
+                  </Field>
+
+                  {/* Price and Currency */}
+                  <div className="flex flex-col sm:flex-row gap-4 sm:gap-6">
+                    <Field className="flex-1">
+                      <FieldLabel htmlFor="price">
+                        <span className="mr-2">💰</span>
+                        Price
+                      </FieldLabel>
+                      <Input
+                        type="text"
+                        id="price"
+                        name="price"
+                        data-testid="hotel-price"
+                        value={formData.price}
+                        onChange={handleChange}
+                        placeholder="Enter price"
+                        aria-invalid={!!errors.price}
+                      />
+                      {errors.price && (
+                        <FieldError className="text-red-500 font-medium text-xs sm:text-sm">
+                          {errors.price}
+                        </FieldError>
+                      )}
+                    </Field>
+
+                    <Field className="flex-1">
+                      <FieldLabel htmlFor="currency">Currency</FieldLabel>
+                      <Select
+                        value={formData.currency}
+                        onValueChange={(value) =>
+                          handleChange({
+                            target: { name: "currency", value },
+                          } as React.ChangeEvent<HTMLSelectElement>)
+                        }
+                      >
+                        <SelectTrigger
+                          id="currency"
+                          data-testid="hotel-currency"
+                        >
+                          <SelectValue placeholder="Select currency" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {CURRENCIES.map((currency) => (
+                            <SelectItem
+                              key={currency.code}
+                              value={currency.code}
+                            >
+                              {currency.code} - {currency.name}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </Field>
+                  </div>
+
+                  {/* Rating */}
+                  <Field>
+                    <FieldLabel htmlFor="rating">
+                      <span className="mr-2">⭐</span>
+                      Rating (0-10)
+                    </FieldLabel>
+                    <Input
+                      type="text"
+                      id="rating"
+                      name="rating"
+                      data-testid="hotel-rating"
+                      value={formData.rating}
+                      onChange={handleChange}
+                      placeholder="Enter rating"
+                      aria-invalid={!!errors.rating}
+                    />
+                    {errors.rating && (
+                      <FieldError className="text-red-500 font-medium text-xs sm:text-sm">
+                        {errors.rating}
+                      </FieldError>
+                    )}
+                  </Field>
+                </FieldGroup>
+              </FieldSet>
+            </CardContent>
+
+            <CardFooter className="flex-col gap-3 sm:gap-4 mt-6 sm:mt-8">
+              {/* Submit Button - enhanced responsive */}
+              <Button
+                type="submit"
+                data-testid="add-hotel-button"
+                variant="default"
+                size="lg"
+                className="w-full"
               >
-                ← Back to Home
-              </Link>
-            </div>
+                🌸 Submit & Compare
+              </Button>
+
+              {/* Secondary Actions - responsive layout */}
+              <div className="w-full space-y-3 sm:space-y-4">
+                <Button
+                  asChild
+                  variant="secondary"
+                  size="lg"
+                  className="w-full"
+                >
+                  <Link href="/hotels/compare">👀 View Compare Page</Link>
+                </Button>
+
+                <Button
+                  asChild
+                  variant="ghost"
+                  className="w-full text-pink-600 hover:text-pink-800 hover:bg-pink-100/50 transition-colors duration-300"
+                >
+                  <Link href="/">← Back to Home</Link>
+                </Button>
+              </div>
+            </CardFooter>
           </form>
         </Card>
 

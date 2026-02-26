@@ -207,8 +207,8 @@ describe("Navigation Flow Integration", () => {
     await vi.waitFor(() => {
       const currencySelect = document.getElementById(
         "currency",
-      ) as HTMLSelectElement;
-      expect(currencySelect.value).toBe("EUR");
+      ) as HTMLButtonElement;
+      expect(currencySelect.textContent).toContain("EUR");
     });
 
     // Add hotel with EUR currency

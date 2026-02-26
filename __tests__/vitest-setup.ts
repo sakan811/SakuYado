@@ -33,6 +33,8 @@ const localStorageMock = (() => {
 // Set up global mocks
 Object.defineProperty(window, "localStorage", {
   value: localStorageMock,
+  writable: true,
+  configurable: true,
 });
 
 // Reset localStorage between tests
@@ -40,3 +42,35 @@ beforeEach(() => {
   localStorageMock.clear();
   vi.clearAllMocks();
 });
+
+// Polyfills for Radix UI in JSDOM
+if (typeof window !== "undefined") {
+  if (!window.PointerEvent) {
+    class PointerEvent extends MouseEvent {
+      pointerId: number;
+      pointerType: string;
+      isPrimary: boolean;
+      constructor(type: string, params: PointerEventInit = {}) {
+        super(type, params);
+        this.pointerId = params.pointerId || 0;
+        this.pointerType = params.pointerType || "mouse";
+        this.isPrimary = params.isPrimary || true;
+      }
+    }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    window.PointerEvent = PointerEvent as any;
+  }
+  window.HTMLElement.prototype.hasPointerCapture = vi.fn();
+  window.HTMLElement.prototype.releasePointerCapture = vi.fn();
+  window.HTMLElement.prototype.setPointerCapture = vi.fn();
+  window.HTMLElement.prototype.scrollIntoView = vi.fn();
+
+  if (!window.ResizeObserver) {
+    class ResizeObserver {
+      observe() {}
+      unobserve() {}
+      disconnect() {}
+    }
+    window.ResizeObserver = ResizeObserver;
+  }
+}

@@ -116,6 +116,7 @@ describe("Layout Metadata (lines 24-51)", () => {
     expect(metadata.openGraph?.url).toBe("https://sakuyado.fukudev.org");
     expect(metadata.openGraph?.siteName).toBe("SakuYado");
     expect(metadata.openGraph?.locale).toBe("en_US");
+    // @ts-expect-error TypeScript doesn't correctly infer the OpenGraph type here
     expect(metadata.openGraph?.type).toBe("website");
   });
 
@@ -269,7 +270,7 @@ describe("RootLayout Component (lines 77-128)", () => {
       </RootLayout>,
     );
 
-    const logoLink = screen.getByTestId("mock-link");
+    const logoLink = screen.getAllByTestId("mock-link")[0];
     expect(logoLink).not.toBeNull();
     expect(logoLink.getAttribute("href")).toBe("/");
     expect(logoLink.classList.contains("flex")).toBe(true);

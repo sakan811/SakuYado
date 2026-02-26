@@ -1,7 +1,7 @@
 # SakuYado 🌸
 
 <p align="center">
-  <img src="docs/SakuYado250x250.png" />
+  <img src="public/SakuYado250x250.png" />
 </p>
 
 A beautiful web application that helps you find the best value accommodations by calculating a **Review/Price Score** for each hotel you input.

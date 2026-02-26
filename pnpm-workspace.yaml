@@ -2,5 +2,7 @@ onlyBuiltDependencies:
   - "@tailwindcss/oxide"
   - cypress
   - esbuild
+  - msw
+  - puppeteer
   - sharp
   - unrs-resolver

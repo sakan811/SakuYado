@@ -15,27 +15,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import React from "react";
+import { clsx, type ClassValue } from "clsx";
+import { twMerge } from "tailwind-merge";
 
-interface ErrorMessageProps {
-  message: string;
-  className?: string;
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs));
 }
-
-const ErrorMessage: React.FC<ErrorMessageProps> = ({
-  message,
-  className = "",
-}) => {
-  if (!message) return null;
-
-  const baseClasses = "bg-red-50 border-2 border-red-200 rounded-xl p-3 sm:p-4";
-  const combinedClasses = `${baseClasses} ${className}`;
-
-  return (
-    <div className={combinedClasses}>
-      <p className="text-sm sm:text-base text-red-700 font-medium">{message}</p>
-    </div>
-  );
-};
-
-export { ErrorMessage };

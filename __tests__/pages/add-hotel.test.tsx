@@ -22,7 +22,7 @@ const getFormElements = () => ({
   nameInput: screen.getAllByLabelText(/Hotel Name/i)[0],
   priceInput: screen.getAllByLabelText(/Price/i)[0],
   ratingInput: screen.getAllByLabelText(/Rating/i)[0],
-  currencySelect: document.getElementById("currency") as HTMLSelectElement,
+  currencySelect: document.getElementById("currency") as HTMLButtonElement,
   submitButton: screen.getAllByText(/Submit & Compare/i)[0],
 });
 
@@ -49,7 +49,14 @@ const fillForm = async (
   if (data.price !== undefined) await user.type(priceInput, data.price);
   if (data.rating !== undefined) await user.type(ratingInput, data.rating);
   if (data.currency && currencySelect) {
-    await user.selectOptions(currencySelect, data.currency);
+    await user.click(currencySelect);
+    const options = await screen.findAllByRole("option");
+    const targetOption = options.find((opt) =>
+      opt.textContent?.includes(data.currency!),
+    );
+    if (targetOption) {
+      await user.click(targetOption);
+    }
   }
 };
 
@@ -73,6 +80,7 @@ describe("AddHotelPage", () => {
     // Clear localStorage and mocks before each test
     localStorage.clear();
     mockPush.mockClear();
+    cleanup();
   });
 
   it("renders the add hotel form", () => {
@@ -259,8 +267,11 @@ describe("AddHotelPage", () => {
     render(<AddHotelPage />);
     const { currencySelect } = getFormElements();
 
-    expect(currencySelect.value).toBe("EUR");
-    await user.selectOptions(currencySelect, "GBP");
+    expect(currencySelect.textContent).toContain("EUR");
+    await user.click(currencySelect);
+    const options = await screen.findAllByRole("option");
+    const gbpOption = options.find((opt) => opt.textContent?.includes("GBP"));
+    if (gbpOption) await user.click(gbpOption);
     expect(localStorage.getItem("lastUsedCurrency")).toBe("GBP");
   });
 
@@ -490,7 +501,10 @@ describe("AddHotelPage", () => {
       render(<AddHotelPage />);
       const { currencySelect, submitButton } = getFormElements();
 
-      await user.selectOptions(currencySelect, "EUR");
+      await user.click(currencySelect);
+      const options = await screen.findAllByRole("option");
+      const eurOption = options.find((opt) => opt.textContent?.includes("EUR"));
+      if (eurOption) await user.click(eurOption);
       await fillForm(user, {
         name: "European Hotel",
         price: "150",
@@ -502,6 +516,42 @@ describe("AddHotelPage", () => {
       expect(savedHotels).toHaveLength(1);
       expect(savedHotels[0].currency).toBe("EUR");
       expect(localStorage.getItem("lastUsedCurrency")).toBe("EUR");
+      expect(mockPush).toHaveBeenCalledWith("/hotels/compare");
+    });
+  });
+
+  it("clears field-level error when user types in a field with an existing error (line 118 branch)", async () => {
+    const user = userEvent.setup();
+    render(<AddHotelPage />);
+    const { nameInput, priceInput, ratingInput, submitButton } =
+      getFormElements();
+
+    // Step 1: Submit with empty fields to trigger validation errors
+    await user.click(submitButton);
+
+    // Step 2: Verify error state is shown (form has errors)
+    // The validation errors should be visible now
+    expect(mockPush).not.toHaveBeenCalled();
+
+    // Step 3: Type in the name field which has an error - this should trigger
+    // the `if (errors[name as keyof typeof errors])` branch to clear errors
+    await user.type(nameInput, "H");
+
+    // Step 4: Type in price field (also has an error)
+    await user.type(priceInput, "1");
+
+    // Step 5: Type in rating field (also has an error)
+    await user.type(ratingInput, "5");
+
+    // The errors should be cleared as the user types, allowing eventual submission
+    await fillForm(
+      user,
+      { name: "otel Test", price: "00", rating: ".0" },
+      false,
+    );
+    await user.click(submitButton);
+
+    await waitFor(() => {
       expect(mockPush).toHaveBeenCalledWith("/hotels/compare");
     });
   });

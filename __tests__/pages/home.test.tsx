@@ -71,9 +71,8 @@ describe("Home Page", () => {
   it("has the correct UI layout and styling", () => {
     render(<Home />);
 
-    // Find the title by one of its parts
     const titleElement = screen.getByText("Find the Best Value Hotels");
-    const heroSection = titleElement.closest("section");
+    const heroSection = titleElement.closest("[data-slot='card']");
 
     expect(heroSection).not.toBeNull();
     if (heroSection) {
@@ -88,7 +87,7 @@ describe("Home Page", () => {
     render(<Home />);
 
     // Check for sakura emojis in the hero section
-    const heroSection = document.querySelector("section");
+    const heroSection = document.querySelector("[data-slot='card']");
     expect(heroSection).not.toBeNull();
 
     // The hero section should contain sakura emojis as decorative elements
@@ -101,12 +100,10 @@ describe("Home Page", () => {
     render(<Home />);
 
     const titleElement = screen.getByText("Find the Best Value Hotels");
-    expect(titleElement.classList.contains("text-3xl")).toBe(true);
-    // Fix: Check for the actual responsive classes used in the component
-    // Based on the component: "text-3xl sm:text-4xl md:text-5xl lg:text-6xl"
-    expect(titleElement.classList.contains("sm:text-4xl")).toBe(true);
-    expect(titleElement.classList.contains("md:text-5xl")).toBe(true);
-    expect(titleElement.classList.contains("lg:text-6xl")).toBe(true);
+    const container = titleElement.parentElement!;
+    expect(container.classList.contains("text-4xl")).toBe(true);
+    expect(container.classList.contains("sm:text-5xl")).toBe(true);
+    expect(container.classList.contains("md:text-6xl")).toBe(true);
 
     // Check button container has responsive classes
     const addButton = screen.getByText("🌸 Add a Hotel");
@@ -114,7 +111,7 @@ describe("Home Page", () => {
 
     // The button container should have flex classes for responsive layout
     let hasFlexClasses = false;
-    let currentElement = buttonContainer;
+    let currentElement: HTMLElement | null = buttonContainer;
 
     while (currentElement && !hasFlexClasses) {
       if (currentElement.classList.contains("flex")) {
@@ -132,24 +129,14 @@ describe("Home Page", () => {
     const addButton = screen.getByText("🌸 Add a Hotel");
     const compareButton = screen.getByText("Compare Hotels");
 
-    // Check add button styling (should have secondary variant classes)
+    // Check add button styling
     expect(addButton).not.toBeNull();
-    expect(addButton.classList.contains("bg-gradient-to-r")).toBe(true);
+    expect(addButton.classList.contains("bg-white")).toBe(true);
     expect(addButton.classList.contains("text-pink-600")).toBe(true);
-    expect(addButton.classList.contains("from-white")).toBe(true);
-    expect(addButton.classList.contains("to-pink-50")).toBe(true);
 
-    // Check compare button styling (should have primary variant classes)
+    // Check compare button styling (should be primary variant)
     expect(compareButton).not.toBeNull();
-    expect(compareButton.classList.contains("bg-gradient-to-r")).toBe(true);
-    expect(compareButton.classList.contains("from-pink-500")).toBe(true);
-    expect(compareButton.classList.contains("to-rose-500")).toBe(true);
+    expect(compareButton.classList.contains("bg-pink-600")).toBe(true);
     expect(compareButton.classList.contains("text-white")).toBe(true);
-
-    // Check that buttons have base button classes
-    expect(addButton.classList.contains("font-bold")).toBe(true);
-    expect(addButton.classList.contains("rounded-xl")).toBe(true);
-    expect(compareButton.classList.contains("font-bold")).toBe(true);
-    expect(compareButton.classList.contains("rounded-xl")).toBe(true);
   });
 });
