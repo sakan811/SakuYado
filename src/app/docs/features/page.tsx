@@ -151,10 +151,6 @@ export default function FeaturesPage() {
                                     desc: "Comprehensive stats about your hotel selections",
                                 },
                                 {
-                                    label: "Flexible Filtering",
-                                    desc: "Focus on specific criteria when comparing options",
-                                },
-                                {
                                     label: "Component Testing",
                                     desc: "All UI components thoroughly tested with comprehensive test coverage",
                                 },

@@ -16,7 +16,7 @@
  */
 
 import type { Metadata } from "next";
-import Image from "next/image";
+import { Mermaid } from "@/components";
 
 export const metadata: Metadata = {
     title: "SakuYado Docs — Architecture",
@@ -42,12 +42,16 @@ const uiComponents = [
         purpose: "Content containers with gradient/highlight variants",
     },
     {
-        name: "ErrorMessage",
-        purpose: "Consistent error message display",
+        name: "Alert",
+        purpose: "Alert messages to show feedback and warnings",
     },
     {
-        name: "LoadingSpinner",
-        purpose: "Loading indicators with custom messages",
+        name: "Field",
+        purpose: "Form field wrapper with label and error messages",
+    },
+    {
+        name: "Table",
+        purpose: "Data tables for displaying structured information",
     },
 ];
 
@@ -66,6 +70,21 @@ const pages = [
         path: "hotels/compare/page.tsx",
         route: "/hotels/compare",
         desc: "Hotel comparison table and value ranking",
+    },
+    {
+        path: "docs/page.tsx",
+        route: "/docs",
+        desc: "Documentation overview and quick links",
+    },
+    {
+        path: "docs/architecture/page.tsx",
+        route: "/docs/architecture",
+        desc: "Technical documentation covering architecture and components",
+    },
+    {
+        path: "docs/features/page.tsx",
+        route: "/docs/features",
+        desc: "User guide detailing available features and usage",
     },
 ];
 
@@ -94,12 +113,22 @@ export default function ArchitecturePage() {
                     Source Architecture
                 </h2>
                 <div className="rounded-2xl overflow-hidden border border-pink-100 shadow-sm bg-white p-4">
-                    <Image
-                        src="/docs/src-architecture.png"
-                        alt="Source architecture diagram showing the full project structure"
-                        width={900}
-                        height={500}
-                        className="w-full h-auto rounded-xl"
+                    <Mermaid
+                        chart={`flowchart TD
+    Root([SakuYado React App]) --> Src[src/ Directory]
+    Src --> App[app/ : Next.js App Router]
+    Src --> Components[components/ : UI Elements]
+    Src --> Contexts[contexts/ : Global State]
+    Src --> Lib[lib/ : External Utils]
+    Src --> Types[types/ : TypeScript Defs]
+    Src --> Utils[utils/ : Functions]
+
+    App --> Pages(Pages & API Routes)
+    Components --> RootComp(Mermaid Diagram Component)
+    Components --> UI(ui/ : Base generic elements)
+    Contexts --> HotelContext(HotelContext & useReducer)
+    Types --> HotelType(Hotel Interface)
+    Utils --> Calcs(Scoring & formatting helpers)`}
                     />
                 </div>
             </section>
@@ -225,12 +254,18 @@ export default function ArchitecturePage() {
                     App Router Architecture
                 </h2>
                 <div className="rounded-2xl overflow-hidden border border-pink-100 shadow-sm bg-white p-4 mb-6">
-                    <Image
-                        src="/docs/app-architecture.png"
-                        alt="App Router architecture diagram"
-                        width={900}
-                        height={500}
-                        className="w-full h-auto rounded-xl"
+                    <Mermaid
+                        chart={`flowchart TD
+    Root([Root Route: /]) --> Layout[Global Root Layout]
+    Layout --> PageHome(Landing Page: /)
+    Layout --> PageCompare(Compare Hotels: /hotels/compare)
+    Layout --> PageAdd(Add Hotel Form: /hotels/add)
+    Layout --> GroupDocs(Documentation Pages)
+    
+    GroupDocs --> DocsLayout[Docs Navigation Layout]
+    DocsLayout --> DocsHome(Docs Overview: /docs)
+    DocsLayout --> DocsArch(Architecture: /docs/architecture)
+    DocsLayout --> DocsFeat(Features: /docs/features)`}
                     />
                 </div>
 
@@ -282,12 +317,24 @@ export default function ArchitecturePage() {
                     Component Architecture
                 </h2>
                 <div className="rounded-2xl overflow-hidden border border-pink-100 shadow-sm bg-white p-4 mb-6">
-                    <Image
-                        src="/docs/components.png"
-                        alt="Component architecture diagram"
-                        width={900}
-                        height={500}
-                        className="w-full h-auto rounded-xl"
+                    <Mermaid
+                        chart={`flowchart TD
+    App(Next.js App) --> ContextProvider{Hotel Context Provider}
+    ContextProvider --> AppRoutes(Application Routes)
+    AppRoutes --> AddForm[Add Hotel Form view]
+    AppRoutes --> CompareTable[Data Table Comparison view]
+    AppRoutes --> Layouts[Shared App Layouts]
+    
+    AddForm --> UIElements(Shared UI Components)
+    CompareTable --> UIElements
+    Layouts --> UIElements
+    
+    UIElements --> Forms[Input / Select / Label / Field]
+    UIElements --> Display[Card / Table / Alert / Separator]
+    UIElements --> Action[Button]
+    
+    AddForm -- "Triggers dispatch cases" --> ContextProvider
+    CompareTable -- "Reads context state" --> ContextProvider`}
                     />
                 </div>
 
