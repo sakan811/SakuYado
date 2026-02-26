@@ -61,6 +61,14 @@ const uiComponents = [
     purpose: "Form field wrapper with label and error messages",
   },
   {
+    name: "Label",
+    purpose: "Accessible label element for form controls",
+  },
+  {
+    name: "Separator",
+    purpose: "Visual divide between content sections",
+  },
+  {
     name: "Table",
     purpose: "Data tables for displaying structured information",
   },
@@ -130,6 +138,7 @@ export default function ArchitecturePage() {
     Root([SakuYado React App]) --> Src[src/ Directory]
     Src --> App[app/ : Next.js App Router]
     Src --> Components[components/ : UI Elements]
+    Src --> Constants[constants/ : Static Data]
     Src --> Contexts[contexts/ : Global State]
     Src --> Lib[lib/ : External Utils]
     Src --> Types[types/ : TypeScript Defs]
@@ -138,6 +147,7 @@ export default function ArchitecturePage() {
     App --> Pages(Pages & API Routes)
     Components --> RootComp(Mermaid Diagram Component)
     Components --> UI(ui/ : Base generic elements)
+    Constants --> Currency(Currencies List)
     Contexts --> HotelContext(HotelContext & useReducer)
     Types --> HotelType(Hotel Interface)
     Utils --> Calcs(Scoring & formatting helpers)`}
