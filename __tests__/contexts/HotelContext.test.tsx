@@ -28,14 +28,13 @@ import { Hotel } from "@/types/hotel";
 
 // Test component to use the hotel context
 function TestComponent() {
-  const { state, addHotel, clearAllHotels, setLastUsedCurrency } = useHotel();
+  const { state, addHotel, clearAllHotels } = useHotel();
 
   return (
     <div>
       <div data-testid="hotels-count">{state.hotels.length}</div>
       <div data-testid="loading">{state.isLoading.toString()}</div>
       <div data-testid="error">{state.error || "no-error"}</div>
-      <div data-testid="currency">{state.lastUsedCurrency}</div>
       <button
         onClick={async () => {
           try {
@@ -55,12 +54,6 @@ function TestComponent() {
       </button>
       <button onClick={clearAllHotels} data-testid="clear-hotels">
         Clear Hotels
-      </button>
-      <button
-        onClick={() => setLastUsedCurrency("EUR")}
-        data-testid="set-currency"
-      >
-        Set Currency
       </button>
     </div>
   );
@@ -154,7 +147,6 @@ describe("HotelContext", () => {
 
       // Verify hotels were loaded via INITIALIZE_STATE action
       expect(screen.getAllByTestId("hotels-count")[0]).toHaveTextContent("2");
-      expect(screen.getAllByTestId("currency")[0]).toHaveTextContent("JPY");
     });
 
     it("should handle all defined action types correctly", () => {
@@ -170,9 +162,6 @@ describe("HotelContext", () => {
         expect(screen.getAllByTestId("loading")[0]).toHaveTextContent("false");
       });
 
-      // Get initial state
-      const initialCurrency = screen.getAllByTestId("currency")[0].textContent;
-
       // Add a hotel to change state
       const addButton = screen.getAllByTestId("add-hotel")[0];
       addButton.click();
@@ -180,11 +169,6 @@ describe("HotelContext", () => {
       await waitFor(() => {
         expect(screen.getAllByTestId("hotels-count")[0]).toHaveTextContent("1");
       });
-
-      // State should remain consistent
-      expect(screen.getAllByTestId("currency")[0]).toHaveTextContent(
-        initialCurrency,
-      );
     });
 
     it("should handle state management correctly", async () => {
@@ -203,7 +187,6 @@ describe("HotelContext", () => {
     it("should load localStorage data during initialization", async () => {
       // Test data loading by setting data in localStorage
       localStorage.setItem("hotels", JSON.stringify(mockHotels));
-      localStorage.setItem("lastUsedCurrency", "JPY");
 
       renderWithProvider();
 
@@ -213,7 +196,7 @@ describe("HotelContext", () => {
       });
 
       // The context should initialize with the data from localStorage
-      expect(screen.getAllByTestId("currency")[0]).toHaveTextContent("JPY");
+      expect(screen.getAllByTestId("hotels-count")[0]).toHaveTextContent("2");
     });
   });
 
@@ -373,17 +356,14 @@ describe("HotelContext", () => {
       expect(screen.getByTestId("hotels-count")).toBeInTheDocument();
       expect(screen.getByTestId("loading")).toBeInTheDocument();
       expect(screen.getByTestId("error")).toBeInTheDocument();
-      expect(screen.getByTestId("currency")).toBeInTheDocument();
       expect(screen.getByTestId("add-hotel")).toBeInTheDocument();
       expect(screen.getByTestId("clear-hotels")).toBeInTheDocument();
-      expect(screen.getByTestId("set-currency")).toBeInTheDocument();
     });
   });
 
   describe("localStorage initialization", () => {
     it("should load hotels from localStorage on mount", async () => {
       localStorage.setItem("hotels", JSON.stringify(mockHotels));
-      localStorage.setItem("lastUsedCurrency", "EUR");
 
       renderWithProvider();
 
@@ -393,7 +373,7 @@ describe("HotelContext", () => {
       });
 
       // The context should initialize with data from localStorage
-      expect(screen.getAllByTestId("currency")[0]).toHaveTextContent("EUR");
+      expect(screen.getAllByTestId("hotels-count")[0]).toHaveTextContent("2");
     });
 
     it("should handle corrupted localStorage data gracefully", () => {
@@ -422,47 +402,6 @@ describe("HotelContext", () => {
 
       // Should only load valid hotels
       expect(screen.getAllByTestId("hotels-count")[0]).toHaveTextContent("2");
-    });
-  });
-
-  describe("currency management", () => {
-    it("should update last used currency", async () => {
-      renderWithProvider();
-
-      await waitFor(() => {
-        expect(screen.getAllByTestId("loading")[0]).toHaveTextContent("false");
-      });
-
-      const currencyButton = screen.getAllByTestId("set-currency")[0];
-      currencyButton.click();
-
-      await waitFor(() => {
-        expect(screen.getAllByTestId("currency")[0]).toHaveTextContent("EUR");
-      });
-      expect(localStorage.setItem).toHaveBeenCalledWith(
-        "lastUsedCurrency",
-        "EUR",
-      );
-    });
-
-    it("should handle errors when setting currency preference", async () => {
-      const originalSetItem = localStorage.setItem;
-      localStorage.setItem = vi.fn(() => {
-        throw new Error("Storage error");
-      });
-
-      renderWithProvider();
-
-      await waitFor(() => {
-        expect(screen.getAllByTestId("loading")[0]).toHaveTextContent("false");
-      });
-
-      const currencyButton = screen.getAllByTestId("set-currency")[0];
-
-      // Should not throw even if localStorage fails
-      expect(() => currencyButton.click()).not.toThrow();
-
-      localStorage.setItem = originalSetItem;
     });
   });
 });

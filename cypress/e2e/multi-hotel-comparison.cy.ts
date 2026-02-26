@@ -65,18 +65,6 @@ describe("Multi-Hotel Comparison", () => {
         cy.get("body").should("contain", "9.0");
       });
 
-      // ─── 3. Currency preference persists via real localStorage ─────
-      it("remembers last-used currency when adding multiple hotels", () => {
-        // Add first hotel in EUR
-        cy.addHotel("Berlin Hotel", 90, 7.5, "EUR");
-
-        // Add page should default to EUR for the next add
-        cy.get('[data-testid="add-another-hotel"]').click();
-        cy.url().should("include", "/hotels/add");
-
-        // The currency selector should have pre-selected EUR
-        cy.get('[data-testid="hotel-currency"]').should("contain", "EUR");
-      });
     });
   });
 });

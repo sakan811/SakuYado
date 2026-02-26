@@ -49,22 +49,13 @@ import {
 
 export default function AddHotelPage() {
   const router = useRouter();
-  const { state, addHotel, setLastUsedCurrency } = useHotel();
-  const [formData, setFormData] = useState(() => {
-    let currency = state.lastUsedCurrency;
-    try {
-      /* v8 ignore start */
-      const saved =
-        typeof localStorage !== "undefined"
-          ? localStorage.getItem("lastUsedCurrency")
-          : null;
-      /* v8 ignore stop */
-      if (saved) currency = saved;
-    } catch {
-      // ignore – localStorage may not be available
-    }
-    return { name: "", price: "", rating: "", currency };
-  });
+  const { state, addHotel } = useHotel();
+  const [formData, setFormData] = useState(() => ({
+    name: "",
+    price: "",
+    rating: "",
+    currency: "USD",
+  }));
   const [errors, setErrors] = useState<ValidationError>({
     name: "",
     price: "",
@@ -74,31 +65,16 @@ export default function AddHotelPage() {
 
   const addHotelPageSchema = generateAddHotelPageSchema();
 
-  // Initialize currency from context when it's available
-
+  // Sync state.isLoading → re-render after initial localStorage load
   const [prevContext, setPrevContext] = useState({
     isLoading: state.isLoading,
-    currency: state.lastUsedCurrency,
   });
 
-  if (
-    state.isLoading !== prevContext.isLoading ||
-    state.lastUsedCurrency !== prevContext.currency
-  ) {
-    setPrevContext({
-      isLoading: state.isLoading,
-      currency: state.lastUsedCurrency,
-    });
+  if (state.isLoading !== prevContext.isLoading) {
+    setPrevContext({ isLoading: state.isLoading });
     /* v8 ignore start */
-    if (!state.isLoading) {
-      setFormData((prev) => ({
-        ...prev,
-        currency: state.lastUsedCurrency,
-      }));
-      // Sync any context-level error (e.g. failed to load saved data) to the form
-      if (state.error && !errors.general) {
-        setErrors((prev) => ({ ...prev, general: state.error! }));
-      }
+    if (!state.isLoading && state.error && !errors.general) {
+      setErrors((prev) => ({ ...prev, general: state.error! }));
     }
     /* v8 ignore stop */
   }
@@ -111,11 +87,6 @@ export default function AddHotelPage() {
       ...prev,
       [name]: value,
     }));
-
-    // If currency is changed, update the context
-    if (name === "currency") {
-      setLastUsedCurrency(value);
-    }
 
     // Clear errors when user starts typing
     if (errors[name as keyof typeof errors]) {

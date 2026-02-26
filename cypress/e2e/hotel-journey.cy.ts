@@ -39,7 +39,7 @@ describe("Hotel Journey", () => {
         cy.url().should("include", "/hotels/add");
 
         // Add first hotel — redirects to compare
-        cy.addHotel("Tokyo Hotel", 150, 8.5, "USD");
+        cy.addHotel("Tokyo Hotel", 150, 8.5);
         cy.url().should("include", "/hotels/compare");
         cy.contains("Hotel Value Comparison").should("be.visible");
         cy.get('[data-testid="hotel-name-0"]').should("contain", "Tokyo Hotel");
@@ -48,7 +48,7 @@ describe("Hotel Journey", () => {
         cy.get('[data-testid="add-another-hotel"]').click();
         cy.url().should("include", "/hotels/add");
 
-        cy.addHotel("Osaka Hotel", 100, 7.0, "USD");
+        cy.addHotel("Osaka Hotel", 100, 7.0);
         cy.url().should("include", "/hotels/compare");
 
         // Both hotels present

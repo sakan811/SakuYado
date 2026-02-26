@@ -9,7 +9,6 @@ declare global {
         name: string,
         price: number,
         rating: number,
-        currency?: string,
       ): Chainable<Element>;
     }
   }
@@ -17,15 +16,13 @@ declare global {
 
 Cypress.Commands.add(
   "addHotel",
-  (name: string, price: number, rating: number, currency = "USD") => {
+  (name: string, price: number, rating: number) => {
     cy.visit("/hotels/add");
     cy.get('[data-testid="hotel-name"]').type(name);
     cy.get('[data-testid="hotel-price"]').type(price.toString());
     cy.get('[data-testid="hotel-rating"]').type(rating.toString());
-    cy.get('[data-testid="hotel-currency"]').click();
-    cy.get(`[role="option"][data-value="${currency}"]`).click();
     cy.get('[data-testid="add-hotel-button"]').click();
   },
 );
 
-export {};
+export { };

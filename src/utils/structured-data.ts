@@ -34,11 +34,10 @@ export function generateAddHotelPageSchema() {
       "@type": "WebApplication",
       name: "SakuYado Hotel Information Form",
       description:
-        "Input hotel name, price, rating and currency for value comparison with SakuYado",
+        "Input hotel name, price, and rating for value comparison with SakuYado",
       applicationCategory: "TravelApplication",
       featureList: [
         "Hotel data input",
-        "Multi-currency support",
         "Rating validation",
         "Value score calculation",
       ],
@@ -70,7 +69,7 @@ export function generateHotelComparisonSchema(hotels: Hotel[]) {
           bestRating: "10",
           worstRating: "1",
         },
-        priceRange: `${hotel.price} ${hotel.currency}`,
+        priceRange: `${hotel.price}`,
         additionalProperty: {
           "@type": "PropertyValue",
           name: "Value Score",
