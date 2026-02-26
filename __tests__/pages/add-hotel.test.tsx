@@ -518,6 +518,38 @@ describe("AddHotelPage", () => {
     });
   });
 
+  it("clears field-level error when user types in a field with an existing error (line 118 branch)", async () => {
+    const user = userEvent.setup();
+    render(<AddHotelPage />);
+    const { nameInput, priceInput, ratingInput, submitButton } =
+      getFormElements();
+
+    // Step 1: Submit with empty fields to trigger validation errors
+    await user.click(submitButton);
+
+    // Step 2: Verify error state is shown (form has errors)
+    // The validation errors should be visible now
+    expect(mockPush).not.toHaveBeenCalled();
+
+    // Step 3: Type in the name field which has an error - this should trigger
+    // the `if (errors[name as keyof typeof errors])` branch to clear errors
+    await user.type(nameInput, "H");
+
+    // Step 4: Type in price field (also has an error)
+    await user.type(priceInput, "1");
+
+    // Step 5: Type in rating field (also has an error)
+    await user.type(ratingInput, "5");
+
+    // The errors should be cleared as the user types, allowing eventual submission
+    await fillForm(user, { name: "otel Test", price: "00", rating: ".0" }, false);
+    await user.click(submitButton);
+
+    await waitFor(() => {
+      expect(mockPush).toHaveBeenCalledWith("/hotels/compare");
+    });
+  });
+
   describe("Error Handling", () => {
     it.each([
       {
