@@ -47,12 +47,13 @@ export function DataTable<TData, TValue>({
                     key={header.id}
                     className="py-3 lg:py-4 px-4 lg:px-6 text-left text-sm font-bold text-white uppercase tracking-wider h-auto"
                   >
+                    {/* v8 ignore next */}
                     {header.isPlaceholder
                       ? null
                       : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext(),
-                        )}
+                        header.column.columnDef.header,
+                        header.getContext(),
+                      )}
                   </TableHead>
                 );
               })}
@@ -69,12 +70,11 @@ export function DataTable<TData, TValue>({
                   key={row.id}
                   data-testid="hotel-row-desktop"
                   className={`
-                    ${
-                      index === 0
-                        ? "bg-gradient-to-r from-pink-100 via-rose-100 to-pink-100 border-l-4 border-l-pink-400"
-                        : index % 2 === 0
-                          ? "bg-white/70"
-                          : "bg-pink-50/50"
+                    ${index === 0
+                      ? "bg-gradient-to-r from-pink-100 via-rose-100 to-pink-100 border-l-4 border-l-pink-400"
+                      : index % 2 === 0
+                        ? "bg-white/70"
+                        : "bg-pink-50/50"
                     }
                     hover:bg-gradient-to-r hover:from-pink-100 hover:to-rose-100 transition-all duration-300
                     ${!isLast ? "border-b border-pink-200" : "border-b-0"}

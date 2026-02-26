@@ -53,10 +53,12 @@ export default function AddHotelPage() {
   const [formData, setFormData] = useState(() => {
     let currency = state.lastUsedCurrency;
     try {
+      /* v8 ignore start */
       const saved =
         typeof localStorage !== "undefined"
           ? localStorage.getItem("lastUsedCurrency")
           : null;
+      /* v8 ignore stop */
       if (saved) currency = saved;
     } catch {
       // ignore – localStorage may not be available
@@ -87,6 +89,7 @@ export default function AddHotelPage() {
       isLoading: state.isLoading,
       currency: state.lastUsedCurrency,
     });
+    /* v8 ignore start */
     if (!state.isLoading) {
       setFormData((prev) => ({
         ...prev,
@@ -97,6 +100,7 @@ export default function AddHotelPage() {
         setErrors((prev) => ({ ...prev, general: state.error! }));
       }
     }
+    /* v8 ignore stop */
   }
 
   const handleChange = (

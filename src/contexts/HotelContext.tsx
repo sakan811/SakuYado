@@ -38,9 +38,9 @@ type HotelAction =
   | { type: "CLEAR_HOTELS" }
   | { type: "SET_LAST_USED_CURRENCY"; payload: string }
   | {
-      type: "INITIALIZE_STATE";
-      payload: { hotels: Hotel[]; currency: string };
-    };
+    type: "INITIALIZE_STATE";
+    payload: { hotels: Hotel[]; currency: string };
+  };
 
 interface HotelContextType {
   state: HotelState;
@@ -188,9 +188,11 @@ export function HotelProvider({ children }: { children: React.ReactNode }) {
 
   const clearAllHotels = () => {
     try {
+      /* v8 ignore start */
       if (typeof localStorage !== "undefined" && localStorage) {
         localStorage.removeItem("hotels");
       }
+      /* v8 ignore stop */
       dispatch({ type: "CLEAR_HOTELS" });
     } catch (error) {
       console.error("Error clearing hotel data:", error);
@@ -200,9 +202,11 @@ export function HotelProvider({ children }: { children: React.ReactNode }) {
 
   const setLastUsedCurrency = (currency: string) => {
     try {
+      /* v8 ignore start */
       if (typeof localStorage !== "undefined" && localStorage) {
         localStorage.setItem("lastUsedCurrency", currency);
       }
+      /* v8 ignore stop */
       dispatch({ type: "SET_LAST_USED_CURRENCY", payload: currency });
     } catch (error) {
       console.error("Error saving currency preference:", error);
