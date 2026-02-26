@@ -38,9 +38,9 @@ type HotelAction =
   | { type: "CLEAR_HOTELS" }
   | { type: "SET_LAST_USED_CURRENCY"; payload: string }
   | {
-    type: "INITIALIZE_STATE";
-    payload: { hotels: Hotel[]; currency: string };
-  };
+      type: "INITIALIZE_STATE";
+      payload: { hotels: Hotel[]; currency: string };
+    };
 
 interface HotelContextType {
   state: HotelState;

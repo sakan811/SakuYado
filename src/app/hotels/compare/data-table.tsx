@@ -1,17 +1,17 @@
 /*
  * SakuYado - A web application that helps you find the best value accommodations
  * Copyright (C) 2025  Sakan Nirattisaykul
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published
  * by the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Affero General Public License for more details.
- * 
+ *
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
@@ -68,9 +68,9 @@ export function DataTable<TData, TValue>({
                     {header.isPlaceholder
                       ? null
                       : flexRender(
-                        header.column.columnDef.header,
-                        header.getContext(),
-                      )}
+                          header.column.columnDef.header,
+                          header.getContext(),
+                        )}
                   </TableHead>
                 );
               })}
@@ -87,11 +87,12 @@ export function DataTable<TData, TValue>({
                   key={row.id}
                   data-testid="hotel-row-desktop"
                   className={`
-                    ${index === 0
-                      ? "bg-gradient-to-r from-pink-100 via-rose-100 to-pink-100 border-l-4 border-l-pink-400"
-                      : index % 2 === 0
-                        ? "bg-white/70"
-                        : "bg-pink-50/50"
+                    ${
+                      index === 0
+                        ? "bg-gradient-to-r from-pink-100 via-rose-100 to-pink-100 border-l-4 border-l-pink-400"
+                        : index % 2 === 0
+                          ? "bg-white/70"
+                          : "bg-pink-50/50"
                     }
                     hover:bg-gradient-to-r hover:from-pink-100 hover:to-rose-100 transition-all duration-300
                     ${!isLast ? "border-b border-pink-200" : "border-b-0"}
