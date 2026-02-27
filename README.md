@@ -9,7 +9,7 @@ A beautiful web application that helps you find the best value accommodations by
 ## What it does
 
 - Add hotel information (name, price, rating)
-- Automatically calculates value scores (Rating ÷ Price)
+- Automatically calculates value scores using three strategies (Balanced, Strict Budget, Quality First)
 - Ranks hotels by best value
 - Compare multiple hotels side-by-side
 
@@ -51,8 +51,3 @@ Simply visit: **<https://sakuyado.fukudev.org/>**
    ```
 
 5. Open <http://localhost:3000>
-
-## Documentation
-
-- [Features Documentation](./docs/features.md) - Detailed overview of all app features and capabilities
-- [Architecture Overview](./docs/architecture.md) - App structure and technical architecture
