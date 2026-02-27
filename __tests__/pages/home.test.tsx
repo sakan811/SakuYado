@@ -100,10 +100,17 @@ describe("Home Page", () => {
     render(<Home />);
 
     const titleElement = screen.getByText("Find the Best Value Hotels");
-    const container = titleElement.parentElement!;
-    expect(container.classList.contains("text-4xl")).toBe(true);
-    expect(container.classList.contains("sm:text-5xl")).toBe(true);
-    expect(container.classList.contains("md:text-6xl")).toBe(true);
+    // Check for refined fluid typography classes
+    expect(titleElement.classList.contains("text-[clamp(1rem,5.5vw,3.75rem)]"))
+      .toBe(true);
+    expect(titleElement.classList.contains("whitespace-nowrap")).toBe(true);
+    // Ensure it doesn't have w-full text-center which was causing issues
+    expect(titleElement.classList.contains("w-full")).toBe(false);
+
+    const subtitleElement = screen.getByText("with SakuYado");
+    expect(
+      subtitleElement.classList.contains("text-[clamp(0.875rem,4vw,1.875rem)]"),
+    ).toBe(true);
 
     // Check button container has responsive classes
     const addButton = screen.getByText("🌸 Add a Hotel");
