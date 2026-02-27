@@ -32,11 +32,43 @@ import {
   CardContent,
   CardTitle,
   CardDescription,
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
 } from "@/components";
+import { ValueCalculationMode } from "@/types/hotel";
 
 export default function CompareHotelsPage() {
-  const { state, clearAllHotels } = useHotel();
-  const { hotels, isLoading } = state;
+  const { state, clearAllHotels, setCalculationMode } = useHotel();
+  const { hotels, isLoading, calculationMode } = state;
+
+  const getCalculationInfo = (mode: ValueCalculationMode) => {
+    switch (mode) {
+      case ValueCalculationMode.STRICT_BUDGET:
+        return {
+          name: "Lowest Price Focus",
+          formula: "Rating ÷ Price",
+          description: "Ideal for budget-conscious travelers focusing on the absolute lowest price for a given rating.",
+        };
+      case ValueCalculationMode.QUALITY_FIRST:
+        return {
+          name: "Premium Comparison",
+          formula: "Rating ÷ log(Price)",
+          description: "Best for high-end hotels where small quality improvements justify larger price increases.",
+        };
+      case ValueCalculationMode.BALANCED:
+      default:
+        return {
+          name: "Top Recommendations",
+          formula: "(Rating² ÷ Price)",
+          description: "The 'Sweet Spot' - rewards higher quality significantly while keeping price in check.",
+        };
+    }
+  };
+
+  const currentInfo = getCalculationInfo(calculationMode);
 
   // Mobile Card Component
   const HotelCard = ({ hotel, index }: { hotel: Hotel; index: number }) => (
@@ -184,6 +216,32 @@ export default function CompareHotelsPage() {
           </Card>
         ) : (
           <>
+            {/* Strategy Selection */}
+            <div className="mb-6 sm:mb-8 max-w-md mx-auto">
+              <label className="block text-sm font-medium text-pink-800 mb-2 text-center">
+                Select Your Value Strategy
+              </label>
+              <Select
+                value={calculationMode}
+                onValueChange={(value) => setCalculationMode(value as ValueCalculationMode)}
+              >
+                <SelectTrigger className="bg-white border-pink-200 text-pink-800">
+                  <SelectValue placeholder="Select Strategy" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value={ValueCalculationMode.BALANCED}>
+                    🌸 Top Recommendations (Balanced)
+                  </SelectItem>
+                  <SelectItem value={ValueCalculationMode.STRICT_BUDGET}>
+                    💰 Lowest Price Focus (Strict)
+                  </SelectItem>
+                  <SelectItem value={ValueCalculationMode.QUALITY_FIRST}>
+                    ✨ Premium Comparison (Advanced)
+                  </SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
             {/* Mobile Cards View (default on mobile) */}
             <div className="block lg:hidden">
               <div className="space-y-4">
@@ -206,18 +264,19 @@ export default function CompareHotelsPage() {
                 <div className="flex items-center space-x-2 sm:space-x-3">
                   <span className="text-xl sm:text-2xl">🧮</span>
                   <CardTitle className="text-base sm:text-lg text-pink-800">
-                    Value Score Calculation
+                    Strategy: {currentInfo.name}
                   </CardTitle>
                 </div>
               </CardHeader>
               <CardContent className="pt-0">
-                <CardDescription className="text-sm sm:text-base text-pink-700">
-                  <strong className="text-pink-800">Value Score</strong> =
-                  Rating ÷ Price
-                  <span className="block sm:inline sm:ml-2 text-xs sm:text-sm">
-                    (higher score = better value for money)
-                  </span>
-                </CardDescription>
+                <div className="text-sm sm:text-base text-pink-700">
+                  <div className="mb-2">
+                    <strong className="text-pink-800">Formula:</strong> {currentInfo.formula}
+                  </div>
+                  <CardDescription className="text-pink-600 italic">
+                    {currentInfo.description}
+                  </CardDescription>
+                </div>
               </CardContent>
             </Card>
 

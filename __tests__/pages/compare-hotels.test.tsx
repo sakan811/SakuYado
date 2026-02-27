@@ -58,7 +58,7 @@ describe("CompareHotelsPage", () => {
     expect(firstDataRow.textContent).toContain("1");
 
     // Check if the best value hotel is highlighted
-    const valueScores = [7 / 50, 9 / 200, 8 / 80];
+    const valueScores = [Math.pow(7, 2) / 50, Math.pow(9, 2) / 200, Math.pow(8, 2) / 80];
     const bestValueIndex = valueScores.indexOf(Math.max(...valueScores));
     const bestHotelName = testHotels[bestValueIndex].name;
 
@@ -121,9 +121,9 @@ describe("CompareHotelsPage", () => {
     render(<CompareHotelsPage />);
 
     // Check if explanation is displayed (should be unique text)
-    expect(screen.getByText(/Value Score Calculation/i)).toBeTruthy();
+    expect(screen.getByText(/Strategy:/i)).toBeTruthy();
     expect(
-      screen.getByText(/higher score = better value for money/i),
+      screen.getByText(/rewards higher quality significantly while keeping price in check/i),
     ).toBeTruthy();
   });
 
@@ -152,9 +152,9 @@ describe("CompareHotelsPage", () => {
 
   it("correctly sorts hotels by value score in descending order", () => {
     const testHotels = [
-      { name: "Low Value", price: 200, rating: 6, currency: "USD" }, // 0.03
-      { name: "High Value", price: 50, rating: 8, currency: "USD" }, // 0.16
-      { name: "Medium Value", price: 100, rating: 7, currency: "USD" }, // 0.07
+      { name: "Low Value", price: 200, rating: 6, currency: "USD" }, // 36/200 = 0.18
+      { name: "High Value", price: 50, rating: 8, currency: "USD" }, // 64/50 = 1.28
+      { name: "Medium Value", price: 100, rating: 7, currency: "USD" }, // 49/100 = 0.49
     ];
     localStorage.setItem("hotels", JSON.stringify(testHotels));
 
@@ -299,9 +299,9 @@ describe("CompareHotelsPage", () => {
     expect(screen.getAllByText("High Price").length).toBeGreaterThan(0);
 
     // Check value score calculations work with edge cases
-    // Note: Component displays "0" for zero values and "0.01" for the calculated value
-    expect(screen.getAllByText("0").length).toBeGreaterThan(0); // 0/100 = 0 (displayed as "0")
-    expect(screen.getAllByText("0.01").length).toBeGreaterThan(0); // 10/1000 = 0.01
+    // Note: Component displays "0" for zero values and "0.1" for the calculated value
+    expect(screen.getAllByText("0").length).toBeGreaterThan(0); // 0^2/100 = 0 (displayed as "0")
+    expect(screen.getAllByText("0.1").length).toBeGreaterThan(0); // 10^2/1000 = 0.1
   });
 
   describe("localStorage Error Handling", () => {

@@ -15,6 +15,12 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+export enum ValueCalculationMode {
+  BALANCED = "balanced",
+  STRICT_BUDGET = "strict_budget",
+  QUALITY_FIRST = "quality_first",
+}
+
 export interface Hotel {
   name: string;
   price: number;

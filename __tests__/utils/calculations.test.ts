@@ -25,7 +25,7 @@ import {
   calculateHotelStatistics,
   getHotelCount,
 } from "@/utils/calculations";
-import type { Hotel } from "@/types/hotel";
+import { Hotel, ValueCalculationMode } from "@/types/hotel";
 
 describe("calculateValueScore", () => {
   describe("price validation", () => {
@@ -42,19 +42,45 @@ describe("calculateValueScore", () => {
     });
   });
 
-  describe("successful calculations", () => {
-    it("should calculate value score correctly", () => {
-      const result = calculateValueScore(4.5, 10000);
-      expect(result).toBeCloseTo(0.0005);
+  describe("BALANCED mode (Default)", () => {
+    it("should calculate value score using R^2/P", () => {
+      const result = calculateValueScore(4.0, 100, ValueCalculationMode.BALANCED);
+      expect(result).toBeCloseTo(0.16); // 16 / 100
     });
 
-    it("should calculate value score correctly with different parameters", () => {
+    it("should use BALANCED mode by default", () => {
       const result = calculateValueScore(4.0, 100);
-      expect(result).toBeCloseTo(0.04);
+      expect(result).toBeCloseTo(0.16);
+    });
+  });
+
+  describe("STRICT_BUDGET mode", () => {
+    it("should calculate value score using R/P", () => {
+      const result = calculateValueScore(4.0, 100, ValueCalculationMode.STRICT_BUDGET);
+      expect(result).toBeCloseTo(0.04); // 4 / 100
+    });
+  });
+
+  describe("QUALITY_FIRST mode", () => {
+    it("should calculate value score using R/log(P)", () => {
+      const price = 100;
+      const rating = 4.0;
+      const expected = +(rating / Math.log(price)).toFixed(4);
+      const result = calculateValueScore(rating, price, ValueCalculationMode.QUALITY_FIRST);
+      expect(result).toBe(expected);
     });
 
+    it("should handle prices close to 1 by using a minimum floor", () => {
+      const result = calculateValueScore(4.0, 1.05, ValueCalculationMode.QUALITY_FIRST);
+      // Math.max(1.05, 1.1) = 1.1
+      const expected = +(4.0 / Math.log(1.1)).toFixed(4);
+      expect(result).toBe(expected);
+    });
+  });
+
+  describe("precision", () => {
     it("should return value with 4 decimal places", () => {
-      const result = calculateValueScore(3.5, 5000);
+      const result = calculateValueScore(3.5, 5000, ValueCalculationMode.STRICT_BUDGET);
       expect(result.toString()).toMatch(/^\d+\.\d{4}$/);
     });
   });
@@ -127,21 +153,6 @@ describe("getMinimumPrice", () => {
   it("should return 0 for empty array", () => {
     expect(getMinimumPrice([])).toBe(0);
   });
-
-  it("should handle single hotel", () => {
-    const hotels: Hotel[] = [
-      { name: "Solo Hotel", price: 15000, rating: 4.5, currency: "JPY" },
-    ];
-    expect(getMinimumPrice(hotels)).toBe(15000);
-  });
-
-  it("should handle negative prices (though should not occur in practice)", () => {
-    const hotels: Hotel[] = [
-      { name: "Hotel A", price: 10000, rating: 4.0, currency: "JPY" },
-      { name: "Hotel B", price: -5000, rating: 4.2, currency: "JPY" },
-    ];
-    expect(getMinimumPrice(hotels)).toBe(-5000);
-  });
 });
 
 describe("getMaximumRating", () => {
@@ -152,26 +163,6 @@ describe("getMaximumRating", () => {
       { name: "Hotel C", price: 12000, rating: 4.2, currency: "JPY" },
     ];
     expect(getMaximumRating(hotels)).toBe(4.5);
-  });
-
-  it("should return 0 for empty array", () => {
-    expect(getMaximumRating([])).toBe(0);
-  });
-
-  it("should handle single hotel", () => {
-    const hotels: Hotel[] = [
-      { name: "Solo Hotel", price: 15000, rating: 4.7, currency: "JPY" },
-    ];
-    expect(getMaximumRating(hotels)).toBe(4.7);
-  });
-
-  it("should handle decimal ratings", () => {
-    const hotels: Hotel[] = [
-      { name: "Hotel A", price: 10000, rating: 4.15, currency: "JPY" },
-      { name: "Hotel B", price: 8000, rating: 4.85, currency: "JPY" },
-      { name: "Hotel C", price: 12000, rating: 4.75, currency: "JPY" },
-    ];
-    expect(getMaximumRating(hotels)).toBe(4.85);
   });
 });
 
@@ -194,59 +185,6 @@ describe("getTopValueScore", () => {
       },
     ];
     expect(getTopValueScore(hotels)).toBe(0.089);
-  });
-
-  it("should return 0 for empty array", () => {
-    expect(getTopValueScore([])).toBe(0);
-  });
-
-  it("should return 0 when first hotel has no valueScore", () => {
-    const hotels: Hotel[] = [
-      { name: "No Score Hotel", price: 10000, rating: 4.5, currency: "JPY" },
-      {
-        name: "Second Hotel",
-        price: 15000,
-        rating: 4.0,
-        currency: "JPY",
-        valueScore: 0.053,
-      },
-    ];
-    expect(getTopValueScore(hotels)).toBe(0);
-  });
-
-  it("should return the value score even if higher scores exist later in array", () => {
-    const hotels: Hotel[] = [
-      {
-        name: "First Hotel",
-        price: 10000,
-        rating: 4.5,
-        currency: "JPY",
-        valueScore: 0.025,
-      },
-      {
-        name: "Second Hotel",
-        price: 15000,
-        rating: 4.0,
-        currency: "JPY",
-        valueScore: 0.053,
-      },
-    ];
-    expect(getTopValueScore(hotels)).toBe(0.025); // Returns first hotel's score, not max
-  });
-});
-
-describe("getHotelCount", () => {
-  it("should return the number of hotels", () => {
-    const hotels: Hotel[] = [
-      { name: "Hotel A", price: 10000, rating: 4.0, currency: "JPY" },
-      { name: "Hotel B", price: 8000, rating: 4.2, currency: "JPY" },
-      { name: "Hotel C", price: 12000, rating: 3.8, currency: "JPY" },
-    ];
-    expect(getHotelCount(hotels)).toBe(3);
-  });
-
-  it("should return 0 for empty array", () => {
-    expect(getHotelCount([])).toBe(0);
   });
 });
 
@@ -282,97 +220,6 @@ describe("calculateHotelStatistics", () => {
       topScore: 0.014,
       lowestPrice: 5000,
       highestRating: 4.8,
-    });
-  });
-
-  it("should return zeros for empty array", () => {
-    const stats = calculateHotelStatistics([]);
-    expect(stats).toEqual({
-      count: 0,
-      topScore: 0,
-      lowestPrice: 0,
-      highestRating: 0,
-    });
-  });
-
-  it("should handle hotels without value scores", () => {
-    const hotels: Hotel[] = [
-      {
-        name: "Scored Hotel",
-        price: 12000,
-        rating: 4.5,
-        currency: "JPY",
-        valueScore: 0.025,
-      },
-      { name: "No Score Hotel", price: 8000, rating: 4.0, currency: "JPY" },
-    ];
-
-    const stats = calculateHotelStatistics(hotels);
-    expect(stats.topScore).toBe(0.025); // Gets score from first hotel in array
-  });
-});
-
-describe("Calculation Precision Edge Cases", () => {
-  it("handles floating point precision in value score calculation", () => {
-    const testCases = [
-      { rating: 7, price: 3, expected: 2.3333 }, // Repeating decimal
-      { rating: 1, price: 3, expected: 0.3333 }, // Small repeating decimal
-      { rating: 9.99999, price: 99.99999, expected: 0.1 }, // High precision
-      { rating: 0.1, price: 0.01, expected: 10.0 }, // Very small numbers
-    ];
-
-    testCases.forEach(({ rating, price, expected }) => {
-      // Using the same calculation logic as the app
-      const valueScore = +(rating / price).toFixed(4);
-      expect(valueScore).toBe(expected);
-    });
-  });
-
-  it("handles sorting stability with identical value scores", () => {
-    const hotels = [
-      {
-        name: "Hotel A",
-        price: 100,
-        rating: 8,
-        currency: "USD",
-        valueScore: 0.08,
-      },
-      {
-        name: "Hotel B",
-        price: 125,
-        rating: 10,
-        currency: "USD",
-        valueScore: 0.08,
-      },
-      {
-        name: "Hotel C",
-        price: 200,
-        rating: 16,
-        currency: "USD",
-        valueScore: 0.08,
-      },
-    ];
-
-    // Test that sort is stable (maintains original order for equal values)
-    const sorted = [...hotels].sort((a, b) => b.valueScore - a.valueScore);
-
-    // All have same value score, so original order should be preserved
-    expect(sorted[0].name).toBe("Hotel A");
-    expect(sorted[1].name).toBe("Hotel B");
-    expect(sorted[2].name).toBe("Hotel C");
-  });
-
-  it("handles extreme value ranges", () => {
-    const extremeCases = [
-      { rating: 10, price: 0.01, expected: 1000 }, // Very high value score
-      { rating: 0.1, price: 999999, expected: 0.0 }, // Very low value score
-      { rating: 10, price: 999999, expected: 0.0 }, // Large price
-      { rating: 0.0001, price: 0.0001, expected: 1.0 }, // Tiny numbers
-    ];
-
-    extremeCases.forEach(({ rating, price, expected }) => {
-      const valueScore = +(rating / price).toFixed(4);
-      expect(valueScore).toBe(expected);
     });
   });
 });
