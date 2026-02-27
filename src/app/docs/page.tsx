@@ -63,7 +63,7 @@ export default function DocsIndexPage() {
         <p className="text-lg text-gray-600 leading-relaxed max-w-2xl">
           SakuYado is a hotel value comparison app that scores hotels by{" "}
           <code className="bg-pink-50 text-pink-700 px-1.5 py-0.5 rounded font-mono text-sm">
-            Rating ÷ Price
+            Rating² ÷ Price
           </code>{" "}
           — helping you stretch your travel budget further. These docs cover
           everything from user-facing features to internal architecture.
@@ -73,7 +73,7 @@ export default function DocsIndexPage() {
       {/* Quick-start formula card */}
       <Card className="bg-gradient-to-br from-pink-50 to-rose-50 border-pink-200 rounded-2xl p-6 mb-12 shadow-sm">
         <p className="text-sm font-semibold text-pink-600 uppercase tracking-widest mb-3">
-          The Core Formula
+          The Balanced Formula (Default)
         </p>
         <div className="flex items-center gap-4 flex-wrap">
           <span className="text-2xl font-bold text-gray-800">
@@ -81,7 +81,7 @@ export default function DocsIndexPage() {
           </span>
           <div className="flex items-center gap-2 text-xl font-bold">
             <span className="bg-white border border-pink-300 text-pink-700 px-4 py-1.5 rounded-xl shadow-sm">
-              Rating
+              Rating²
             </span>
             <span className="text-gray-500">÷</span>
             <span className="bg-white border border-rose-300 text-rose-700 px-4 py-1.5 rounded-xl shadow-sm">
@@ -91,7 +91,7 @@ export default function DocsIndexPage() {
         </div>
         <p className="text-sm text-gray-500 mt-3">
           Higher score = better value. Hotels are automatically ranked by this
-          score.
+          score. Three scoring strategies (Balanced, Strict Budget, Quality First) are available.
         </p>
       </Card>
 

@@ -58,9 +58,19 @@ export default function FeaturesPage() {
             <ul className="space-y-3">
               {[
                 {
-                  label: "Review/Price Score",
-                  desc: "Automatically calculates value scores using the formula",
+                  label: "Balanced (Default)",
+                  desc: "Focuses on high-quality recommendations",
+                  code: "Rating² ÷ Price",
+                },
+                {
+                  label: "Strict Budget",
+                  desc: "Focuses on absolute price for a given rating",
                   code: "Rating ÷ Price",
+                },
+                {
+                  label: "Quality First",
+                  desc: "Best for premium hotel comparisons",
+                  code: "Rating ÷ log(Price)",
                 },
                 {
                   label: "Smart Ranking",
