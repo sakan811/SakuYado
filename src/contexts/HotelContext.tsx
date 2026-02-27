@@ -18,7 +18,7 @@
 "use client";
 
 import React, { createContext, useContext, useReducer, useEffect } from "react";
-import { Hotel } from "@/types/hotel";
+import { Hotel, ValueCalculationMode } from "@/types/hotel";
 import {
   calculateValueScore,
   sortHotelsByValueScore,
@@ -26,6 +26,7 @@ import {
 
 interface HotelState {
   hotels: Hotel[];
+  calculationMode: ValueCalculationMode;
   isLoading: boolean;
   error: string | null;
 }
@@ -35,16 +36,22 @@ type HotelAction =
   | { type: "SET_ERROR"; payload: string | null }
   | { type: "ADD_HOTEL"; payload: Omit<Hotel, "valueScore"> }
   | { type: "CLEAR_HOTELS" }
-  | { type: "INITIALIZE_STATE"; payload: { hotels: Hotel[] } };
+  | {
+      type: "INITIALIZE_STATE";
+      payload: { hotels: Hotel[]; calculationMode: ValueCalculationMode };
+    }
+  | { type: "SET_CALCULATION_MODE"; payload: ValueCalculationMode };
 
 interface HotelContextType {
   state: HotelState;
   addHotel: (hotel: Omit<Hotel, "valueScore">) => Promise<void>;
   clearAllHotels: () => void;
+  setCalculationMode: (mode: ValueCalculationMode) => void;
 }
 
 const initialState: HotelState = {
   hotels: [],
+  calculationMode: ValueCalculationMode.BALANCED,
   isLoading: true,
   error: null,
 };
@@ -61,6 +68,7 @@ function hotelReducer(state: HotelState, action: HotelAction): HotelState {
         valueScore: calculateValueScore(
           action.payload.rating,
           action.payload.price,
+          state.calculationMode,
         ),
       };
       const updatedHotels = sortHotelsByValueScore([...state.hotels, newHotel]);
@@ -72,8 +80,23 @@ function hotelReducer(state: HotelState, action: HotelAction): HotelState {
       return {
         ...state,
         hotels: action.payload.hotels,
+        calculationMode: action.payload.calculationMode,
         isLoading: false,
       };
+    case "SET_CALCULATION_MODE": {
+      const newMode = action.payload;
+      const updatedHotels = sortHotelsByValueScore(
+        state.hotels.map((hotel) => ({
+          ...hotel,
+          valueScore: calculateValueScore(hotel.rating, hotel.price, newMode),
+        })),
+      );
+      return {
+        ...state,
+        calculationMode: newMode,
+        hotels: updatedHotels,
+      };
+    }
   }
 }
 
@@ -92,6 +115,7 @@ export function HotelProvider({ children }: { children: React.ReactNode }) {
         }
 
         const savedHotels = JSON.parse(localStorage.getItem("hotels") || "[]");
+        const savedMode = (localStorage.getItem("calculationMode") as ValueCalculationMode) || ValueCalculationMode.BALANCED;
 
         // Filter out invalid hotels
         const validHotels = savedHotels.filter((hotel: unknown) => {
@@ -113,13 +137,13 @@ export function HotelProvider({ children }: { children: React.ReactNode }) {
         const processedHotels = sortHotelsByValueScore(
           validHotels.map((hotel: Hotel) => ({
             ...hotel,
-            valueScore: calculateValueScore(hotel.rating, hotel.price),
+            valueScore: calculateValueScore(hotel.rating, hotel.price, savedMode),
           })),
         );
 
         dispatch({
           type: "INITIALIZE_STATE",
-          payload: { hotels: processedHotels },
+          payload: { hotels: processedHotels, calculationMode: savedMode },
         });
       } catch (error) {
         console.error("Error loading data from localStorage:", error);
@@ -177,12 +201,25 @@ export function HotelProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
+  const setCalculationMode = (mode: ValueCalculationMode) => {
+    try {
+      if (typeof localStorage !== "undefined" && localStorage) {
+        localStorage.setItem("calculationMode", mode);
+      }
+      dispatch({ type: "SET_CALCULATION_MODE", payload: mode });
+    } catch (error) {
+      console.error("Error saving calculation mode:", error);
+      dispatch({ type: "SET_ERROR", payload: "Failed to save calculation mode" });
+    }
+  };
+
   return (
     <HotelContext.Provider
       value={{
         state,
         addHotel,
         clearAllHotels,
+        setCalculationMode,
       }}
     >
       {children}

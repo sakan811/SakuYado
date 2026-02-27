@@ -231,7 +231,7 @@ describe("Navigation Flow Integration", () => {
     }
 
     // Test that value scores are displayed - use getAllByText for duplicates
-    const valueScoreElements = screen.getAllByText("0.0875");
+    const valueScoreElements = screen.getAllByText("0.6125");
     expect(valueScoreElements.length).toBeGreaterThan(0);
 
     // Test navigation to add more hotels

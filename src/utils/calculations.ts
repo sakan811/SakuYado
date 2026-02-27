@@ -15,14 +15,33 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Hotel } from "@/types/hotel";
+import { Hotel, ValueCalculationMode } from "@/types/hotel";
 
-export function calculateValueScore(rating: number, price: number): number {
+export function calculateValueScore(
+  rating: number,
+  price: number,
+  mode: ValueCalculationMode = ValueCalculationMode.BALANCED,
+): number {
   if (price <= 0) {
     throw new Error("Price must be greater than 0");
   }
 
-  return +(rating / price).toFixed(4);
+  let score: number;
+  switch (mode) {
+    case ValueCalculationMode.STRICT_BUDGET:
+      score = rating / price;
+      break;
+    case ValueCalculationMode.QUALITY_FIRST:
+      // Use natural logarithm, ensuring price is at least 1.1 to avoid log(1) = 0 or negative values
+      score = rating / Math.log(Math.max(price, 1.1));
+      break;
+    case ValueCalculationMode.BALANCED:
+    default:
+      score = Math.pow(rating, 2) / price;
+      break;
+  }
+
+  return +score.toFixed(4);
 }
 
 export function sortHotelsByValueScore(hotels: Hotel[]): Hotel[] {
