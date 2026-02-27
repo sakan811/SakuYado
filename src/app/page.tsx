@@ -23,10 +23,10 @@ export default function ResponsiveHomePage() {
   return (
     <div className="space-y-6 sm:space-y-8">
       {/* Hero and Buttons Container */}
-      <div className="w-max max-w-full mx-auto px-4 space-y-6 sm:space-y-8 overflow-x-hidden">
+      <div className="w-full max-w-4xl mx-auto px-4 space-y-6 sm:space-y-8 overflow-x-hidden">
         {/* Hero Section */}
         <div className="w-full">
-          <Card className="relative bg-gradient-to-br from-pink-500 via-rose-400 to-pink-600 text-white rounded-2xl overflow-hidden shadow-xl border-0">
+          <Card className="relative bg-gradient-to-br from-pink-500 via-rose-400 to-pink-600 text-white rounded-2xl overflow-hidden shadow-xl border-0 items-center justify-center">
             {/* Decorative elements */}
             <div className="absolute inset-0 bg-gradient-to-r from-pink-500/90 to-rose-500/90 z-0"></div>
             <div className="absolute top-2 right-2 text-3xl opacity-20">🌸</div>
@@ -34,19 +34,19 @@ export default function ResponsiveHomePage() {
               🌸
             </div>
 
-            <CardHeader className="relative z-10 text-center pt-12 pb-10 px-6 sm:px-12">
-              <div className="mb-4">
+            <CardHeader className="relative z-10 pt-12 pb-10 px-4 sm:px-8 md:px-12 w-full flex flex-col items-center">
+              <div className="mb-4 flex justify-center">
                 <span className="text-4xl sm:text-5xl md:text-6xl">🌸</span>
               </div>
-              <CardTitle className="text-4xl sm:text-5xl md:text-6xl font-bold text-white mb-2 leading-tight">
-                <span className="block whitespace-nowrap">
+              <CardTitle className="font-bold text-white mb-2 leading-tight flex flex-col items-center">
+                <span className="block whitespace-nowrap text-[clamp(1rem,5.5vw,3.75rem)]">
                   Find the Best Value Hotels
                 </span>
-                <span className="block text-2xl sm:text-3xl text-pink-100 mt-2">
+                <span className="block text-pink-100 mt-2 text-[clamp(0.875rem,4vw,1.875rem)]">
                   with SakuYado
                 </span>
               </CardTitle>
-              <CardDescription className="text-lg sm:text-xl text-pink-50 leading-relaxed max-w-lg mx-auto mt-4">
+              <CardDescription className="text-lg sm:text-xl text-pink-50 leading-relaxed max-w-lg mx-auto mt-4 text-center">
                 Compare hotels based on review-per-price ratio to get the most
                 value for your money
               </CardDescription>
