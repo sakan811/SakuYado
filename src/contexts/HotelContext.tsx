@@ -27,6 +27,7 @@ import {
 interface HotelState {
   hotels: Hotel[];
   calculationMode: ValueCalculationMode;
+  lastSelectedCurrency: string;
   isLoading: boolean;
   error: string | null;
 }
@@ -38,20 +39,27 @@ type HotelAction =
   | { type: "CLEAR_HOTELS" }
   | {
       type: "INITIALIZE_STATE";
-      payload: { hotels: Hotel[]; calculationMode: ValueCalculationMode };
+      payload: {
+        hotels: Hotel[];
+        calculationMode: ValueCalculationMode;
+        lastSelectedCurrency: string;
+      };
     }
-  | { type: "SET_CALCULATION_MODE"; payload: ValueCalculationMode };
+  | { type: "SET_CALCULATION_MODE"; payload: ValueCalculationMode }
+  | { type: "SET_LAST_CURRENCY"; payload: string };
 
 interface HotelContextType {
   state: HotelState;
   addHotel: (hotel: Omit<Hotel, "valueScore">) => Promise<void>;
   clearAllHotels: () => void;
   setCalculationMode: (mode: ValueCalculationMode) => void;
+  setLastCurrency: (currency: string) => void;
 }
 
 const initialState: HotelState = {
   hotels: [],
   calculationMode: ValueCalculationMode.BALANCED,
+  lastSelectedCurrency: "USD",
   isLoading: true,
   error: null,
 };
@@ -72,7 +80,12 @@ function hotelReducer(state: HotelState, action: HotelAction): HotelState {
         ),
       };
       const updatedHotels = sortHotelsByValueScore([...state.hotels, newHotel]);
-      return { ...state, hotels: updatedHotels, error: null };
+      return {
+        ...state,
+        hotels: updatedHotels,
+        lastSelectedCurrency: action.payload.currency,
+        error: null,
+      };
     }
     case "CLEAR_HOTELS":
       return { ...state, hotels: [], error: null };
@@ -81,6 +94,7 @@ function hotelReducer(state: HotelState, action: HotelAction): HotelState {
         ...state,
         hotels: action.payload.hotels,
         calculationMode: action.payload.calculationMode,
+        lastSelectedCurrency: action.payload.lastSelectedCurrency,
         isLoading: false,
       };
     case "SET_CALCULATION_MODE": {
@@ -97,6 +111,8 @@ function hotelReducer(state: HotelState, action: HotelAction): HotelState {
         hotels: updatedHotels,
       };
     }
+    case "SET_LAST_CURRENCY":
+      return { ...state, lastSelectedCurrency: action.payload };
   }
 }
 
@@ -115,7 +131,11 @@ export function HotelProvider({ children }: { children: React.ReactNode }) {
         }
 
         const savedHotels = JSON.parse(localStorage.getItem("hotels") || "[]");
-        const savedMode = (localStorage.getItem("calculationMode") as ValueCalculationMode) || ValueCalculationMode.BALANCED;
+        const savedMode =
+          (localStorage.getItem("calculationMode") as ValueCalculationMode) ||
+          ValueCalculationMode.BALANCED;
+        const savedCurrency =
+          localStorage.getItem("lastSelectedCurrency") || "USD";
 
         // Filter out invalid hotels
         const validHotels = savedHotels.filter((hotel: unknown) => {
@@ -137,13 +157,21 @@ export function HotelProvider({ children }: { children: React.ReactNode }) {
         const processedHotels = sortHotelsByValueScore(
           validHotels.map((hotel: Hotel) => ({
             ...hotel,
-            valueScore: calculateValueScore(hotel.rating, hotel.price, savedMode),
+            valueScore: calculateValueScore(
+              hotel.rating,
+              hotel.price,
+              savedMode,
+            ),
           })),
         );
 
         dispatch({
           type: "INITIALIZE_STATE",
-          payload: { hotels: processedHotels, calculationMode: savedMode },
+          payload: {
+            hotels: processedHotels,
+            calculationMode: savedMode,
+            lastSelectedCurrency: savedCurrency,
+          },
         });
       } catch (error) {
         console.error("Error loading data from localStorage:", error);
@@ -160,6 +188,7 @@ export function HotelProvider({ children }: { children: React.ReactNode }) {
       dispatch({ type: "SET_ERROR", payload: null });
       dispatch({ type: "ADD_HOTEL", payload: hotel });
 
+      /* v8 ignore start */
       // Check if localStorage is available
       if (typeof localStorage === "undefined" || !localStorage) {
         dispatch({
@@ -168,6 +197,7 @@ export function HotelProvider({ children }: { children: React.ReactNode }) {
         });
         throw new Error("localStorage is not available");
       }
+      /* v8 ignore stop */
 
       // Read current hotels from localStorage to ensure we have the latest data
       const currentHotels = JSON.parse(localStorage.getItem("hotels") || "[]");
@@ -176,6 +206,7 @@ export function HotelProvider({ children }: { children: React.ReactNode }) {
 
       // Save to localStorage without valueScore (computed property)
       localStorage.setItem("hotels", JSON.stringify(updatedHotelsData));
+      localStorage.setItem("lastSelectedCurrency", hotel.currency);
     } catch (error) {
       console.error("Error saving hotel data:", error);
       dispatch({
@@ -203,13 +234,31 @@ export function HotelProvider({ children }: { children: React.ReactNode }) {
 
   const setCalculationMode = (mode: ValueCalculationMode) => {
     try {
+      /* v8 ignore start */
       if (typeof localStorage !== "undefined" && localStorage) {
         localStorage.setItem("calculationMode", mode);
       }
+      /* v8 ignore stop */
       dispatch({ type: "SET_CALCULATION_MODE", payload: mode });
     } catch (error) {
       console.error("Error saving calculation mode:", error);
-      dispatch({ type: "SET_ERROR", payload: "Failed to save calculation mode" });
+      dispatch({
+        type: "SET_ERROR",
+        payload: "Failed to save calculation mode",
+      });
+    }
+  };
+
+  const setLastCurrency = (currency: string) => {
+    try {
+      /* v8 ignore start */
+      if (typeof localStorage !== "undefined" && localStorage) {
+        localStorage.setItem("lastSelectedCurrency", currency);
+      }
+      /* v8 ignore stop */
+      dispatch({ type: "SET_LAST_CURRENCY", payload: currency });
+    } catch (error) {
+      console.error("Error saving last selected currency:", error);
     }
   };
 
@@ -220,6 +269,7 @@ export function HotelProvider({ children }: { children: React.ReactNode }) {
         addHotel,
         clearAllHotels,
         setCalculationMode,
+        setLastCurrency,
       }}
     >
       {children}

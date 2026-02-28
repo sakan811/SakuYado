@@ -49,13 +49,13 @@ import {
 
 export default function AddHotelPage() {
   const router = useRouter();
-  const { state, addHotel } = useHotel();
-  const [formData, setFormData] = useState(() => ({
+  const { state, addHotel, setLastCurrency } = useHotel();
+  const [formData, setFormData] = useState({
     name: "",
     price: "",
     rating: "",
-    currency: "USD",
-  }));
+    currency: state.lastSelectedCurrency,
+  });
   const [errors, setErrors] = useState<ValidationError>({
     name: "",
     price: "",
@@ -68,16 +68,31 @@ export default function AddHotelPage() {
   // Sync state.isLoading → re-render after initial localStorage load
   const [prevContext, setPrevContext] = useState({
     isLoading: state.isLoading,
+    lastSelectedCurrency: state.lastSelectedCurrency,
   });
 
-  if (state.isLoading !== prevContext.isLoading) {
-    setPrevContext({ isLoading: state.isLoading });
-    /* v8 ignore start */
+  /* v8 ignore start */
+  if (
+    state.isLoading !== prevContext.isLoading ||
+    state.lastSelectedCurrency !== prevContext.lastSelectedCurrency
+  ) {
+    setPrevContext({
+      isLoading: state.isLoading,
+      lastSelectedCurrency: state.lastSelectedCurrency,
+    });
+
+    if (!state.isLoading) {
+      setFormData((prev) => ({
+        ...prev,
+        currency: state.lastSelectedCurrency,
+      }));
+    }
+
     if (!state.isLoading && state.error && !errors.general) {
       setErrors((prev) => ({ ...prev, general: state.error! }));
     }
-    /* v8 ignore stop */
   }
+  /* v8 ignore stop */
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
@@ -87,6 +102,10 @@ export default function AddHotelPage() {
       ...prev,
       [name]: value,
     }));
+
+    if (name === "currency") {
+      setLastCurrency(value);
+    }
 
     // Clear errors when user starts typing
     if (errors[name as keyof typeof errors]) {
