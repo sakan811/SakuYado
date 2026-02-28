@@ -91,7 +91,8 @@ export default function DocsIndexPage() {
         </div>
         <p className="text-sm text-gray-500 mt-3">
           Higher score = better value. Hotels are automatically ranked by this
-          score. Three scoring strategies (Balanced, Strict Budget, Quality First) are available.
+          score. Three scoring strategies (Balanced, Strict Budget, Quality
+          First) are available.
         </p>
       </Card>
 
