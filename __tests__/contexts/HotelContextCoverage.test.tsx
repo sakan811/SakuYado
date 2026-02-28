@@ -175,7 +175,7 @@ describe("HotelContext Coverage", () => {
     await act(async () => {
       try {
         await result.current.addHotel(newHotel);
-      } catch (e) {
+      } catch {
         // Expected error
       }
     });
