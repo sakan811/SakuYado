@@ -105,12 +105,17 @@ describe("HotelContext", () => {
       });
 
       expect(screen.getByTestId("hotels-count")).toHaveTextContent("0");
-      expect(screen.getByTestId("calculation-mode")).toHaveTextContent(ValueCalculationMode.BALANCED);
+      expect(screen.getByTestId("calculation-mode")).toHaveTextContent(
+        ValueCalculationMode.BALANCED,
+      );
     });
 
     it("should handle localStorage data during initialization", async () => {
       localStorage.setItem("hotels", JSON.stringify(mockHotels));
-      localStorage.setItem("calculationMode", ValueCalculationMode.STRICT_BUDGET);
+      localStorage.setItem(
+        "calculationMode",
+        ValueCalculationMode.STRICT_BUDGET,
+      );
 
       renderWithProvider();
 
@@ -119,12 +124,19 @@ describe("HotelContext", () => {
       });
 
       expect(screen.getByTestId("hotels-count")).toHaveTextContent("2");
-      expect(screen.getByTestId("calculation-mode")).toHaveTextContent(ValueCalculationMode.STRICT_BUDGET);
+      expect(screen.getByTestId("calculation-mode")).toHaveTextContent(
+        ValueCalculationMode.STRICT_BUDGET,
+      );
     });
 
     it("should change calculation mode and update scores", async () => {
-      localStorage.setItem("hotels", JSON.stringify([{ name: "Hotel A", price: 100, rating: 8, currency: "USD" }]));
-      
+      localStorage.setItem(
+        "hotels",
+        JSON.stringify([
+          { name: "Hotel A", price: 100, rating: 8, currency: "USD" },
+        ]),
+      );
+
       renderWithProvider();
 
       await waitFor(() => {
@@ -136,10 +148,15 @@ describe("HotelContext", () => {
       screen.getByTestId("set-mode-strict").click();
 
       await waitFor(() => {
-        expect(screen.getByTestId("calculation-mode")).toHaveTextContent(ValueCalculationMode.STRICT_BUDGET);
+        expect(screen.getByTestId("calculation-mode")).toHaveTextContent(
+          ValueCalculationMode.STRICT_BUDGET,
+        );
       });
 
-      expect(localStorage.setItem).toHaveBeenCalledWith("calculationMode", ValueCalculationMode.STRICT_BUDGET);
+      expect(localStorage.setItem).toHaveBeenCalledWith(
+        "calculationMode",
+        ValueCalculationMode.STRICT_BUDGET,
+      );
     });
   });
 

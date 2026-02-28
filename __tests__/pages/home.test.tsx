@@ -101,8 +101,9 @@ describe("Home Page", () => {
 
     const titleElement = screen.getByText("Find the Best Value Hotels");
     // Check for refined fluid typography classes
-    expect(titleElement.classList.contains("text-[clamp(1rem,5.5vw,3.75rem)]"))
-      .toBe(true);
+    expect(
+      titleElement.classList.contains("text-[clamp(1rem,5.5vw,3.75rem)]"),
+    ).toBe(true);
     expect(titleElement.classList.contains("whitespace-nowrap")).toBe(true);
     // Ensure it doesn't have w-full text-center which was causing issues
     expect(titleElement.classList.contains("w-full")).toBe(false);

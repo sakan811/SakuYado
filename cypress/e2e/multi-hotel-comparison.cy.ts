@@ -64,7 +64,6 @@ describe("Multi-Hotel Comparison", () => {
         // Highest rating
         cy.get("body").should("contain", "9.0");
       });
-
     });
   });
 });

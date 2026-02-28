@@ -44,7 +44,11 @@ describe("calculateValueScore", () => {
 
   describe("BALANCED mode (Default)", () => {
     it("should calculate value score using R^2/P", () => {
-      const result = calculateValueScore(4.0, 100, ValueCalculationMode.BALANCED);
+      const result = calculateValueScore(
+        4.0,
+        100,
+        ValueCalculationMode.BALANCED,
+      );
       expect(result).toBeCloseTo(0.16); // 16 / 100
     });
 
@@ -56,7 +60,11 @@ describe("calculateValueScore", () => {
 
   describe("STRICT_BUDGET mode", () => {
     it("should calculate value score using R/P", () => {
-      const result = calculateValueScore(4.0, 100, ValueCalculationMode.STRICT_BUDGET);
+      const result = calculateValueScore(
+        4.0,
+        100,
+        ValueCalculationMode.STRICT_BUDGET,
+      );
       expect(result).toBeCloseTo(0.04); // 4 / 100
     });
   });
@@ -66,12 +74,20 @@ describe("calculateValueScore", () => {
       const price = 100;
       const rating = 4.0;
       const expected = +(rating / Math.log(price)).toFixed(4);
-      const result = calculateValueScore(rating, price, ValueCalculationMode.QUALITY_FIRST);
+      const result = calculateValueScore(
+        rating,
+        price,
+        ValueCalculationMode.QUALITY_FIRST,
+      );
       expect(result).toBe(expected);
     });
 
     it("should handle prices close to 1 by using a minimum floor", () => {
-      const result = calculateValueScore(4.0, 1.05, ValueCalculationMode.QUALITY_FIRST);
+      const result = calculateValueScore(
+        4.0,
+        1.05,
+        ValueCalculationMode.QUALITY_FIRST,
+      );
       // Math.max(1.05, 1.1) = 1.1
       const expected = +(4.0 / Math.log(1.1)).toFixed(4);
       expect(result).toBe(expected);
@@ -80,7 +96,11 @@ describe("calculateValueScore", () => {
 
   describe("precision", () => {
     it("should return value with 4 decimal places", () => {
-      const result = calculateValueScore(3.5, 5000, ValueCalculationMode.STRICT_BUDGET);
+      const result = calculateValueScore(
+        3.5,
+        5000,
+        ValueCalculationMode.STRICT_BUDGET,
+      );
       expect(result.toString()).toMatch(/^\d+\.\d{4}$/);
     });
   });
@@ -164,6 +184,10 @@ describe("getMaximumRating", () => {
     ];
     expect(getMaximumRating(hotels)).toBe(4.5);
   });
+
+  it("should return 0 for empty array", () => {
+    expect(getMaximumRating([])).toBe(0);
+  });
 });
 
 describe("getTopValueScore", () => {
@@ -185,6 +209,17 @@ describe("getTopValueScore", () => {
       },
     ];
     expect(getTopValueScore(hotels)).toBe(0.089);
+  });
+
+  it("should return 0 for empty array", () => {
+    expect(getTopValueScore([])).toBe(0);
+  });
+
+  it("should handle hotel without valueScore", () => {
+    const hotels: Hotel[] = [
+      { name: "No Score", price: 10000, rating: 4.5, currency: "JPY" },
+    ];
+    expect(getTopValueScore(hotels)).toBe(0);
   });
 });
 
