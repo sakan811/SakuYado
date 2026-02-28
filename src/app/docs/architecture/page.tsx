@@ -144,13 +144,13 @@ export default function ArchitecturePage() {
     Src --> Types[types/ : TypeScript Defs]
     Src --> Utils[utils/ : Functions]
 
-    App --> Pages(Pages & API Routes)
+    App --> Pages(Pages & Metadata)
     Components --> RootComp(Mermaid Diagram Component)
     Components --> UI(ui/ : Base generic elements)
     Constants --> Currency(Currencies List)
     Contexts --> HotelContext(HotelContext & useReducer)
     Types --> HotelType(Hotel Interface)
-    Utils --> Calcs(Scoring & formatting helpers)`}
+    Utils --> Calcs(Scoring, validation & formatting)`}
           />
         </Card>
       </section>

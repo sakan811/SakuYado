@@ -70,7 +70,7 @@ export default function FeaturesPage() {
                 {
                   label: "Quality First",
                   desc: "Best for premium hotel comparisons",
-                  code: "Rating ÷ log(Price)",
+                  code: "Rating ÷ ln(Price)",
                 },
                 {
                   label: "Smart Ranking",
