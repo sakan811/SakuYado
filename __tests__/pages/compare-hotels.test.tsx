@@ -58,7 +58,11 @@ describe("CompareHotelsPage", () => {
     expect(firstDataRow.textContent).toContain("1");
 
     // Check if the best value hotel is highlighted
-    const valueScores = [Math.pow(7, 2) / 50, Math.pow(9, 2) / 200, Math.pow(8, 2) / 80];
+    const valueScores = [
+      Math.pow(7, 2) / 50,
+      Math.pow(9, 2) / 200,
+      Math.pow(8, 2) / 80,
+    ];
     const bestValueIndex = valueScores.indexOf(Math.max(...valueScores));
     const bestHotelName = testHotels[bestValueIndex].name;
 
@@ -123,7 +127,9 @@ describe("CompareHotelsPage", () => {
     // Check if explanation is displayed (should be unique text)
     expect(screen.getByText(/Strategy:/i)).toBeTruthy();
     expect(
-      screen.getByText(/rewards higher quality significantly while keeping price in check/i),
+      screen.getByText(
+        /rewards higher quality significantly while keeping price in check/i,
+      ),
     ).toBeTruthy();
   });
 
@@ -148,6 +154,41 @@ describe("CompareHotelsPage", () => {
         expect(anchorElement.getAttribute("href")).toBe("/hotels/add");
       }
     });
+  });
+
+  it("allows changing the value strategy", async () => {
+    const user = userEvent.setup();
+    const testHotels = [
+      { name: "Test Hotel", price: 100, rating: 8, currency: "USD" },
+    ];
+    localStorage.setItem("hotels", JSON.stringify(testHotels));
+
+    render(<CompareHotelsPage />);
+
+    // Initially should be BALANCED
+    expect(screen.getByText(/Strategy: Top Recommendations/i)).toBeTruthy();
+    expect(screen.getByText(/Rating² ÷ Price/i)).toBeTruthy();
+
+    // Change to STRICT_BUDGET
+    const strategySelect = screen.getByRole("combobox");
+    await user.click(strategySelect);
+
+    const strictOption = await screen.findByText(/Lowest Price Focus/i);
+    await user.click(strictOption);
+
+    // Should now show STRICT_BUDGET info
+    expect(screen.getByText(/Strategy: Lowest Price Focus/i)).toBeTruthy();
+    expect(screen.getByText(/Rating ÷ Price/i)).toBeTruthy();
+
+    // Change to QUALITY_FIRST
+    await user.click(strategySelect);
+    const qualityOption = await screen.findByText(/Premium Comparison/i);
+    await user.click(qualityOption);
+
+    // Should now show QUALITY_FIRST info
+    expect(screen.getByText(/Strategy: Premium Comparison/i)).toBeTruthy();
+    expect(screen.getByText(/Rating ÷ ln\(Price\)/i)).toBeTruthy();
+    expect(screen.getByText(/Best for high-end hotels/i)).toBeTruthy();
   });
 
   it("correctly sorts hotels by value score in descending order", () => {

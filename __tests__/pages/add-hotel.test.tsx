@@ -1,6 +1,6 @@
 // __tests__/pages/add-hotel.test.tsx
 import { describe, expect, it, vi, beforeEach } from "vitest";
-import { render, screen, cleanup, waitFor } from "../test-utils";
+import { render, screen, cleanup, waitFor, fireEvent } from "../test-utils";
 import userEvent from "@testing-library/user-event";
 import AddHotelPage from "../../src/app/hotels/add/page";
 
@@ -49,13 +49,14 @@ const fillForm = async (
   if (data.price !== undefined) await user.type(priceInput, data.price);
   if (data.rating !== undefined) await user.type(ratingInput, data.rating);
   if (data.currency && currencySelect) {
-    await user.click(currencySelect);
+    // Use fireEvent consistently
+    fireEvent.click(currencySelect);
     const options = await screen.findAllByRole("option");
     const targetOption = options.find((opt) =>
       opt.textContent?.includes(data.currency!),
     );
     if (targetOption) {
-      await user.click(targetOption);
+      fireEvent.click(targetOption);
     }
   }
 };
@@ -259,8 +260,6 @@ describe("AddHotelPage", () => {
       expect(link.getAttribute("href")).toBe("/hotels/compare");
     }
   });
-
-
 
   describe("Edge Cases", () => {
     it.each([
@@ -482,8 +481,6 @@ describe("AddHotelPage", () => {
       expect(savedHotels[0].rating).toBe(8);
       expect(mockPush).toHaveBeenCalledWith("/hotels/compare");
     }, 10000);
-
-
   });
 
   it("clears field-level error when user types in a field with an existing error (line 118 branch)", async () => {

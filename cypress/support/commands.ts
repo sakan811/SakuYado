@@ -5,11 +5,7 @@ declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace Cypress {
     interface Chainable {
-      addHotel(
-        name: string,
-        price: number,
-        rating: number,
-      ): Chainable<Element>;
+      addHotel(name: string, price: number, rating: number): Chainable<Element>;
     }
   }
 }
@@ -25,4 +21,4 @@ Cypress.Commands.add(
   },
 );
 
-export { };
+export {};

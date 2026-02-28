@@ -195,7 +195,6 @@ describe("Navigation Flow Integration", () => {
     unmountCompare();
   });
 
-
   it("tests complete multi-hotel comparison workflow", async () => {
     // Add multiple hotels to localStorage
     const multipleHotels = [
