@@ -38,39 +38,46 @@ const uiComponents = [
   {
     name: "Button",
     purpose:
-      "Interactive actions with variants (default, secondary, destructive)",
+      "Interactive actions with variants (default, secondary, destructive, ghost, outline) and asChild support for Link components.",
   },
   {
     name: "Input",
-    purpose: "Basic text input field with styling and validation states",
+    purpose:
+      "Basic text input field with Tailwind-based styling and focus states.",
   },
   {
     name: "Select",
-    purpose: "Dropdown selection with accessibility support",
+    purpose:
+      "Full Radix-UI based selection system including SelectTrigger, SelectValue, SelectContent, and SelectItem.",
   },
   {
     name: "Card",
-    purpose: "Content containers with gradient/highlight variants",
+    purpose:
+      "Compositional container with CardHeader, CardTitle, CardDescription, CardContent, CardAction, and CardFooter sub-components.",
   },
   {
     name: "Alert",
-    purpose: "Alert messages to show feedback and warnings",
+    purpose:
+      "Feedback and warning messages with AlertTitle and AlertDescription for structured content.",
   },
   {
     name: "Field",
-    purpose: "Form field wrapper with label and error messages",
+    purpose:
+      "A rich form layout system featuring FieldSet, FieldGroup, FieldLabel, FieldDescription, and FieldError with multi-error support.",
   },
   {
     name: "Label",
-    purpose: "Accessible label element for form controls",
+    purpose: "Accessible Radix-UI based label element for form controls.",
   },
   {
     name: "Separator",
-    purpose: "Visual divide between content sections",
+    purpose:
+      "Accessible visual divide between content sections with horizontal and vertical orientations.",
   },
   {
     name: "Table",
-    purpose: "Data tables for displaying structured information",
+    purpose:
+      "Accessible data tables with TableHeader, TableBody, TableFooter, TableHead, and TableCell sub-components.",
   },
 ];
 

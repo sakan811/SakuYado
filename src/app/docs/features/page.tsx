@@ -59,22 +59,22 @@ export default function FeaturesPage() {
               {[
                 {
                   label: "Balanced (Default)",
-                  desc: "Focuses on high-quality recommendations",
+                  desc: "The 'Sweet Spot' - rewards higher quality significantly while keeping price in check",
                   code: "Rating² ÷ Price",
                 },
                 {
                   label: "Strict Budget",
-                  desc: "Focuses on absolute price for a given rating",
+                  desc: "Ideal for budget-conscious travelers focusing on absolute price for a given rating",
                   code: "Rating ÷ Price",
                 },
                 {
                   label: "Quality First",
-                  desc: "Best for premium hotel comparisons",
+                  desc: "Best for premium hotel comparisons where quality justifies larger price increases",
                   code: "Rating ÷ ln(Price)",
                 },
                 {
                   label: "Smart Ranking",
-                  desc: "Hotels are automatically sorted by value score (highest first)",
+                  desc: "Hotels are automatically sorted by value score (highest first) across all strategies",
                   code: null,
                 },
               ].map((item) => (
@@ -105,15 +105,15 @@ export default function FeaturesPage() {
               {[
                 {
                   label: "Add Hotels",
-                  desc: "Simple form to input hotel details including name, price, rating, and currency",
+                  desc: "Simple form with real-time validation for name, price (positive numbers), and rating (0-10)",
                 },
                 {
                   label: "Data Persistence",
-                  desc: "Hotel data is automatically saved to localStorage",
+                  desc: "Hotel data and selected strategies are automatically saved to localStorage for later sessions",
                 },
                 {
-                  label: "Data Validation",
-                  desc: "Ensures all hotel entries meet quality standards",
+                  label: "Currency Memory",
+                  desc: "Automatically remembers and defaults to your last used currency for faster entry",
                 },
                 {
                   label: "Currency Consistency",
@@ -142,19 +142,19 @@ export default function FeaturesPage() {
               {[
                 {
                   label: "Side-by-Side Comparison",
-                  desc: "View multiple hotels together for easy comparison",
+                  desc: "Interactive data table (desktop) and card list (mobile) for easy comparisons",
                 },
                 {
                   label: "Visual Ranking",
-                  desc: "Clear visual hierarchy showing best value options",
+                  desc: "Clear visual hierarchy with gold crown (👑) and pink highlights for the best value options",
                 },
                 {
                   label: "Detailed Statistics",
-                  desc: "Comprehensive stats about your hotel selections",
+                  desc: "Dynamic summary showing hotel count, top score, lowest price, and highest rating",
                 },
                 {
-                  label: "Component Testing",
-                  desc: "All UI components thoroughly tested with comprehensive test coverage",
+                  label: "Comprehensive Testing",
+                  desc: "Thoroughly verified through Vitest unit tests and Cypress end-to-end journey tests",
                 },
               ].map((item) => (
                 <li key={item.label} className="flex items-start gap-3">
@@ -185,19 +185,19 @@ export default function FeaturesPage() {
               icon: "📱",
               title: "Responsive Design",
               items: [
-                "Mobile-First at 375px breakpoint",
-                "Full desktop experience at 1280px+",
+                "Mobile-First layout from 375px upwards",
+                "Full desktop experience optimized for 1280px+",
                 "Touch-friendly interactive elements",
-                "WCAG-compliant with ARIA & keyboard nav",
+                "Accessible with ARIA labels and keyboard navigation",
               ],
             },
             {
               icon: "🎨",
               title: "Interface Elements",
               items: [
-                "Minimalist sakura (cherry blossom) theme",
-                "User-friendly input validation & error handling",
-                "Clear feedback during data operations",
+                "Minimalist sakura (cherry blossom) aesthetic",
+                "Fluid typography and layout with modern CSS clamp",
+                "Real-time input validation and friendly error feedback",
               ],
             },
           ].map((card) => (
