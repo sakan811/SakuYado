@@ -50,20 +50,23 @@ export default function CompareHotelsPage() {
         return {
           name: "Lowest Price Focus",
           formula: "Rating ÷ Price",
-          description: "Ideal for budget-conscious travelers focusing on the absolute lowest price for a given rating.",
+          description:
+            "Ideal for budget-conscious travelers focusing on the absolute lowest price for a given rating.",
         };
       case ValueCalculationMode.QUALITY_FIRST:
         return {
           name: "Premium Comparison",
-          formula: "Rating ÷ log(Price)",
-          description: "Best for high-end hotels where small quality improvements justify larger price increases.",
+          formula: "Rating ÷ ln(Price)",
+          description:
+            "Best for high-end hotels where small quality improvements justify larger price increases.",
         };
       case ValueCalculationMode.BALANCED:
       default:
         return {
           name: "Top Recommendations",
           formula: "(Rating² ÷ Price)",
-          description: "The 'Sweet Spot' - rewards higher quality significantly while keeping price in check.",
+          description:
+            "The 'Sweet Spot' - rewards higher quality significantly while keeping price in check.",
         };
     }
   };
@@ -109,12 +112,12 @@ export default function CompareHotelsPage() {
 
         {/* Hotel Name */}
         <CardTitle
-          className="font-bold text-lg sm:text-xl text-pink-800 mt-2"
+          className="font-bold text-base sm:text-lg text-pink-800 mt-2"
           data-testid={`hotel-name-${index}`}
         >
           {hotel.name}
           {index === 0 && (
-            <span className="block text-sm font-normal text-pink-600 mt-1">
+            <span className="block text-xs font-normal text-pink-600 mt-1">
               🌸 Best Value
             </span>
           )}
@@ -223,7 +226,9 @@ export default function CompareHotelsPage() {
               </label>
               <Select
                 value={calculationMode}
-                onValueChange={(value) => setCalculationMode(value as ValueCalculationMode)}
+                onValueChange={(value) =>
+                  setCalculationMode(value as ValueCalculationMode)
+                }
               >
                 <SelectTrigger className="bg-white border-pink-200 text-pink-800">
                   <SelectValue placeholder="Select Strategy" />
@@ -271,7 +276,8 @@ export default function CompareHotelsPage() {
               <CardContent className="pt-0">
                 <div className="text-sm sm:text-base text-pink-700">
                   <div className="mb-2">
-                    <strong className="text-pink-800">Formula:</strong> {currentInfo.formula}
+                    <strong className="text-pink-800">Formula:</strong>{" "}
+                    {currentInfo.formula}
                   </div>
                   <CardDescription className="text-pink-600 italic">
                     {currentInfo.description}
@@ -308,13 +314,13 @@ export default function CompareHotelsPage() {
               className="mt-6 sm:mt-8 grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4"
             >
               <Card className="bg-white/80 backdrop-blur py-3 sm:py-4 rounded-xl border border-pink-200 text-center">
-                <div className="text-lg sm:text-xl font-bold text-pink-800">
+                <div className="text-base sm:text-lg md:text-xl font-bold text-pink-800">
                   {calculateHotelStatistics(hotels).count}
                 </div>
                 <div className="text-xs sm:text-sm text-pink-600">Hotels</div>
               </Card>
               <Card className="bg-white/80 backdrop-blur py-3 sm:py-4 rounded-xl border border-pink-200 text-center">
-                <div className="text-lg sm:text-xl font-bold text-rose-800">
+                <div className="text-base sm:text-lg md:text-xl font-bold text-rose-800">
                   {calculateHotelStatistics(hotels).topScore}
                 </div>
                 <div className="text-xs sm:text-sm text-rose-600">
@@ -322,7 +328,7 @@ export default function CompareHotelsPage() {
                 </div>
               </Card>
               <Card className="col-span-2 lg:col-span-1 bg-white/80 backdrop-blur py-3 sm:py-4 rounded-xl border border-pink-200 text-center">
-                <div className="text-lg sm:text-xl font-bold text-pink-800">
+                <div className="text-base sm:text-lg md:text-xl font-bold text-pink-800">
                   {formatPrice(calculateHotelStatistics(hotels).lowestPrice)}
                 </div>
                 <div className="text-xs sm:text-sm text-pink-600">
@@ -330,7 +336,7 @@ export default function CompareHotelsPage() {
                 </div>
               </Card>
               <Card className="col-span-2 lg:col-span-1 bg-white/80 backdrop-blur py-3 sm:py-4 rounded-xl border border-pink-200 text-center">
-                <div className="text-lg sm:text-xl font-bold text-rose-800">
+                <div className="text-base sm:text-lg md:text-xl font-bold text-rose-800">
                   {formatRating(calculateHotelStatistics(hotels).highestRating)}
                 </div>
                 <div className="text-xs sm:text-sm text-rose-600">

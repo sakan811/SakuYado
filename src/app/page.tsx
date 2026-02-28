@@ -46,7 +46,7 @@ export default function ResponsiveHomePage() {
                   with SakuYado
                 </span>
               </CardTitle>
-              <CardDescription className="text-lg sm:text-xl text-pink-50 leading-relaxed max-w-lg mx-auto mt-4 text-center">
+              <CardDescription className="text-base sm:text-lg md:text-xl text-pink-50 leading-relaxed max-w-lg mx-auto mt-4 text-center">
                 Compare hotels based on review-per-price ratio to get the most
                 value for your money
               </CardDescription>

@@ -116,15 +116,8 @@
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
     @apply bg-background text-foreground overflow-x-hidden md:overflow-x-auto;
   }
-}
-
-/* 
- * Foolproof Horizontal Overflow Detection 
- * Add this class to body to see which element is breaking the layout
- */
-.debug-overflow * {
-  outline: 1px solid red !important;
 }
