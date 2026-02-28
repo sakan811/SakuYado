@@ -23,7 +23,6 @@ import {
   getMaximumRating,
   getTopValueScore,
   calculateHotelStatistics,
-  getHotelCount,
 } from "@/utils/calculations";
 import { Hotel, ValueCalculationMode } from "@/types/hotel";
 
