@@ -18,7 +18,7 @@
   "dependencies": {
     "@mdx-js/loader": "^3.1.1",
     "@mdx-js/react": "^3.1.1",
-    "@next/mdx": "^16.2.1",
+    "@next/mdx": "^16.2.2",
     "@tanstack/react-table": "^8.21.3",
     "@testing-library/user-event": "^14.6.1",
     "@types/mdx": "^2.0.13",
