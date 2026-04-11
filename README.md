@@ -6,14 +6,13 @@
 
 A beautiful web application that helps you find the best value accommodations by calculating a **Review/Price Score** for each hotel you input.
 
-## What it does
+## Features
 
-- Add hotel information (name, price, rating)
-- Automatically calculates value scores using three strategies (Balanced, Strict Budget, Quality First)
-- Ranks hotels by best value
-- Compare multiple hotels side-by-side
-
-Higher scores = better value for money! 🌸
+- **Hotel Value Scoring**: Automatically calculates value scores using three strategies (Balanced, Strict Budget, Quality First).
+- **Side-by-side Comparison**: Compare multiple hotels and rank them by their value.
+- **Currencies**: Supports entry of 50+ fiat currencies to record prices accurately.
+- **Persistent Storage**: Uses your browser's `localStorage` so you don't lose your hotel lists when you leave.
+- **Mobile-first Design**: Highly responsive design scaling beautifully from 375px up to desktop resolutions.
 
 ## Status
 

@@ -204,6 +204,18 @@ export default function ArchitecturePage() {
               detail: "End-to-end testing",
               color: "bg-pink-50 border-pink-200",
             },
+            {
+              icon: "🧩",
+              name: "shadcn/ui + Radix",
+              detail: "Accessible component primitives",
+              color: "bg-rose-50 border-rose-200",
+            },
+            {
+              icon: "📊",
+              name: "TanStack Table",
+              detail: "Headless UI for data tables",
+              color: "bg-pink-50 border-pink-200",
+            },
           ].map((tech) => (
             <Card
               key={tech.name}

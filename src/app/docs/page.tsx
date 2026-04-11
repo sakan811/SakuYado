@@ -155,6 +155,8 @@ export default function DocsIndexPage() {
             "React 19",
             "TypeScript",
             "Tailwind CSS v4",
+            "shadcn/ui",
+            "TanStack Table",
             "Vitest",
             "Cypress",
           ].map((tech) => (
