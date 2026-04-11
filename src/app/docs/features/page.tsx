@@ -105,7 +105,7 @@ export default function FeaturesPage() {
               {[
                 {
                   label: "Add Hotels",
-                  desc: "Simple form with real-time validation for name, price (positive numbers), and rating (0-10)",
+                  desc: "Simple form with real-time validation for name, price (in 50+ fiat currencies), and rating (0-10)",
                 },
                 {
                   label: "Data Persistence",
