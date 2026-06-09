@@ -132,8 +132,8 @@ importers:
         specifier: ^4.11.0
         version: 4.11.0(typescript@6.0.3)
       start-server-and-test:
-        specifier: ^3.0.6
-        version: 3.0.6
+        specifier: ^3.0.9
+        version: 3.0.9
       tailwindcss:
         specifier: ^4.3.0
         version: 4.3.0
@@ -4381,8 +4381,8 @@ packages:
   layout-base@2.0.1:
     resolution: {integrity: sha512-dp3s92+uNI1hWIpPGH3jK2kxE2lMjdXdr+DH8ynZHpd6PUlH6x6cbuXnoMmiNumznqaNO31xu9e79F0uuZ0JFg==}
 
-  lazy-ass@1.6.0:
-    resolution: {integrity: sha512-cc8oEVoctTvsFZ/Oje/kGnHbpWHYBe8IAJe4C0QNc3t8uM/0Y8+erSz/7Y1ALuXTEZTMvxXwO6YbX1ey3ujiZw==}
+  lazy-ass@2.0.3:
+    resolution: {integrity: sha512-/O3/DoQmI1XAhklDvF1dAjFf/epE8u3lzOZegQfLZ8G7Ud5bTRSZiFOpukHCu6jODrCA4gtIdwUCC7htxcDACA==}
     engines: {node: '> 0.8'}
 
   levn@0.4.1:
@@ -5549,8 +5549,8 @@ packages:
   stackback@0.0.2:
     resolution: {integrity: sha512-1XMJE5fQo1jGH6Y/7ebnwPOBEkIEnT4QF32d5R1+VXdXveM0IBMJt8zfaxX1P3QhVwrYe+576+jkANtSS2mBbw==}
 
-  start-server-and-test@3.0.6:
-    resolution: {integrity: sha512-rgEVH+MKOCVB63R50WS1DXD/fJ4A07aGw/9J6MxkO88ZPOewa4VukGEuayinTdt+feKefeynw/iDJBzn+tW4Jw==}
+  start-server-and-test@3.0.9:
+    resolution: {integrity: sha512-Wxa3llUystTkCRiRx/QzsGS7+/X/la2al6DaX9Q3iWjCZqSQTEcHTIXwvNiGEg0cnEQeY/UBqB7aUZth50IJoA==}
     engines: {node: ^22 || >=24}
     hasBin: true
 
@@ -10884,7 +10884,7 @@ snapshots:
 
   layout-base@2.0.1: {}
 
-  lazy-ass@1.6.0: {}
+  lazy-ass@2.0.3: {}
 
   levn@0.4.1:
     dependencies:
@@ -12741,13 +12741,13 @@ snapshots:
 
   stackback@0.0.2: {}
 
-  start-server-and-test@3.0.6:
+  start-server-and-test@3.0.9:
     dependencies:
       arg: 5.0.2
       check-more-types: 2.24.0
       debug: 4.4.3(supports-color@8.1.1)
       execa: 5.1.1
-      lazy-ass: 1.6.0
+      lazy-ass: 2.0.3
       tree-kill: 1.2.2
       wait-on: 9.0.10(debug@4.4.3)
     transitivePeerDependencies:
