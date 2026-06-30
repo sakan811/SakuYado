@@ -105,8 +105,8 @@ importers:
         specifier: ^19.2.3
         version: 19.2.3(@types/react@19.2.14)
       '@vitejs/plugin-react':
-        specifier: ^6.0.2
-        version: 6.0.2(vite@8.0.8(@types/node@26.0.1)(esbuild@0.27.3)(jiti@2.7.0)(terser@5.44.1))
+        specifier: ^6.0.3
+        version: 6.0.3(vite@8.0.8(@types/node@26.0.1)(esbuild@0.27.3)(jiti@2.7.0)(terser@5.44.1))
       '@vitest/coverage-v8':
         specifier: 4.1.4
         version: 4.1.4(vitest@4.1.4)
@@ -2355,8 +2355,8 @@ packages:
       vue-router:
         optional: true
 
-  '@vitejs/plugin-react@6.0.2':
-    resolution: {integrity: sha512-DlSMqo4WhThw4vB8Mpn0Woe9J+Jfq1geJ61AKW0QEgLzGMNwtIMdxbDUzLxcun8W7NbJO0e2Jg/Nxm3cCSVzzg==}
+  '@vitejs/plugin-react@6.0.3':
+    resolution: {integrity: sha512-vmFvco5/QuC2f9Oj+wTk0+9XeDFkHxSamwZKYc7MxYwKICfvUvlMhqKI0VuICPltGqh1neqBKDvO4kes1ya8vg==}
     engines: {node: ^20.19.0 || >=22.12.0}
     peerDependencies:
       '@rolldown/plugin-babel': ^0.1.7 || ^0.2.0
@@ -8508,7 +8508,7 @@ snapshots:
       vue: 3.5.25(typescript@6.0.3)
       vue-router: 4.6.3(vue@3.5.25(typescript@6.0.3))
 
-  '@vitejs/plugin-react@6.0.2(vite@8.0.8(@types/node@26.0.1)(esbuild@0.27.3)(jiti@2.7.0)(terser@5.44.1))':
+  '@vitejs/plugin-react@6.0.3(vite@8.0.8(@types/node@26.0.1)(esbuild@0.27.3)(jiti@2.7.0)(terser@5.44.1))':
     dependencies:
       '@rolldown/pluginutils': 1.0.1
       vite: 8.0.8(@types/node@26.0.1)(esbuild@0.27.3)(jiti@2.7.0)(terser@5.44.1)
