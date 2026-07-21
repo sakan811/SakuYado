@@ -46,7 +46,7 @@
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^6.0.3",
     "@vitest/coverage-v8": "4.1.4",
-    "cypress": "^15.16.0",
+    "cypress": "^15.18.1",
     "eslint": "^9.39.4",
     "eslint-config-next": "^16.2.10",
     "eslint-config-prettier": "^10.1.8",
